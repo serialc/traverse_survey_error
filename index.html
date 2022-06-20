@@ -54,9 +54,44 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h2 id="letsgo">Triangulation inputs</h2>
-                    <p>Provide the grid coordinate locations and headings from two perspectives.</p>
+                <div class="col">
+                    <h2 id="letsgo">Traverse activity</h2>
+                    <p>The step preceeding the calculation of points relative to your bench mark is to calculate your error in distance and direction.</p>
+
+                    <h3>Calculating your error</h3>
+                    <p>Before starting a traverse we would like to know the error percentage for distance and azimuth/direction.</p>
+
+                    <h4>Distance error</h4>
+                    <p>Depending on your means of measuring distance (among other possible causes) you will have a different error rate in measurement. Using paces will have more error than a tape measure for example.</p>
+                    <p>Do you already know your distance error percentage?</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button id="distance_error_yes" class="btn btn-outline-primary">Yes</button>
+                            <button id="distance_error_no" class="btn btn-outline-primary">No</button>
+                            <div class="form-text">If you're unsure, select 'No'.</div>
+                        </div>
+
+                        <div class="d-none col-md-6" id="known_error_input">
+                            <label>Error percentage on distances measurements:</label>
+                            <input type="number" class="form-control" id="known_error_percentage" placeholder="%" required>
+                            <div class="form-text">The percentage error</div>
+                            <button id="submit_distance_error" class="btn btn-primary float-end">Submit error</button>
+                        </div>
+
+
+                            <div class="d-none col-md-6" id="calc_error_input">
+                                <p>To calculate your distance measurement error we will take measurements between two points of known distance. For this exercise we will ignore the error between these two points (e.g., perhaps the distance was measured with a tape measure that also has error).</p>
+                                <div class="col-12">
+                                    <label>What is the distance between the known points?</label>
+                                    <input type="number" class="form-control" id="pacing_distance" placeholder="60 (metres)" required>
+                                    <div class="form-text"></div>
+                                    <button id="submit_pace_distance" class="btn btn-primary float-end">Submit distance</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    <h4 class="mt-4">Direction or azimuth error</h4>
+ While distance error will be percentage based
 
                     <form class="row g-3 needs-validation" novalidate>
                         <div class="col-12">

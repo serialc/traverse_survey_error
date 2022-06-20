@@ -1,21 +1,19 @@
 
-var TR = {
-    "defaults": {
-        "grid_size": 100
-    },
-    "zoom": false
+var TSE = {
+    "projects": {},
+    "defaults": {},
+    "active": null
 };
 
-TR.translateGrid = function(gridloc) {
+TSE.translateGrid = function(gridloc) {
     'use strict'
     
-    let grid_size = TR.defaults.grid_size;
+    let grid_size = TSE.defaults.grid_size;
     
     // calculate coord of top/left corner
     let ynumb = (parseInt(gridloc.replace(/\D/g, ""), 10));
     let xchar = gridloc.substr(0, gridloc.indexOf(ynumb)).toLowerCase();
     
-    //console.log(gridloc, ynumb, xchar);
 
     // need to convert letters to number
     // Only works for a range of grid coordinates from 'A' to 'ZZ'
@@ -42,11 +40,11 @@ TR.translateGrid = function(gridloc) {
     ]);
 };
 
-TR.triangulate = function(gridloc1, gridloc2, dir1, dir2) {
+TSE.triangulate = function(gridloc1, gridloc2, dir1, dir2) {
     'use strict'
 
-    let locs1 = TR.translateGrid(gridloc1);
-    let locs2 = TR.translateGrid(gridloc2);
+    let locs1 = TSE.translateGrid(gridloc1);
+    let locs2 = TSE.translateGrid(gridloc2);
 
     if (locs1 === false || locs2 === false) {
         return false;
@@ -56,13 +54,13 @@ TR.triangulate = function(gridloc1, gridloc2, dir1, dir2) {
     let points = [];
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-            points.push(TR.getIntersection(locs1[i], locs2[j], dir1, dir2));
+            points.push(TSE.getIntersection(locs1[i], locs2[j], dir1, dir2));
         }
     }
     return points;
 };
 
-TR.getIntersection = function(xy1, xy2, dir1, dir2) {
+TSE.getIntersection = function(xy1, xy2, dir1, dir2) {
     'use strict'
 
     //console.log(xy1, dir1);
@@ -108,34 +106,34 @@ TR.getIntersection = function(xy1, xy2, dir1, dir2) {
 };
 
 
-TR.test = function(test_num) {
+TSE.test = function(test_num) {
     'use strict'
     switch (test_num) {
         case 1:
             console.log("C9");
-            let d = TR.translateGrid("C9");
+            let d = TSE.translateGrid("C9");
             console.log(d);
-            d = TR.translateGrid("x23");
+            d = TSE.translateGrid("x23");
             console.log(d);
             console.log("a1");
-            d = TR.translateGrid("a1");
+            d = TSE.translateGrid("a1");
             console.log(d);
-            d = TR.translateGrid("ac12");
+            d = TSE.translateGrid("ac12");
             console.log(d);
             break;
 
         case 2:
             // use negative directions as we've inerted the model
-            let t = TR.triangulate("e5", "j10", -0, -270);
+            let t = TSE.triangulate("e5", "j10", -0, -270);
             console.log(t, 'expect', '[400,900]');
 
-            t = TR.triangulate("e5", "j10", -20, -250);
+            t = TSE.triangulate("e5", "j10", -20, -250);
             console.log(t, 'expect', '[533,767]');
 
-            t = TR.triangulate("e5", "j10", -90, -180);
+            t = TSE.triangulate("e5", "j10", -90, -180);
             console.log(t, 'expect', '[900,400]');
 
-            t = TR.triangulate("a1", "l12", -180, -270);
+            t = TSE.triangulate("a1", "l12", -180, -270);
             console.log(t, 'expect', '[900,400]');
             break;
 
@@ -144,7 +142,7 @@ TR.test = function(test_num) {
     };
 };
 
-TR.process = function(event) {
+TSE.process = function(event) {
     'use strict'
 
     event.preventDefault();
@@ -168,8 +166,8 @@ TR.process = function(event) {
     let d1 = -parseInt(ed1.value, 10);
     let d2 = -parseInt(ed2.value, 10);
 
-    let gc1 = TR.translateGrid(l1);
-    let gc2 = TR.translateGrid(l2);
+    let gc1 = TSE.translateGrid(l1);
+    let gc2 = TSE.translateGrid(l2);
 
     // check if inputs are filled, if not notify
     if (gc1 === false) {
@@ -190,7 +188,7 @@ TR.process = function(event) {
     }
 
     // get the triangulated area
-    let tri_points = TR.triangulate(l1, l2, d1, d2);
+    let tri_points = TSE.triangulate(l1, l2, d1, d2);
 
     // check we have successful retrieval of points
     if (tri_points === false) {
@@ -198,10 +196,10 @@ TR.process = function(event) {
     }
 
     // combine all points to determine bounds
-    let bounds = TR.getBounds(tri_points.concat(gc1, gc2));
+    let bounds = TSE.getBounds(tri_points.concat(gc1, gc2));
 
-    let grid_size = TR.defaults.grid_size;
-    let grids = TR.generateGrids(bounds);
+    let grid_size = TSE.defaults.grid_size;
+    let grids = TSE.generateGrids(bounds);
     
     // remove svg if exists
     d3.select("#figure").remove();
@@ -250,15 +248,15 @@ TR.process = function(event) {
         .on("click", function() { 
 
             // if click again, reset
-            if (TR.zoom) {
-                TR.zoom = false;
+            if (TSE.zoom) {
+                TSE.zoom = false;
                 d3.select("#figure")
                     .attr("viewBox", d3.select("#figure").attr("altviewBox"));
                 return;
             }
 
-            TR.zoom = true;
-            let tri_bounds = TR.getBounds(tri_points);
+            TSE.zoom = true;
+            let tri_bounds = TSE.getBounds(tri_points);
 
             d3.select("#figure")
             .attr("altviewBox", d3.select("#figure").attr("viewBox"))
@@ -328,24 +326,24 @@ TR.process = function(event) {
         .attr("font-size", "2em")
         .text( (d) => d.name );
 
-    TR.createGrid("l1g", l1);
-    TR.createGrid("l2g", l2);
+    TSE.createGrid("l1g", l1);
+    TSE.createGrid("l2g", l2);
 
     // display the advanced options
     document.getElementById("advanced_options").classList.remove("d-none");
     document.getElementById("advanced").disabled = true;
 
     // holds/resets the advanced options
-    TR.aloc = {
+    TSE.aloc = {
         "one": null,
         "two": null
     };
 };
 
-TR.generateGrids = function(bounds) {
+TSE.generateGrids = function(bounds) {
     "use strict"
 
-    let grid_size = TR.defaults.grid_size;
+    let grid_size = TSE.defaults.grid_size;
 
     let grids = [];
     // generate grid coordinates
@@ -368,7 +366,7 @@ TR.generateGrids = function(bounds) {
     return grids;
 };
 
-TR.getBounds = function(points) {
+TSE.getBounds = function(points) {
     'use strict'
 
     // get bounds
@@ -392,11 +390,11 @@ TR.getBounds = function(points) {
     return bounds;
 };
 
-TR.createGrid = function(target, grid_name) {
+TSE.createGrid = function(target, grid_name) {
     'use strict'
 
     let e = document.getElementById(target);
-    let grid_size = TR.defaults.grid_size;
+    let grid_size = TSE.defaults.grid_size;
 
     d3.select("#" + target + "svg").remove();
 
@@ -444,20 +442,20 @@ TR.createGrid = function(target, grid_name) {
             this.setAttribute("fill", "blue");
 
             if (target === "l1g") {
-                TR.aloc.one = {
+                TSE.aloc.one = {
                     "x": parseInt(this.getAttribute("cx"), 10),
                     "y": parseInt(this.getAttribute("cy"), 10)
                 };
             }
             if (target === "l2g") {
-                TR.aloc.two = {
+                TSE.aloc.two = {
                     "x": parseInt(this.getAttribute("cx"), 10),
                     "y": parseInt(this.getAttribute("cy"), 10)
                 };
             }
 
             // enable the advanced submission
-            if (TR.aloc.one !== null && TR.aloc.two !== null) {
+            if (TSE.aloc.one !== null && TSE.aloc.two !== null) {
                 document.getElementById("advanced").disabled = false;
             }
         })
@@ -470,7 +468,7 @@ TR.createGrid = function(target, grid_name) {
 
 };
 
-TR.processAdvanced = function(event) {
+TSE.processAdvanced = function(event) {
     'use strict'
 
     event.preventDefault();
@@ -488,29 +486,29 @@ TR.processAdvanced = function(event) {
     let d1 = -parseInt(ed1.value, 10);
     let d2 = -parseInt(ed2.value, 10);
 
-    let gc1_grid = TR.translateGrid(l1);
-    let gc2_grid = TR.translateGrid(l2);
+    let gc1_grid = TSE.translateGrid(l1);
+    let gc2_grid = TSE.translateGrid(l2);
 
-    let gc1 = TR.translateGrid(l1)[0];
-    let gc2 = TR.translateGrid(l2)[0];
+    let gc1 = TSE.translateGrid(l1)[0];
+    let gc2 = TSE.translateGrid(l2)[0];
 
-    gc1.x += TR.aloc.one.x;
-    gc1.y += TR.aloc.one.y;
-    gc2.x += TR.aloc.two.x;
-    gc2.y += TR.aloc.two.y;
+    gc1.x += TSE.aloc.one.x;
+    gc1.y += TSE.aloc.one.y;
+    gc2.x += TSE.aloc.two.x;
+    gc2.y += TSE.aloc.two.y;
 
     // get the area of triangulation
     let tri_points = [];
-    tri_points.push(TR.getIntersection(gc1, gc2, d1-1, d2-1));
-    tri_points.push(TR.getIntersection(gc1, gc2, d1-1, d2+1));
-    tri_points.push(TR.getIntersection(gc1, gc2, d1+1, d2-1));
-    tri_points.push(TR.getIntersection(gc1, gc2, d1+1, d2+1));
+    tri_points.push(TSE.getIntersection(gc1, gc2, d1-1, d2-1));
+    tri_points.push(TSE.getIntersection(gc1, gc2, d1-1, d2+1));
+    tri_points.push(TSE.getIntersection(gc1, gc2, d1+1, d2-1));
+    tri_points.push(TSE.getIntersection(gc1, gc2, d1+1, d2+1));
     
     // combine all points to determine bounds
-    let bounds = TR.getBounds(tri_points.concat(gc1_grid, gc2_grid));
+    let bounds = TSE.getBounds(tri_points.concat(gc1_grid, gc2_grid));
 
-    let grid_size = TR.defaults.grid_size;
-    let grids = TR.generateGrids(bounds);
+    let grid_size = TSE.defaults.grid_size;
+    let grids = TSE.generateGrids(bounds);
     
     // create SVG
     let padding = 10;
@@ -576,15 +574,15 @@ TR.processAdvanced = function(event) {
         .on("click", function() { 
 
             // if click again, reset
-            if (TR.zoom) {
-                TR.zoom = false;
+            if (TSE.zoom) {
+                TSE.zoom = false;
                 d3.select("#figure")
                     .attr("viewBox", d3.select("#figure").attr("altviewBox"));
                 return;
             }
 
-            TR.zoom = true;
-            let tri_bounds = TR.getBounds(tri_points);
+            TSE.zoom = true;
+            let tri_bounds = TSE.getBounds(tri_points);
 
             d3.select("#figure")
             .attr("altviewBox", d3.select("#figure").attr("viewBox"))
@@ -621,6 +619,52 @@ TR.processAdvanced = function(event) {
 // initialization
 (function(){
     'use strict'
-    document.getElementById('start').onclick = TR.process;
-    document.getElementById('advanced').onclick = TR.processAdvanced;
+    document.getElementById('distance_error_yes').onclick = function() {
+        let yesb = document.getElementById('distance_error_yes');
+        let nob = document.getElementById('distance_error_no');
+        let yesf = document.getElementById('known_error_input');
+        let nof = document.getElementById('calc_error_input');
+
+        yesb.classList.remove('btn-outline-primary')
+        yesb.classList.add('btn-primary')
+        nob.classList.remove('btn-primary')
+        nob.classList.add('btn-outline-primary');
+
+        yesf.classList.remove('d-none');
+        nof.classList.add('d-none');
+    };
+    document.getElementById('distance_error_no').onclick = function() {
+        let yesb = document.getElementById('distance_error_yes');
+        let yesf = document.getElementById('known_error_input');
+        let nob = document.getElementById('distance_error_no');
+        let nof = document.getElementById('calc_error_input');
+
+        nob.classList.remove('btn-outline-primary')
+        nob.classList.add('btn-primary')
+        yesb.classList.remove('btn-primary')
+        yesb.classList.add('btn-outline-primary');
+
+        yesf.classList.add('d-none');
+        nof.classList.remove('d-none');
+    };
+    document.getElementById('submit_distance_error').onclick = function() {
+        if (TSE.active === null) {
+            TSE.active = 'main';
+        }
+        if (!TSE.projects[TSE.active]) {
+            TSE.projects[TSE.active] = {};
+        }
+        TSE.projects[TSE.active].pacing_error_percentage = 
+            parseInt(document.getElementById('known_error_percentage').value, 10);
+    };
+    document.getElementById('submit_pace_distance').onclick = function() {
+        if (TSE.active === null) {
+            TSE.active = 'main';
+        }
+        if (!TSE.projects[TSE.active]) {
+            TSE.projects[TSE.active] = {};
+        }
+        TSE.projects[TSE.active].pacing_distance =
+            parseInt(document.getElementById('pacing_distance').value, 10);
+    };
 }());
