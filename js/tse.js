@@ -5,365 +5,45 @@ var TSE = {
     "active": null
 };
 
-TSE.translateGrid = function(gridloc) {
-    'use strict'
-    
-    let grid_size = TSE.defaults.grid_size;
-    
-    // calculate coord of top/left corner
-    let ynumb = (parseInt(gridloc.replace(/\D/g, ""), 10));
-    let xchar = gridloc.substr(0, gridloc.indexOf(ynumb)).toLowerCase();
-    
-
-    // need to convert letters to number
-    // Only works for a range of grid coordinates from 'A' to 'ZZ'
-    let xnumb = xchar.charCodeAt(0) - 97; // 97 is 'a'
-    if (xchar.length > 1) {
-        xnumb = ((xnumb + 1) * 26) + (xchar.charCodeAt(1) - 97)
-    }
-
-    let x = xnumb * grid_size;
-    let y = (ynumb - 1) * grid_size;
-
-    if (isNaN(x) || isNaN(y)) {
-        return false;
-    }
-
-    // only expects grid coordinates in forms: C9, E15
-    // where letter is A-Z
-    // returns four corners of grid
-    return ([
-        {x:x, y:y},
-        {x:x + grid_size, y:y},
-        {x:x + grid_size, y:y + grid_size},
-        {x:x, y:y + grid_size},
-    ]);
-};
-
-TSE.triangulate = function(gridloc1, gridloc2, dir1, dir2) {
-    'use strict'
-
-    let locs1 = TSE.translateGrid(gridloc1);
-    let locs2 = TSE.translateGrid(gridloc2);
-
-    if (locs1 === false || locs2 === false) {
-        return false;
-    }
-
-    //console.log(locs1, locs2);
-    let points = [];
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            points.push(TSE.getIntersection(locs1[i], locs2[j], dir1, dir2));
-        }
-    }
-    return points;
-};
-
-TSE.getIntersection = function(xy1, xy2, dir1, dir2) {
-    'use strict'
-
-    //console.log(xy1, dir1);
-    //console.log(xy2, dir2);
-    
-    // if both lines are parallel or both vertical - return false
-    if (dir1 === dir2 || (dir1%180 === 0 && dir2%180 === 0)) {
-        return false;
-    }
-
-    // calculate slopes
-    let m1 = 1/Math.tan(dir1/180*Math.PI)
-    let m2 = 1/Math.tan(dir2/180*Math.PI)
-    
-    // calc y intercept (b)
-    let b1 = xy1.y - (m1 * xy1.x)
-    let b2 = xy2.y - (m2 * xy2.x)
-
-    // exceptions when one of the two lines is vertical
-    if (dir1%180 === 0) {
-        //console.log("dir1 is vertical");
-        return {x:xy1.x, y:Math.round(m2*xy1.x + b2)};
-    }
-    if (dir2%180 === 0) {
-        //console.log("dir2 is vertical");
-        return {x:xy2.x, y:Math.round(m1*xy2.x + b1)};
-    }
-
-    //console.log('slopes', m1, m2);
-    //console.log('y-intercepts:', b1, b2);
-
-    // As per: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_line_equations
-    // As:  ax + c  = bx  + d
-    // is: m1x + b1 = m2x + b2
-    // Want: x = (d-c)/(a-b)
-    // And:  y = (a(d-c)/(a-b))+c
-    let x = (b2-b1)/(m1-m2)
-    let y = (m1*(b2-b1)/(m1-m2)) + b1
-
-    //console.log('e', {x:Math.round(x), y:Math.round(y)});
-
-    return {x:Math.round(x), y:Math.round(y)};
-};
-
-
-TSE.test = function(test_num) {
+TSE.test = function(test_num)
+{
     'use strict'
     switch (test_num) {
         case 1:
-            console.log("C9");
-            let d = TSE.translateGrid("C9");
-            console.log(d);
-            d = TSE.translateGrid("x23");
-            console.log(d);
-            console.log("a1");
-            d = TSE.translateGrid("a1");
-            console.log(d);
-            d = TSE.translateGrid("ac12");
-            console.log(d);
+            // generate pace trials and azim error
+            document.getElementById('distance_error_no').click();
+            document.getElementById('pacing_distance').value = 60.7;
+            document.getElementById('submit_pace_distance').click();
+            document.getElementById('pacing_trial_value').value = 70.5;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 80;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 75;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 73;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 77.5;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 74;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 76;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 72;
+            document.getElementById('submit_pace_trial').click();
+            document.getElementById('pacing_trial_value').value = 78;
+            document.getElementById('submit_pace_trial').click();
+            
+            // add direction error
+            document.getElementById('azim_error_input').value = 2.5;
+            document.getElementById('submit_azim_error').click();
             break;
 
         case 2:
-            // use negative directions as we've inerted the model
-            let t = TSE.triangulate("e5", "j10", -0, -270);
-            console.log(t, 'expect', '[400,900]');
-
-            t = TSE.triangulate("e5", "j10", -20, -250);
-            console.log(t, 'expect', '[533,767]');
-
-            t = TSE.triangulate("e5", "j10", -90, -180);
-            console.log(t, 'expect', '[900,400]');
-
-            t = TSE.triangulate("a1", "l12", -180, -270);
-            console.log(t, 'expect', '[900,400]');
             break;
 
         default:
             console.log(test_num);
     };
-};
-
-TSE.process = function(event) {
-    'use strict'
-
-    event.preventDefault();
-
-    // retrieve values and do the work
-    let el1 = document.getElementById("l1");
-    let el2 = document.getElementById("l2");
-    let ed1 = document.getElementById("d1");
-    let ed2 = document.getElementById("d2");
-
-    // remove any errors
-    el1.classList.remove("is-invalid");
-    el2.classList.remove("is-invalid");
-    ed1.classList.remove("is-invalid");
-    ed2.classList.remove("is-invalid");
-
-    let l1 = el1.value;
-    let l2 = el2.value;
-
-    // we invert the direction because our model is partially inverted
-    let d1 = -parseInt(ed1.value, 10);
-    let d2 = -parseInt(ed2.value, 10);
-
-    let gc1 = TSE.translateGrid(l1);
-    let gc2 = TSE.translateGrid(l2);
-
-    // check if inputs are filled, if not notify
-    if (gc1 === false) {
-        el1.classList.add("is-invalid");
-        return false;
-    }
-    if (gc2 === false) {
-        el2.classList.add("is-invalid");
-        return false;
-    }
-    if (isNaN(d1)) {
-        ed1.classList.add("is-invalid");
-        return false;
-    }
-    if (isNaN(d2)) {
-        ed2.classList.add("is-invalid");
-        return false;
-    }
-
-    // get the triangulated area
-    let tri_points = TSE.triangulate(l1, l2, d1, d2);
-
-    // check we have successful retrieval of points
-    if (tri_points === false) {
-        return false;
-    }
-
-    // combine all points to determine bounds
-    let bounds = TSE.getBounds(tri_points.concat(gc1, gc2));
-
-    let grid_size = TSE.defaults.grid_size;
-    let grids = TSE.generateGrids(bounds);
-    
-    // remove svg if exists
-    d3.select("#figure").remove();
-
-    // create SVG
-    let padding = 10;
-    let svg = d3.select("#results")
-        .append("svg")
-        .attr("id", "figure")
-        .attr("viewBox",
-            (bounds.xmin - padding) + " " + (bounds.ymin - padding) + " " +
-            (bounds.xmax - bounds.xmin + grid_size + (2 * padding)) + " " + (bounds.ymax - bounds.ymin + grid_size + (2 * padding)))
-       // viewBox x, y, w, h
-                        
-        //.attr("width", width + margin.left + margin.right)
-        .attr("width", "100%")
-
-    // view paths from grids
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points.concat(gc1))])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("opacity", 0.3)
-        .attr("stroke", "black")
-        .attr("fill", "grey");
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points.concat(gc2))])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("opacity", 0.3)
-        .attr("stroke", "black")
-        .attr("fill", "grey");
-
-    // draw triangulated polygon
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points)])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("class", "pointer")
-        .on("click", function() { 
-
-            // if click again, reset
-            if (TSE.zoom) {
-                TSE.zoom = false;
-                d3.select("#figure")
-                    .attr("viewBox", d3.select("#figure").attr("altviewBox"));
-                return;
-            }
-
-            TSE.zoom = true;
-            let tri_bounds = TSE.getBounds(tri_points);
-
-            d3.select("#figure")
-            .attr("altviewBox", d3.select("#figure").attr("viewBox"))
-            .attr("viewBox",
-                (tri_bounds.xmin - padding) + " " + (tri_bounds.ymin - padding) + " " +
-                (tri_bounds.xmax - tri_bounds.xmin + (2 * padding)) + " " + (tri_bounds.ymax - tri_bounds.ymin + (2 * padding)));
-        })
-        .attr("fill", "green");
-
-    // draw grid polygons
-    svg.append("g")
-        .selectAll("polygon")
-        .data([gc1])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("fill", "orange");
-    svg.append("g")
-        .selectAll("polygon")
-        .data([gc2])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("fill", "orange");
-    
-    // Add the points
-    /**
-    svg.append("g")
-        .selectAll("circle")
-        .data(tri_points)
-        .enter().append("circle")
-        .attr("fill", "green")
-        .attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y)
-        .attr("r", 20);
-    
-    svg.append("g")
-        .selectAll("circle")
-        .data(gc1.concat(gc2))
-        .enter().append("circle")
-        .attr("fill", "blue")
-        .attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y)
-        .attr("r", 20);
-    **/
-
-    // draw grids
-    svg.append("g")
-        .selectAll("rect")
-        .data(grids)
-        .enter().append("rect")
-        .attr("x", (d) => d.x)
-        .attr("y", (d) => d.y)
-        .attr("width", grid_size)
-        .attr("height", grid_size)
-        .attr("stroke", "grey")
-        .attr("stroke-width", 4)
-        .attr("fill", "none");
-    
-    // Add grid names
-    svg.append("g")
-        .selectAll("text")
-        .data(grids)
-        .enter().append("text")
-        .attr("x", (d) => d.x + 0.1 * grid_size)
-        .attr("y", (d) => d.y + 0.3 * grid_size)
-        .attr("font-size", "2em")
-        .text( (d) => d.name );
-
-    TSE.createGrid("l1g", l1);
-    TSE.createGrid("l2g", l2);
-
-    // display the advanced options
-    document.getElementById("advanced_options").classList.remove("d-none");
-    document.getElementById("advanced").disabled = true;
-
-    // holds/resets the advanced options
-    TSE.aloc = {
-        "one": null,
-        "two": null
-    };
-};
-
-TSE.generateGrids = function(bounds) {
-    "use strict"
-
-    let grid_size = TSE.defaults.grid_size;
-
-    let grids = [];
-    // generate grid coordinates
-    for (let x = Math.floor(bounds.xmin/grid_size) * grid_size; x < Math.ceil(bounds.xmax/grid_size) * grid_size; x+=grid_size) {
-        for (let y = Math.floor(bounds.ymin/grid_size) * grid_size; y < Math.ceil(bounds.ymax/grid_size) * grid_size; y+=grid_size) {
-            let grid_letter = String.fromCharCode((x/grid_size) + 97).toUpperCase();
-            if (x < 0) { grid_letter = ""; }
-            // handle if x/grid_size > 26 (or letter should be greater than Z (e.g., AB)
-            if ((x/grid_size) > 25) {
-                grid_letter = 'A' + String.fromCharCode((x/grid_size) - 26 + 97).toUpperCase();
-            }
-            let grid_num = (y/grid_size) + 1;
-            grids.push({
-                    "x": x,
-                    "y": y,
-                    "name": grid_letter + grid_num
-                });
-        }
-    }
-    return grids;
 };
 
 TSE.getBounds = function(points) {
@@ -468,152 +148,214 @@ TSE.createGrid = function(target, grid_name) {
 
 };
 
-TSE.processAdvanced = function(event) {
-    'use strict'
+TSE.update_pace_trials_table = function()
+{
+    let table_div = document.getElementById('pace_data_table');
+    let prj = TSE.projects[TSE.active];
+    // reduce((a,b)=>a+b) sums all values in array
+    let trials_pace_mean = prj.pace_trials.reduce((a,b)=>a+b)/prj.pace_trials.length;
+    let pacelen_mean = prj.pacing_distance/trials_pace_mean;
+    let variance_sum = 0;
+    let tc = "<table class='table table-striped'>" +
+        "<thead>" +
+        "<tr><th>Trial#</th>" +
+        "<th>No. of paces</th>" +
+        "<th>Distance</th>" +
+        "<th>Pace length</th>" +
+        "<th>Variance</th>" +
+        "<th>Delete</th><tr>" +
+        "</thead>";
 
-    event.preventDefault();
+    tc += "<tbody>";
+    for (let trial_num = 0; trial_num < prj.pace_trials.length; trial_num+=1) {
+        let paces = prj.pace_trials[trial_num];
+        let pacelen = prj.pacing_distance/paces;
 
-    // retrieve values and do the work
-    let el1 = document.getElementById("l1");
-    let el2 = document.getElementById("l2");
-    let ed1 = document.getElementById("d1");
-    let ed2 = document.getElementById("d2");
+        tc += "<tr>" +
+            "<td>" + (trial_num + 1) + "</td>" +
+            "<td>" + paces + "</td>" +
+            "<td>" + prj.pacing_distance + "</td>" +
+            "<td>" + (Math.round(pacelen * 100) / 100) + "</td>" +
+            "<td>" + (Math.round(Math.pow(pacelen - pacelen_mean, 2) * 10000) / 10000) + "</td>" +
+            "<td><a href='#/' onclick='TSE.delete_pace_trial(" + trial_num + ")'>del</a></td>" +
+            "</tr>";
+        variance_sum += Math.pow(pacelen - pacelen_mean, 2);
+    }
 
-    let l1 = el1.value;
-    let l2 = el2.value;
+    tc += "<tr><td></td><td></td><td></td>" +
+        "<td>mean=" + (Math.round(pacelen_mean * 1000) / 1000) + "</td><td>&Sigma;=" + (Math.round(variance_sum * 10000)/10000) + "</td>" +
+        "<td></td></tr>" +
+        "</tbody></table>";
 
-    // we invert the direction because our model is partially inverted
-    let d1 = -parseInt(ed1.value, 10);
-    let d2 = -parseInt(ed2.value, 10);
+    // calculate the standard deviation and standard error
+    let stddev = Math.sqrt(variance_sum/(prj.pace_trials.length - 1));
+    let stderr = 2 * stddev * 100 / pacelen_mean;
 
-    let gc1_grid = TSE.translateGrid(l1);
-    let gc2_grid = TSE.translateGrid(l2);
+    tc += "<p class='m-4'>" +
+        "<strong>Standard deviation: " + (Math.round(stddev * 10000) / 10000) + "<br>" +
+        "Standard error: " + (Math.round(stderr * 10000) / 10000) + "%<br>" +
+        "Mean pace length: " + (Math.round(pacelen_mean * 100) / 100) + "</p>";
 
-    let gc1 = TSE.translateGrid(l1)[0];
-    let gc2 = TSE.translateGrid(l2)[0];
+    // save the stderr and pace length to the project
+    TSE.projects[TSE.active].pacing_error_percentage = stderr;
+    TSE.projects[TSE.active].pace_length = pacelen_mean;
 
-    gc1.x += TSE.aloc.one.x;
-    gc1.y += TSE.aloc.one.y;
-    gc2.x += TSE.aloc.two.x;
-    gc2.y += TSE.aloc.two.y;
+    // update the div and make sure it's visible
+    table_div.innerHTML = tc;
+    table_div.classList.remove('d-none');
+};
 
-    // get the area of triangulation
-    let tri_points = [];
-    tri_points.push(TSE.getIntersection(gc1, gc2, d1-1, d2-1));
-    tri_points.push(TSE.getIntersection(gc1, gc2, d1-1, d2+1));
-    tri_points.push(TSE.getIntersection(gc1, gc2, d1+1, d2-1));
-    tri_points.push(TSE.getIntersection(gc1, gc2, d1+1, d2+1));
-    
-    // combine all points to determine bounds
-    let bounds = TSE.getBounds(tri_points.concat(gc1_grid, gc2_grid));
 
-    let grid_size = TSE.defaults.grid_size;
-    let grids = TSE.generateGrids(bounds);
+TSE.delete_pace_trial = function(i)
+{
+    // remove pacing trial
+    TSE.projects[TSE.active].pace_trials.splice(i, 1);
+    TSE.update_pace_trials_table();
+};
+
+TSE.updateSVG = function()
+{
+    let prj = TSE.projects[TSE.active];
+
+    // get the bounds
+    let bounds = TSE.getBounds(prj.survey);
+    let padding = 10;
+
+    // remove svg if already exists
+    d3.select("#surveyfigure").remove();
     
     // create SVG
-    let padding = 10;
     let svg = d3.select("#results")
         .append("svg")
-        .attr("id", "figure")
+        .attr("id", "surveyfigure")
         .attr("viewBox",
-            (bounds.xmin - padding) + " " + (bounds.ymin - padding) + " " +
-            (bounds.xmax - bounds.xmin + grid_size + (2 * padding)) + " " + (bounds.ymax - bounds.ymin + grid_size + (2 * padding)))
-       // viewBox x, y, w, h
-                        
-        //.attr("width", width + margin.left + margin.right)
-        .attr("width", "100%")
+            // compensate for y-inversion
+            (bounds.xmin - padding) + " " + (-bounds.ymax - padding) + " " +
+            (bounds.xmax - bounds.xmin + (2 * padding)) + " " + (bounds.ymax - bounds.ymin + (2 * padding))
+        ); // viewBox x, y, w, h
+
+    // add groups to contain and order layers of map elements/hierarchy
+    let layer_lines = svg.append("g")
+        .attr("id", "map_lines")
+    let layer_stations = svg.append("g")
+        .attr("id", "map_stations")
+
+    // customize/define some symbol types
+    let triangle = d3.symbol()
+        .type(d3.symbolTriangle)
+        .size(25);
+    let circle = d3.symbol()
+        .type(d3.symbolCircle)
+        .size(10);
+
+    // iterate through stations and populate svg
+    for (let i = 0; i < prj.survey.length; i+=1) {
+        let n = prj.survey[i];
+        let marker = circle;
+
+        // select correct marker
+        switch(n.type) {
+            case "benchmark":
+                marker = triangle;
+                break;
+        }
+
+        // add the marker to the SVG
+        layer_stations.append("path")
+            .attr("d", marker)
+            .attr("id", "station_" + n.id)
+            //.attr("stroke", "black")
+            //.attr("fill", "white")
+            .attr("class", "pointer")
+            .on("click", function() {
+                // save index of selected node/point/bm
+                TSE.select_station(n.id);
+                // show controls
+                document.getElementById('controls').classList.remove('d-none');
+            })
+            // note that y is inverted as SVG postive values go down
+            .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
+            .append("title") // add child title tag for tooltip
+            .html(n.name);
+    }
     
-    // remove svg if exists
-    d3.select("#figure").remove();
+    // iterate through lines and populate svg
+    for (i = 0; i < prj.connections.length; i+=1) {
+        let cnx = prj.connections[i];
+        // for each connection create a line
+        let orig = prj.survey.filter( obj => obj.id == cnx[0] )[0]
+        let dest = prj.survey.filter( obj => obj.id == cnx[1] )[0]
 
-    // draw grid polygons
-    svg.append("g")
-        .selectAll("polygon")
-        .data([gc1_grid])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("fill", "orange");
-    svg.append("g")
-        .selectAll("polygon")
-        .data([gc2_grid])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("fill", "orange");
+        // note the inverted y axis
+        layer_lines.append("line")
+            .attr("x1", orig.x)
+            .attr("y1", -orig.y)
+            .attr("x2", dest.x)
+            .attr("y2", -dest.y)
+            .attr("class", "leg_line");
+    }
+};
 
-    // view paths from grids
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points.concat(gc1))])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("opacity", 0.3)
-        .attr("stroke", "black")
-        .attr("fill", "grey");
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points.concat(gc2))])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("opacity", 0.3)
-        .attr("stroke", "black")
-        .attr("fill", "grey");
-    
+TSE.resetControls = function()
+{
+    document.getElementById('controls').classList.add('d-none');
+    document.getElementById('form_add_leg').classList.add('d-none');
+    document.getElementById('form_edit').classList.add('d-none');
+    document.getElementById('form_wall_instructions').classList.add('d-none');
+};
 
-    // draw triangulated polygon
-    svg.append("g")
-        .selectAll("polygon")
-        .data([QuickHull(tri_points)])
-        .enter()
-        .append("polygon")
-        .attr("points", (d) => d.map(function(e) { return e.x + "," + e.y}).join(" "))
-        .attr("class", "pointer")
-        .on("click", function() { 
+TSE.requestAnId = function()
+{
+    let id = TSE.projects[TSE.active].id_counter;
+    TSE.projects[TSE.active].id_counter += 1;
+    return id;
+};
 
-            // if click again, reset
-            if (TSE.zoom) {
-                TSE.zoom = false;
-                d3.select("#figure")
-                    .attr("viewBox", d3.select("#figure").attr("altviewBox"));
-                return;
-            }
+TSE.tryInitialization = function()
+{
+    let prj = TSE.projects[TSE.active];
 
-            TSE.zoom = true;
-            let tri_bounds = TSE.getBounds(tri_points);
+    // check if pace and azim error are provided
+    if (!prj.pacing_error_percentage || !prj.azim_error) {
+        return;
+    }
 
-            d3.select("#figure")
-            .attr("altviewBox", d3.select("#figure").attr("viewBox"))
-            .attr("viewBox",
-                (tri_bounds.xmin - padding) + " " + (tri_bounds.ymin - padding) + " " +
-                (tri_bounds.xmax - tri_bounds.xmin + (2 * padding)) + " " + (tri_bounds.ymax - tri_bounds.ymin + (2 * padding)));
-        })
-        .attr("fill", "green");
+    // create starting benchmark if not present
+    if (!prj.survey || prj.survey.filter( ob => ob.type == "benchmark" ).length == 0) {
+        prj.id_counter = 0;
+        prj.connections = [];
+        prj.survey = [{
+            "type": "benchmark",
+            "name": "Starting benchmark",
+            "id": TSE.requestAnId(),
+            "x": 0,
+            "y": 0,
+            "dependence": -1 // external
+        }];
+    }
 
-    // draw grids
-    svg.append("g")
-        .selectAll("rect")
-        .data(grids)
-        .enter().append("rect")
-        .attr("x", (d) => d.x)
-        .attr("y", (d) => d.y)
-        .attr("width", grid_size)
-        .attr("height", grid_size)
-        .attr("stroke", "grey")
-        .attr("stroke-width", 4)
-        .attr("fill", "none");
-    
-    // Add grid names
-    svg.append("g")
-        .selectAll("text")
-        .data(grids)
-        .enter().append("text")
-        .attr("x", (d) => d.x + 0.1 * grid_size)
-        .attr("y", (d) => d.y + 0.3 * grid_size)
-        .attr("font-size", "2em")
-        .text( (d) => d.name );
+    // write back any changes to global 
+    TSE.projects[TSE.active] = prj;
+
+    TSE.updateSVG();
+};
+
+TSE.select_station = function(stnid) {
+    console.log("Requesting selection of " + stnid);
+    console.log("Previous selection was of " + TSE.projects[TSE.active].selected);
+
+    // deselect previous
+    // testing with isNaN otherwise id of 0 will be false
+    if (!isNaN(TSE.projects[TSE.active].selected)) {
+        document.getElementById('station_' + TSE.projects[TSE.active].selected).classList.remove("selection")
+    }
+
+    // select new
+    if (!isNaN(stnid)) {
+        document.getElementById('station_' + stnid).classList.add("selection")
+    }
+
+    TSE.projects[TSE.active].selected = stnid;
 };
 
 // initialization
@@ -622,7 +364,7 @@ TSE.processAdvanced = function(event) {
     document.getElementById('distance_error_yes').onclick = function() {
         let yesb = document.getElementById('distance_error_yes');
         let nob = document.getElementById('distance_error_no');
-        let yesf = document.getElementById('known_error_input');
+        let yesf = document.getElementById('known_pace_and_error_input');
         let nof = document.getElementById('calc_error_input');
 
         yesb.classList.remove('btn-outline-primary')
@@ -635,7 +377,7 @@ TSE.processAdvanced = function(event) {
     };
     document.getElementById('distance_error_no').onclick = function() {
         let yesb = document.getElementById('distance_error_yes');
-        let yesf = document.getElementById('known_error_input');
+        let yesf = document.getElementById('known_pace_and_error_input');
         let nob = document.getElementById('distance_error_no');
         let nof = document.getElementById('calc_error_input');
 
@@ -654,8 +396,8 @@ TSE.processAdvanced = function(event) {
         if (!TSE.projects[TSE.active]) {
             TSE.projects[TSE.active] = {};
         }
-        TSE.projects[TSE.active].pacing_error_percentage = 
-            parseInt(document.getElementById('known_error_percentage').value, 10);
+        TSE.projects[TSE.active].pacing_error_percentage = parseFloat(document.getElementById('known_error_percentage').value, 10);
+        TSE.projects[TSE.active].pace_length = parseFloat(document.getElementById('known_pace_length').value, 10);
     };
     document.getElementById('submit_pace_distance').onclick = function() {
         if (TSE.active === null) {
@@ -664,7 +406,94 @@ TSE.processAdvanced = function(event) {
         if (!TSE.projects[TSE.active]) {
             TSE.projects[TSE.active] = {};
         }
-        TSE.projects[TSE.active].pacing_distance =
-            parseInt(document.getElementById('pacing_distance').value, 10);
+        TSE.projects[TSE.active].pacing_distance = parseFloat(document.getElementById('pacing_distance').value, 10);
+
+        // show the input form for pace measurement tests
+        document.getElementById('input_pace_test').classList.remove('d-none');
+
     };
+    document.getElementById('submit_pace_trial').onclick = function() {
+        let paces = parseFloat(document.getElementById('pacing_trial_value').value);
+
+        if (!TSE.projects[TSE.active].pace_trials) {
+            TSE.projects[TSE.active].pace_trials = [];
+        }
+        TSE.projects[TSE.active].pace_trials.push(paces);
+        TSE.update_pace_trials_table();
+
+        // try to setup the graph area if the required paramters have been provided
+        TSE.tryInitialization();
+    };
+
+    document.getElementById('submit_azim_error').onclick = function() {
+        if (TSE.active === null) {
+            TSE.active = 'main';
+        }
+        let azim = parseFloat(document.getElementById('azim_error_input').value);
+
+        if (!TSE.projects[TSE.active]) {
+            TSE.projects[TSE.active] = {};
+        }
+        TSE.projects[TSE.active].azim_error = azim;
+
+        // try to setup the graph area if the required paramters have been provided
+        TSE.tryInitialization();
+    };
+    document.getElementById('control_add_leg').onclick = function() {
+        TSE.action = 'add_leg';
+        document.getElementById('form_add_leg').classList.remove('d-none');
+    };
+    document.getElementById('control_edit').onclick = function() {
+        TSE.action = 'edit';
+        document.getElementById('form_edit').classList.remove('d-none');
+    };
+    document.getElementById('control_wall').onclick = function() {
+        TSE.action = 'wall';
+        document.getElementById('form_wall_instructions').classList.remove('d-none');
+    };
+    document.getElementById('control_delete').onclick = function() {
+        let selection = TSE.projects[TSE.active].selected;
+        TSE.projects[TSE.active].survey.splice(selection, 1);
+        TSE.updateSVG();
+    };
+    document.getElementById('control_close').onclick = function() {
+        TSE.resetControls();
+        TSE.select_station(undefined);
+        TSE.action = null;
+    };
+    document.getElementById('submit_new_leg').onclick = function() {
+        let azim = parseFloat(document.getElementById('target_azim').value);
+        let paces = parseFloat(document.getElementById('target_distance').value);
+        let desc = document.getElementById('target_description').value;
+        // below only works as long as we don't add a third point type
+        let ptype = document.getElementById('target_type_point').checked ? "point" : "benchmark";
+        // retrieve the dependend object that was clicked on
+        let dependent = TSE.projects[TSE.active].survey.filter( obj => obj.id == TSE.projects[TSE.active].selected )[0];
+        let stnid = TSE.requestAnId();
+
+        // convert paces to metres (or other unit)
+        let dist = TSE.projects[TSE.active].pace_length * paces;
+
+        // calculate x,y
+        let x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
+        let y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+
+        // add point to project survey list
+        TSE.projects[TSE.active].survey.push({
+            "type": ptype,
+            "name": desc,
+            "id": stnid,
+            "x": x,
+            "y": y,
+            "dependence": dependent.id
+        });
+
+        // add lines to list - we note the ids, not the coordinates in case they are changed
+        TSE.projects[TSE.active].connections.push([dependent.id, stnid]);
+
+        // gui update controls and SVG graphics
+        TSE.resetControls();
+        TSE.updateSVG();
+    };
+    
 }());
