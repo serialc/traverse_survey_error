@@ -1,13 +1,12 @@
+'use strict'
 
 var TSE = {
     "projects": {},
-    "defaults": {},
     "active": null
 };
 
 TSE.test = function(test_num)
 {
-    'use strict'
     switch (test_num) {
         case 1:
             // generate pace trials and azim error
@@ -39,16 +38,159 @@ TSE.test = function(test_num)
             break;
 
         case 2:
+            TSE.projects.main = {
+  "pacing_distance": 60.7,
+  "pace_trials": [ 70.5, 80, 75, 73, 77.5, 74, 76, 72, 78 ],
+  "pacing_error_percentage": 8.186035527621778,
+  "pace_length": 0.8081360946745563,
+  "azim_error": 2.5,
+  "id_counter": 12,
+  "connections": [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ],
+  "survey": [
+    {
+      "type": "benchmark",
+      "name": "Starting benchmark",
+      "id": 0,
+      "x": 0,
+      "y": 0,
+      "dependence": -1
+    },
+    {
+      "type": "point",
+      "name": "oak tree",
+      "id": 1,
+      "distance": 53.33698224852071,
+      "paces": 66,
+      "x": 52.68031548939374,
+      "y": 8.34374228490763,
+      "dependence": 0,
+      "azimuth": 81
+    },
+    {
+      "type": "point",
+      "name": "lamp post",
+      "id": 2,
+      "distance": 35.55798816568048,
+      "paces": 44,
+      "x": 50.199915621520525,
+      "y": 43.81511297855475,
+      "dependence": 1,
+      "azimuth": 356
+    },
+    {
+      "type": "point",
+      "name": "no parking sign",
+      "id": 3,
+      "distance": 57.37766272189349,
+      "paces": 71,
+      "x": 13.318264951114138,
+      "y": 87.76895266581619,
+      "dependence": 2,
+      "azimuth": 320
+    },
+    {
+      "type": "point",
+      "name": "apple tree",
+      "id": 4,
+      "distance": 58.18579881656805,
+      "paces": 72,
+      "x": -31.25464290075662,
+      "y": 50.36784212681253,
+      "dependence": 3,
+      "azimuth": 230
+    },
+    {
+      "type": "benchmark",
+      "name": "return to starting BM",
+      "id": 5,
+      "distance": 50.91257396449704,
+      "paces": 63,
+      "x": -13.841517056340624,
+      "y": 2.525672067157906,
+      "dependence": 4,
+      "azimuth": 160
+    },
+    {
+      "type": "point",
+      "name": "SW corner building",
+      "id": 6,
+      "distance": 16.970857988165683,
+      "paces": 21,
+      "x": -3.238192363399902,
+      "y": 16.65905552761337,
+      "dependence": 0,
+      "azimuth": 349
+    },
+    {
+      "type": "point",
+      "name": "SE corner building",
+      "id": 7,
+      "distance": 16.970857988165683,
+      "paces": 21,
+      "x": 37.69593727999216,
+      "y": 16.311077506429186,
+      "dependence": 1,
+      "azimuth": 298
+    },
+    {
+      "type": "point",
+      "name": "SE top corner building",
+      "id": 8,
+      "distance": 12.122041420118345,
+      "paces": 15,
+      "x": 39.701919805970846,
+      "y": 37.754092268495576,
+      "dependence": 2,
+      "azimuth": 240
+    },
+    {
+      "type": "point",
+      "name": "East inner corner building",
+      "id": 9,
+      "distance": 32.32544378698225,
+      "paces": 40,
+      "x": 18.365567960540098,
+      "y": 38.20185857267049,
+      "dependence": 2,
+      "azimuth": 260
+    },
+    {
+      "type": "point",
+      "name": "North side - eastern corner",
+      "id": 10,
+      "distance": 21.81967455621302,
+      "paces": 27,
+      "x": 17.107211675086024,
+      "y": 66.2807679946544,
+      "dependence": 3,
+      "azimuth": 170
+    },
+    {
+      "type": "point",
+      "name": "North side - western corner",
+      "id": 11,
+      "distance": 29.092899408284026,
+      "paces": 36,
+      "x": -6.0594529434373925,
+      "y": 64.91429183095455,
+      "dependence": 4,
+      "azimuth": 60
+    }
+  ],
+  "selected": 7
+};
+            TSE.active = "main";
+            TSE.updateSVG();
             break;
 
         default:
-            console.log(test_num);
+            console.log("Unknown test request number " + test_num);
     };
 };
 
-TSE.getBounds = function(points) {
-    'use strict'
-
+// returns the bounds of an array of points with structure {x: #, y: #}
+TSE.getBounds = function(points)
+{
     // get bounds
     let bounds = {"xmin": null, "ymin": null, "xmax": null, "ymax": null};
     for (let k = 0; k < points.length; k+=1) {
@@ -70,84 +212,7 @@ TSE.getBounds = function(points) {
     return bounds;
 };
 
-TSE.createGrid = function(target, grid_name) {
-    'use strict'
-
-    let e = document.getElementById(target);
-    let grid_size = TSE.defaults.grid_size;
-
-    d3.select("#" + target + "svg").remove();
-
-    let padding = 20;
-
-    let svg = d3.select("#" + target)
-        .append("svg")
-        .attr("id", target + "svg")
-        .attr("width", "100")
-        .attr("height", "100")
-        .attr("viewBox", "-" + padding + " -" + padding + " " + (grid_size + (2*padding)) + " " + (grid_size + (2*padding)));
-
-    svg.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", grid_size)
-        .attr("height", grid_size)
-        .attr("stroke", "grey")
-        .attr("stroke-width", 4)
-        .attr("fill", "none");
-
-    svg.append("text")
-        .attr("x", 0.1 * grid_size)
-        .attr("y", 0.3 * grid_size)
-        .attr("font-size", "2em")
-        .text( grid_name.toUpperCase() );
-
-    // add points to grid
-    let gpoints = [];
-    for (let x = 0; x <= grid_size; x+=(grid_size/2)) {
-        for (let y = 0; y <= grid_size; y+=(grid_size/2)) {
-            gpoints.push({"x": x, "y": y});
-        }
-    }
-    svg.append("g")
-        .selectAll("circle")
-        .data(gpoints)
-        .enter().append("circle")
-        .on("click", function() { 
-            // reset all to green
-            svg.selectAll("circle")
-                .attr("fill", "green");
-
-            // but this one to blue
-            this.setAttribute("fill", "blue");
-
-            if (target === "l1g") {
-                TSE.aloc.one = {
-                    "x": parseInt(this.getAttribute("cx"), 10),
-                    "y": parseInt(this.getAttribute("cy"), 10)
-                };
-            }
-            if (target === "l2g") {
-                TSE.aloc.two = {
-                    "x": parseInt(this.getAttribute("cx"), 10),
-                    "y": parseInt(this.getAttribute("cy"), 10)
-                };
-            }
-
-            // enable the advanced submission
-            if (TSE.aloc.one !== null && TSE.aloc.two !== null) {
-                document.getElementById("advanced").disabled = false;
-            }
-        })
-        .attr("fill", "green")
-        .attr("opacity", 0.5)
-        .attr("class", "hover")
-        .attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y)
-        .attr("r", 20);
-
-};
-
+// displays the table of pace trials
 TSE.update_pace_trials_table = function()
 {
     let table_div = document.getElementById('pace_data_table');
@@ -205,7 +270,7 @@ TSE.update_pace_trials_table = function()
     table_div.classList.remove('d-none');
 };
 
-
+// deletes one trial of the pacing activity
 TSE.delete_pace_trial = function(i)
 {
     // remove pacing trial
@@ -213,6 +278,7 @@ TSE.delete_pace_trial = function(i)
     TSE.update_pace_trials_table();
 };
 
+// draws the SVG elements from the data
 TSE.updateSVG = function()
 {
     let prj = TSE.projects[TSE.active];
@@ -235,6 +301,8 @@ TSE.updateSVG = function()
         ); // viewBox x, y, w, h
 
     // add groups to contain and order layers of map elements/hierarchy
+    let layer_error = svg.append("g")
+        .attr("id", "map_error")
     let layer_lines = svg.append("g")
         .attr("id", "map_lines")
     let layer_stations = svg.append("g")
@@ -247,6 +315,7 @@ TSE.updateSVG = function()
     let circle = d3.symbol()
         .type(d3.symbolCircle)
         .size(10);
+
 
     // iterate through stations and populate svg
     for (let i = 0; i < prj.survey.length; i+=1) {
@@ -269,9 +338,9 @@ TSE.updateSVG = function()
             .attr("class", "pointer")
             .on("click", function() {
                 // save index of selected node/point/bm
-                TSE.select_station(n.id);
+                TSE.selectStation(n.id);
                 // show controls
-                document.getElementById('controls').classList.remove('d-none');
+                document.getElementById('controls').classList.remove('invisible');
             })
             // note that y is inverted as SVG postive values go down
             .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
@@ -279,8 +348,74 @@ TSE.updateSVG = function()
             .html(n.name);
     }
     
+    // a recursively called function to illustrate error
+    function calcStationError(stnid, error_points) {
+
+        // get the needed stations for ease of reading
+        let stn = TSE.getStationFromId(stnid);
+
+        console.log("passed error points to stnid " + stnid + " " + stn.name);
+        console.log(error_points);
+
+        // get azim and pace error
+        let error_pace = stn.distance * TSE.projects[TSE.active].pacing_error_percentage / 100;
+        let error_azim = TSE.projects[TSE.active].azim_error;
+
+        // store station's error range
+        let erpnts = [];
+
+        // first station is a benchmark has no error for this exercise
+        if (stn.type === "point") {
+            // calculate x,y according to distance and azim error limits for all error points from dependent
+            for (let i = 0; i < error_points.length; i+=1) {
+                // change azim error
+                erpnts.push({
+                    "x": Math.sin((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
+                });
+                erpnts.push({
+                    "x": Math.sin((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
+                });
+                // change pace error
+                erpnts.push({
+                    "x": Math.sin((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
+                });
+                erpnts.push({
+                    "x": Math.sin((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
+                });
+            }
+
+            // transform points keeping external only using convex
+            let convex_pnts = QuickHull(erpnts);
+
+            // calculate error area for this station - remove interior points with turf.convex(points)
+
+            // add error to map
+            layer_error.append("polygon")
+                .attr("points", convex_pnts.map(function(p) { return p.x + "," + (-p.y) }).join(" "))
+                .attr("class", "error_poly")
+                .append("title") // add child title tag for tooltip
+                .html(stn.name);
+        } else {
+            // benchmarks
+            // just transfer error points to other stations for benchmarks
+            erpnts = error_points;
+        }
+
+        // get all the stations that are dependent on this one and and make recursive call
+        let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
+        for (let i = 0; i < childcon.length; i+=1) {
+            calcStationError(childcon[i][1], erpnts);
+        }
+    }
+    // call for the root, second parameter is the error area
+    calcStationError(0, [{"x": 0, "y": 0}]);
+    
     // iterate through lines and populate svg
-    for (i = 0; i < prj.connections.length; i+=1) {
+    for (let i = 0; i < prj.connections.length; i+=1) {
         let cnx = prj.connections[i];
         // for each connection create a line
         let orig = prj.survey.filter( obj => obj.id == cnx[0] )[0]
@@ -296,14 +431,16 @@ TSE.updateSVG = function()
     }
 };
 
+// hides all station controls
 TSE.resetControls = function()
 {
-    document.getElementById('controls').classList.add('d-none');
+    document.getElementById('controls').classList.add('invisible');
     document.getElementById('form_add_leg').classList.add('d-none');
     document.getElementById('form_edit').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
 };
 
+// autoincrements the id counter and returns available id
 TSE.requestAnId = function()
 {
     let id = TSE.projects[TSE.active].id_counter;
@@ -311,6 +448,7 @@ TSE.requestAnId = function()
     return id;
 };
 
+// if pace and azim errors are provided, generate map and initial data structure
 TSE.tryInitialization = function()
 {
     let prj = TSE.projects[TSE.active];
@@ -340,12 +478,20 @@ TSE.tryInitialization = function()
     TSE.updateSVG();
 };
 
-TSE.select_station = function(stnid) {
-    console.log("Requesting selection of " + stnid);
-    console.log("Previous selection was of " + TSE.projects[TSE.active].selected);
+// returns the station object given a station id
+TSE.getStationFromId = function(stnid)
+{
+    return TSE.projects[TSE.active].survey.filter( obj => obj.id == stnid)[0];
+};
+
+// makes a station selected in gui and data
+TSE.selectStation = function(stnid)
+{
+    //console.log("Requesting selection of " + stnid);
+    //console.log("Previous selection was of " + TSE.projects[TSE.active].selected);
 
     // deselect previous
-    // testing with isNaN otherwise id of 0 will be false
+    // checking with isNaN otherwise id of 0 will be false
     if (!isNaN(TSE.projects[TSE.active].selected)) {
         document.getElementById('station_' + TSE.projects[TSE.active].selected).classList.remove("selection")
     }
@@ -356,11 +502,43 @@ TSE.select_station = function(stnid) {
     }
 
     TSE.projects[TSE.active].selected = stnid;
+    TSE.resetControls();
+};
+
+TSE.recomputeAllXY = function()
+{
+    // tree search - start at root and look dependents, etc, recursive until spur/leaf
+    function updateXY(stnid) {
+
+        // get the index of the edited station in the array
+        let stnindex = TSE.projects.main.survey.findIndex( (o) => o.id == stnid)
+        // get the station for ease of reading
+        let stn = TSE.getStationFromId(stnid);
+
+        if (stnindex !== 0) {
+            // calculate x,y based on dependent
+            // get the object this station is dependent on
+            let dependent = TSE.getStationFromId(stn.dependence);
+            stn.x = Math.sin(stn.azimuth / 180 * Math.PI) * stn.distance + dependent.x;
+            stn.y = Math.cos(stn.azimuth / 180 * Math.PI) * stn.distance + dependent.y;
+            
+            // replace the station back in the main data array
+            TSE.projects[TSE.active].survey[stnindex] = stn;
+        }
+
+        // get all the stations that are dependent on this one and and make recursive call
+        let childcon = TSE.project[TSE.active].connections.filter( c => c[0] === stnid);
+        for (let i = 0; i < childcon.length; i+=1) {
+            updateXY(childcon[i][1]);
+        }
+    }
+
+    // root/benchmark
+    updateXY(0);
 };
 
 // initialization
 (function(){
-    'use strict'
     document.getElementById('distance_error_yes').onclick = function() {
         let yesb = document.getElementById('distance_error_yes');
         let nob = document.getElementById('distance_error_no');
@@ -440,15 +618,60 @@ TSE.select_station = function(stnid) {
         TSE.tryInitialization();
     };
     document.getElementById('control_add_leg').onclick = function() {
-        TSE.action = 'add_leg';
         document.getElementById('form_add_leg').classList.remove('d-none');
     };
     document.getElementById('control_edit').onclick = function() {
-        TSE.action = 'edit';
         document.getElementById('form_edit').classList.remove('d-none');
+
+        // populate the edit form with the select station's data
+        let stn = TSE.getStationFromId(TSE.projects[TSE.active].selected);
+        document.getElementById('edit_station_azim').value = stn.azimuth;
+        document.getElementById('edit_station_paces').value = stn.paces;
+        document.getElementById('edit_station_description').value = stn.name;
+        if (stn.type === "point" ) {
+            document.getElementById('edit_station_type_point').checked = true;
+        } else {
+            document.getElementById('edit_station_type_benchmark').checked = true;
+        }
+    };
+    document.getElementById('submit_station_edit').onclick = function() {
+        // retrieve data from form
+        let azim = parseFloat(document.getElementById('edit_station_azim').value);
+        let paces = parseFloat(document.getElementById('edit_station_paces').value);
+        let desc = document.getElementById('edit_station_description').value;
+        // below only works as long as we don't add a third point type
+        let ptype = document.getElementById('edit_station_type_point').checked ? "point" : "benchmark";
+
+        // get station id/index/object
+        let stnid = TSE.projects[TSE.active].selected;
+        // get the index of the edited station in the array
+        let stnindex = TSE.projects.main.survey.findIndex( (o) => o.id == stnid)
+        // get the object we want to update
+        let stn = TSE.projects[TSE.active].survey[stnindex];
+
+        // calculate
+        let dist = TSE.projects[TSE.active].pace_length * paces;
+        // get the object this station is dependent on
+        let dependent = TSE.getStationFromId(stn.dependence);
+
+        stn.azimuth = azim;
+        stn.paces = paces;
+        stn.distance = dist;
+        stn.name = desc;
+        stn.type = ptype;
+        stn.x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
+        stn.y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+
+        // replace the object we want to update
+        TSE.projects[TSE.active].survey[stnindex] = stn;
+
+        // recompute all X,Y as we've made changes
+        TSE.recomputeAllXY();
+
+        // update SVG display
+        TSE.updateSVG();
     };
     document.getElementById('control_wall').onclick = function() {
-        TSE.action = 'wall';
         document.getElementById('form_wall_instructions').classList.remove('d-none');
     };
     document.getElementById('control_delete').onclick = function() {
@@ -458,8 +681,7 @@ TSE.select_station = function(stnid) {
     };
     document.getElementById('control_close').onclick = function() {
         TSE.resetControls();
-        TSE.select_station(undefined);
-        TSE.action = null;
+        TSE.selectStation(undefined);
     };
     document.getElementById('submit_new_leg').onclick = function() {
         let azim = parseFloat(document.getElementById('target_azim').value);
@@ -468,7 +690,7 @@ TSE.select_station = function(stnid) {
         // below only works as long as we don't add a third point type
         let ptype = document.getElementById('target_type_point').checked ? "point" : "benchmark";
         // retrieve the dependend object that was clicked on
-        let dependent = TSE.projects[TSE.active].survey.filter( obj => obj.id == TSE.projects[TSE.active].selected )[0];
+        let dependent = TSE.getStationFromId(TSE.projects[TSE.active].selected);
         let stnid = TSE.requestAnId();
 
         // convert paces to metres (or other unit)
@@ -483,6 +705,9 @@ TSE.select_station = function(stnid) {
             "type": ptype,
             "name": desc,
             "id": stnid,
+            "azimuth": azim,
+            "distance": dist,
+            "paces": paces,
             "x": x,
             "y": y,
             "dependence": dependent.id
