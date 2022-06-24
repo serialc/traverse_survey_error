@@ -401,13 +401,15 @@ TSE.updateSVG = function()
                 .html(stn.name);
         } else {
             // benchmarks
-            // just transfer error points to other stations for benchmarks
-            erpnts = error_points;
+            // just transfer self coordinates
+            erpnts = [{"x": stn.x, "y": stn.y}];
         }
 
         // get all the stations that are dependent on this one and and make recursive call
         let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
         for (let i = 0; i < childcon.length; i+=1) {
+            console.log("Sending error points for child " + childcon[i][1]);
+            console.log(erpnts);
             calcStationError(childcon[i][1], erpnts);
         }
     }
@@ -527,7 +529,7 @@ TSE.recomputeAllXY = function()
         }
 
         // get all the stations that are dependent on this one and and make recursive call
-        let childcon = TSE.project[TSE.active].connections.filter( c => c[0] === stnid);
+        let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
         for (let i = 0; i < childcon.length; i+=1) {
             updateXY(childcon[i][1]);
         }
@@ -576,6 +578,9 @@ TSE.recomputeAllXY = function()
         }
         TSE.projects[TSE.active].pacing_error_percentage = parseFloat(document.getElementById('known_error_percentage').value, 10);
         TSE.projects[TSE.active].pace_length = parseFloat(document.getElementById('known_pace_length').value, 10);
+        
+        // try to setup the graph area if the required paramters have been provided
+        TSE.tryInitialization();
     };
     document.getElementById('submit_pace_distance').onclick = function() {
         if (TSE.active === null) {
@@ -602,7 +607,6 @@ TSE.recomputeAllXY = function()
         // try to setup the graph area if the required paramters have been provided
         TSE.tryInitialization();
     };
-
     document.getElementById('submit_azim_error').onclick = function() {
         if (TSE.active === null) {
             TSE.active = 'main';
@@ -670,6 +674,7 @@ TSE.recomputeAllXY = function()
 
         // update SVG display
         TSE.updateSVG();
+        TSE.resetControls();
     };
     document.getElementById('control_wall').onclick = function() {
         document.getElementById('form_wall_instructions').classList.remove('d-none');
@@ -719,6 +724,7 @@ TSE.recomputeAllXY = function()
         // gui update controls and SVG graphics
         TSE.resetControls();
         TSE.updateSVG();
+        TSE.resetControls();
     };
     
 }());

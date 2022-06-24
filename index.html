@@ -47,7 +47,7 @@
                                 A benchmark in France (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons)
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p><strong>Dealing with error.</strong> For this exercise we will be using a compass and paces. A pace is, when walking, one step or the distance between where one foot lifts off the ground and the other touches down again, at a consistent point (e.g., the tip or heel of the feet).</p>
                         </div>
                     </div>
@@ -55,24 +55,26 @@
 
                 <hr>
 
-                <div class="col">
+                <div class="col-12">
                     <h2 id="letsgo">Traverse activity</h2>
                     <p>The step preceeding the calculation of points relative to your bench mark is to calculate your error in distance and direction.</p>
 
                     <h3>Calculating your error</h3>
-                    <p>Before starting a traverse we would like to know the error percentage for distance and azimuth/direction.</p>
+                    <p>Before starting a traverse you should know the error percentage for distance and azimuth/direction measurements.</p>
+                </div>
 
+                <div id="panel_distance_error" class="col-lg-12 mb-4">
                     <h4>Distance error</h4>
                     <p>Depending on your means of measuring distance (among other possible causes) you will have a different error rate in measurement. Using paces will have more error than a tape measure for example.</p>
                     <p>Do you already know your pace distance and error percentage?</p>
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-12 mb-3">
                             <button id="distance_error_yes" class="btn btn-outline-primary">Yes</button>
                             <button id="distance_error_no" class="btn btn-outline-primary">No</button>
                             <div class="form-text">If you're unsure, select 'No'.</div>
                         </div>
 
-                        <div class="d-none col-md-6" id="known_pace_and_error_input">
+                        <div class="d-none col-12 mb-3" id="known_pace_and_error_input">
                             <label>Enter your mean pace length:</label>
                             <input type="number" class="form-control" id="known_pace_length" placeholder="e.g., 0.8" required>
                             <div class="form-text">Metres is recommended</div>
@@ -89,7 +91,7 @@
 
                     <div id="calc_error_input" class="d-none row">
                         <h4>Pace measurement exercise</h4>
-                        <div class="col-md-6">
+                        <div class="col-md-12 mb-3">
                             <p>To calculate your distance measurement error we will take measurements between two points of known distance. For this exercise we will ignore the error between these two points (e.g., perhaps the distance was measured with a tape measure that also has error).</p>
                             <label>What is the distance between the known points?</label>
                             <input type="number" class="form-control" id="pacing_distance" placeholder="60 (metres)" required>
@@ -99,7 +101,7 @@
                             </div>
                         </div>
 
-                        <div class="d-none col-md-6" id="input_pace_test">
+                        <div class="d-none col-md-12" id="input_pace_test">
                             <p>Walk the distance between the points repeatedly, submitting the number of paces you took to complete the distance.</p>
                             <label>Number of paces</label>
                             <input type="number" class="form-control" id="pacing_trial_value" placeholder="number of paces in trial" required>
@@ -112,8 +114,10 @@
                         <div class="d-none col-sm-12 mt-4" id="pace_data_table">
                         </div>
                     </div>
+                </div>
 
-                    <h4 class="mt-4">Direction / Azimuth error</h4>
+                <div id="panel_azimuth_error" class="col-md-12 mb-4">
+                    <h4>Direction / Azimuth error</h4>
                     <p>Azimuth is the compass direction. Compass directions also have error.</p>
                     <p>While distance error will be percentage based, azimuth error is value based.</p>
                     <label>Please estimate your azimuth accuracy in degrees:</label>
@@ -125,6 +129,8 @@
 
                 </div>
             </div>
+
+            <hr>
 
             <div class="row">
                 <div class="col-md-12">
@@ -245,11 +251,19 @@
                 </div>
             </div>
 
+            <hr>
+
             <div class="row">
+                <div class="col-md-12">
+                    <h2>Export</h2>
+                    <p>Working on making it so you can export the data based on provided coordinates for benchmark (not yet implemented)</p>
+                </div>
                 <div class="col-md-12">
                     <h2>Objective</h2>
                     <p>To provide a follow-up exercise to traditional traverse exercises that consist of field work, returning to the lab for trigonometric computation of point locations along the traverse and graphing of the points. This tool allows easier graphing of points, reducing error of that process when surveying error is already significant. Secondly the tool allows better visualization of measurements error.</p>
-                    <h2>Further aspects to develop for Tranverse Survey Error exercise (TSE):</h2>
+                </div>
+                <div class="col-md-12">
+                    <h2>Aspects to still develop:</h2>
                     <ul>
                         <li>Discuss open and closed (loop and between BM) traverses</li>
                         <li>Provide ability to add backsights to increase azimuth accuracy</li>
@@ -272,7 +286,7 @@
                     <p>Some automated inputs for testing:</p>
                     <ol>
                         <li><a href="#/" onclick="TSE.test(1)">Generate pace trials</a></li>
-                        <li><a href="#/" onclick="TSE.test(2)">Add stations</a></li>
+                        <li><a href="#/" onclick="TSE.test(2)">Add example stations</a></li>
                     </ol>
                 </div>
             </div>
