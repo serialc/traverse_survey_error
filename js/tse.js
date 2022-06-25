@@ -354,9 +354,6 @@ TSE.updateSVG = function()
         // get the needed stations for ease of reading
         let stn = TSE.getStationFromId(stnid);
 
-        console.log("passed error points to stnid " + stnid + " " + stn.name);
-        console.log(error_points);
-
         // get azim and pace error
         let error_pace = stn.distance * TSE.projects[TSE.active].pacing_error_percentage / 100;
         let error_azim = TSE.projects[TSE.active].azim_error;
@@ -365,7 +362,7 @@ TSE.updateSVG = function()
         let erpnts = [];
 
         // first station is a benchmark has no error for this exercise
-        if (stn.type === "point") {
+        if (stn.id !== 0) {
             // calculate x,y according to distance and azim error limits for all error points from dependent
             for (let i = 0; i < error_points.length; i+=1) {
                 // change azim error
@@ -408,8 +405,6 @@ TSE.updateSVG = function()
         // get all the stations that are dependent on this one and and make recursive call
         let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
         for (let i = 0; i < childcon.length; i+=1) {
-            console.log("Sending error points for child " + childcon[i][1]);
-            console.log(erpnts);
             calcStationError(childcon[i][1], erpnts);
         }
     }
@@ -457,7 +452,7 @@ TSE.tryInitialization = function()
 
     // check if pace and azim error are provided
     if (!prj.pacing_error_percentage || !prj.azim_error) {
-        return;
+        return false;
     }
 
     // create starting benchmark if not present
@@ -478,6 +473,8 @@ TSE.tryInitialization = function()
     TSE.projects[TSE.active] = prj;
 
     TSE.updateSVG();
+
+    return true;
 };
 
 // returns the station object given a station id
@@ -539,6 +536,40 @@ TSE.recomputeAllXY = function()
     updateXY(0);
 };
 
+// display notifications
+TSE.successToast = function(msg)
+{
+    TSE.toast(msg, "Success", "bg-success", "text-light");
+};
+TSE.warnToast = function(msg)
+{
+    TSE.toast(msg, "Warning", "bg-warning", "text-dark");
+};
+
+TSE.toast = function(msg, head_text, type, text_colour)
+{
+    // update  msg
+    document.getElementById('toast-body').innerHTML = msg;
+
+    // set the toast type
+    let th = document.getElementById('toast-head');
+    th.classList.remove("bg-warning");
+    th.classList.remove("bg-primary");
+    th.classList.remove("bg-success");
+    th.classList.add(type);
+
+    let tht = document.getElementById('toast-head-text');
+    tht.classList.remove("text-dark");
+    tht.classList.remove("text-light");
+    tht.classList.add(text_colour);
+    tht.innerHTML = head_text;
+
+    // get the overall toast
+    let toast = document.getElementById('liveToast');
+    const t = new bootstrap.Toast(toast);
+    t.show();
+};
+
 // initialization
 (function(){
     document.getElementById('distance_error_yes').onclick = function() {
@@ -596,7 +627,10 @@ TSE.recomputeAllXY = function()
 
     };
     document.getElementById('submit_pace_trial').onclick = function() {
-        let paces = parseFloat(document.getElementById('pacing_trial_value').value);
+        let pinput = document.getElementById('pacing_trial_value');
+        let paces = parseFloat(pinput.value);
+        // clear  input value
+        pinput.value = "";
 
         if (!TSE.projects[TSE.active].pace_trials) {
             TSE.projects[TSE.active].pace_trials = [];
@@ -619,7 +653,10 @@ TSE.recomputeAllXY = function()
         TSE.projects[TSE.active].azim_error = azim;
 
         // try to setup the graph area if the required paramters have been provided
-        TSE.tryInitialization();
+        if (TSE.tryInitialization()) {
+            // it's initializing, so go to traverse
+            document.getElementById("begin_survey_traverse").scrollIntoView({behavior: 'smooth'});
+        }
     };
     document.getElementById('control_add_leg').onclick = function() {
         document.getElementById('form_add_leg').classList.remove('d-none');
@@ -689,11 +726,32 @@ TSE.recomputeAllXY = function()
         TSE.selectStation(undefined);
     };
     document.getElementById('submit_new_leg').onclick = function() {
-        let azim = parseFloat(document.getElementById('target_azim').value);
-        let paces = parseFloat(document.getElementById('target_distance').value);
-        let desc = document.getElementById('target_description').value;
+
+        // get inputs
+        let elazim = document.getElementById('target_azim');
+        let elpaces = document.getElementById('target_distance');
+        let eldesc = document.getElementById('target_description');
+        let elptype = document.getElementById('target_type_point');
+        
+        // check if inputs are valid
+        if (elazim.value == "" || elpaces.value == "") {
+            TSE.warnToast("You must specify both an <strong>azimuth</strong> and pace <strong>distance</strong> at a minimum.");
+            return false;
+        }
+
+        // get values
+        let azim = parseFloat(elazim.value);
+        let paces = parseFloat(elpaces.value);
+        let desc = eldesc.value;
         // below only works as long as we don't add a third point type
-        let ptype = document.getElementById('target_type_point').checked ? "point" : "benchmark";
+        let ptype = elptype.checked ? "point" : "benchmark";
+
+        // reset inputs
+        elazim.value = "";
+        elpaces.value = "";
+        eldesc.value = "";
+        elptype.checked = true;
+        
         // retrieve the dependend object that was clicked on
         let dependent = TSE.getStationFromId(TSE.projects[TSE.active].selected);
         let stnid = TSE.requestAnId();

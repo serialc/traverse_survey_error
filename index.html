@@ -93,9 +93,9 @@
                         <h4>Pace measurement exercise</h4>
                         <div class="col-md-12 mb-3">
                             <p>To calculate your distance measurement error we will take measurements between two points of known distance. For this exercise we will ignore the error between these two points (e.g., perhaps the distance was measured with a tape measure that also has error).</p>
-                            <label>What is the distance between the known points?</label>
+                            <label>What is the distance between the known points? (in metres?)</label>
                             <input type="number" class="form-control" id="pacing_distance" placeholder="60 (metres)" required>
-                            <div class="form-text">This need not be a round number.<br>Look for a clear boundary/line</div>
+                            <div class="form-text">This need not be a round number.</div>
                             <div class="text-end">
                                 <button id="submit_pace_distance" class="btn btn-primary">Submit distance</button>
                             </div>
@@ -134,16 +134,17 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Begin survey traverse</h2>
+                    <h2 id="begin_survey_traverse">Begin survey traverse</h2>
                     <p>The area below represents your field space. The icon in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
                     <p><strong>Select the benchmark or stations to see possible operations.</strong></p>
                     <div id="controls" class="invisible">
                         <p>
-                            <button id="control_add_leg" class="btn btn-outline-primary">Add leg</button>
-                            <button id="control_edit" class="btn btn-outline-secondary">Edit station</button>
-                            <button id="control_wall" class="btn btn-outline-secondary d-none" disabled>Draw wall to point</button>
-                            <button id="control_delete" class="btn btn-outline-danger d-none" disabled>Delete point</button>
-                            <button id="control_close" class="btn btn-outline-dark float-end">X</button>
+                            <button id="control_add_leg" class="btn btn-primary">Add leg</button>
+                            <button id="control_edit" class="btn btn-secondary">Edit station</button>
+                            <button id="control_mergebm" class="btn btn-success" disabled>Merge BM</button>
+                            <button id="control_wall" class="btn btn-secondary" disabled>Draw wall to point</button>
+                            <button id="control_delete" class="btn btn-danger" disabled>Delete point</button>
+                            <button id="control_close" class="btn btn-dark float-end">X</button>
                         </p>
                     </div>
                     <div id="form_add_leg" class="d-none mb-3">
@@ -151,7 +152,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Enter target azimuth:</label>
                                 <input type="number" class="form-control" id="target_azim" placeholder="" required>
-                                <div class="form-text">In degrees (0-360)</div>
+                                <div class="form-text">In degrees (0-360&deg;)</div>
                             </div>
 
                             <div class="col-md-6">
@@ -212,6 +213,9 @@
                     </div>
                     <div id="form_wall_instructions" class="d-none">
                         <p>Click on another point to create a wall from between points.</p>
+                    </div>
+                    <div id="merge_bm_instructions" class="d-none">
+                        <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
                     </div>
 
                     <!-- SVG CSS -->
@@ -290,6 +294,20 @@
                     </ol>
                 </div>
             </div>
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div id="toast-head" class="toast-header">
+                        <strong id="toast-head-text" class="me-auto"></strong>
+                        <small></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div id="toast-body" class="toast-body">
+                        Hello, world! This is a toast message.
+                    </div>
+                </div>
+            </div>
+
         </div>
         <footer class="container-fluid mt-5 pb-5 bg-dark text-light">
             <div class="container">
