@@ -23,13 +23,34 @@
             <span class="navbar-brand mb-0 h1">Traverse Surveying & Error</span>
           </div>
         </nav>
-        <div class="container pb-5">
-            <div class="row">
+
+        <div class="container">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="section1-tab" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab" aria-controls="section1" aria-selected="true">Introduction</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="section2-tab" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab" aria-controls="section2" aria-selected="false">Error</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="section3-tab" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab" aria-controls="section3" aria-selected="false" disabled>Activity</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="section4-tab" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab" aria-controls="section4" aria-selected="false" disabled>Export</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="section5-tab" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab" aria-controls="section5" aria-selected="false">Objectives</button>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="container pb-5 tab-content">
+
+            <div id="section1" class="row tab-pane fade show active" role="tabpanel" aria-labelledby="section1" tabindex="0">
                 <div class="col-12">
-                    <h1>Compass and Pace Traverse Surveying</h1>
-                    <p>This tool helps track data and illustrate error when performing traverse surveying. While the focus here is on compass and paces to measure angle and distance, other tools could be used to provide greater precision.</p>
-                    <p>See below for the instructions and the tool.</p>
-                    <p>Already know what you're doing? <a href="#letsgo">Let's go!</a></o>
+                    <h2>Compass and Pace Traverse Surveying</h2>
+                    <p>This tool helps track data and illustrate error when performing traverse surveying. For accessibility reasons, the focus here is on the use of compasses and pacing to measure angle and distance.</p>
+                    <p>Follow the instructions below for the activity.</p>
                 </div>
 
                 <div class="col-12 mb-4">
@@ -40,7 +61,7 @@
                             <p><strong>The situation.</strong> You only have a compass and would like to record the location of other features relative to a chosen point (e.g., rock cairn, geodetic benchmark).<br>
                             A benchmark is a good point to start such an activity, but not necesary.<br>
                             A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating points for an area).<br>
-                            The benefit of a geodetic benchmark is that your collected data can be tied or transferred directly to know geographic coordinate systems.
+                            The benefit of a geodetic benchmark is that your collected data using a local coordinate system can be tied and transferred directly to know geographic coordinate systems.
                         </div>
                         <div class="col-md-6">
                             <img src="rsc/bm.jpg" class="sizelim" width="100%"><br>
@@ -51,99 +72,147 @@
                             <p><strong>Dealing with error.</strong> For this exercise we will be using a compass and paces. A pace is, when walking, one step or the distance between where one foot lifts off the ground and the other touches down again, at a consistent point (e.g., the tip or heel of the feet).</p>
                         </div>
                     </div>
+
+                    <p class="text-end">
+                        <button id="goto_section2" class="btn btn-primary">Next</button>
+                    </p>
                 </div>
+            </div>
 
-                <hr>
-
+            <div id="section2" class="row tab-pane fade" role="tabpanel" aria-labelledby="section2" tabindex="0">
                 <div class="col-12">
-                    <h2 id="letsgo">Traverse activity</h2>
-                    <p>The step preceeding the calculation of points relative to your bench mark is to calculate your error in distance and direction.</p>
+                    <h2>Calculating your error</h2>
+                    <p>Preceeding your traverse measurements relative to your bench mark, it is necessary to calculate your error in distance and direction measurements.</p>
 
-                    <h3>Calculating your error</h3>
-                    <p>Before starting a traverse you should know the error percentage for distance and azimuth/direction measurements.</p>
-                </div>
+                    <div id="dist_error_select" class="row">
+                        <h4>Distance error</h4>
+                        <p>Depending on your means of measuring distance (among other possible causes) you will have a different error rate in your measurements. Using paces will have more error than a tape measure for example.</p>
 
-                <div id="panel_distance_error" class="col-lg-12 mb-4">
-                    <h4>Distance error</h4>
-                    <p>Depending on your means of measuring distance (among other possible causes) you will have a different error rate in measurement. Using paces will have more error than a tape measure for example.</p>
-                    <p>Do you already know your pace distance and error percentage?</p>
-                    <div class="row">
+                        <p>Do you already know your pace distance and error percentage?</p>
+
                         <div class="col-12 mb-3">
                             <button id="distance_error_yes" class="btn btn-outline-primary">Yes</button>
                             <button id="distance_error_no" class="btn btn-outline-primary">No</button>
                             <div class="form-text">If you're unsure, select 'No'.</div>
                         </div>
 
-                        <div class="d-none col-12 mb-3" id="known_pace_and_error_input">
-                            <label>Enter your mean pace length:</label>
-                            <input type="number" class="form-control" id="known_pace_length" placeholder="e.g., 0.8" required>
-                            <div class="form-text">Metres is recommended</div>
-
-                            <label>Enter your known error percentage for distance measurements:</label>
-                            <input type="number" class="form-control" id="known_error_percentage" placeholder="%" required>
-                            <div class="form-text">The percentage error</div>
+                        <div id="known_pace_and_error_input" class="d-none col-12 mb-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Enter your mean pace length:</label>
+                                    <input type="number" class="form-control" id="known_pace_length" placeholder="e.g., 0.8" required>
+                                    <div class="form-text">Metres is recommended</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Enter your known error percentage:</label>
+                                    <input type="number" class="form-control" id="known_error_percentage" placeholder="e.g., 7%" required>
+                                    <div class="form-text">The percentage error</div>
+                                </div>
+                            </div>
 
                             <div class="text-end">
                                 <button id="submit_distance_error" class="btn btn-primary">Submit pace and error</button>
                             </div>
                         </div>
+
+                        <div id="calc_dist_error_input" class="d-none row">
+                            <h4>Pace measurement exercise</h4>
+                            <p>To calculate your distance measurement error we will take measurements between various points of <strong>known distance</strong>.</p>
+                            <p>And then walk the distances between the points repeatedly, submitting the number of paces you took to complete the distance.</p>
+                            <div class="col-md-6">
+                                <label>The pacing distance</label>
+                                <input type="number" class="form-control" id="pacing_distance" required>
+                                <div class="form-text">In metres - this need not be a round number</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Number of paces</label>
+                                <input type="number" class="form-control" id="pacing_trial_value" required>
+                                <div class="form-text">Number of paces in trial</div>
+                                <div class="text-end">
+                                    <button id="submit_pace_trial" class="btn btn-primary">Submit pace trial</button>
+                                </div>
+                            </div>
+                            <div class="d-none col-sm-12 mt-4" id="pace_data_table"> </div>
+
+                            <div class="text-end mt-3">
+                                <button id="finish_pace_trials" class="btn btn-success" disabled>Next</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="calc_error_input" class="d-none row">
-                        <h4>Pace measurement exercise</h4>
+                    <div id="calc_azim_error_input" class="d-none row">
+                        <h4>Direction / Azimuth error</h4>
                         <div class="col-md-12 mb-3">
-                            <p>To calculate your distance measurement error we will take measurements between two points of known distance. For this exercise we will ignore the error between these two points (e.g., perhaps the distance was measured with a tape measure that also has error).</p>
-                            <label>What is the distance between the known points? (in metres?)</label>
-                            <input type="number" class="form-control" id="pacing_distance" placeholder="60 (metres)" required>
-                            <div class="form-text">This need not be a round number.</div>
-                            <div class="text-end">
-                                <button id="submit_pace_distance" class="btn btn-primary">Submit distance</button>
+                            <p>Azimuth is the compass direction. Compass directions also have error.</p>
+                            <p>While distance error will be percentage based, azimuth error is value based.</p>
+                            <label>Please estimate your azimuth accuracy in degrees:</label>
+                            <input type="number" class="form-control" id="azim_error_input" placeholder="e.g., 2">
+                            <div class="form-text">We will improve this to test your error assumptions in the future</div>
+                            <div class="row mt-3">
+                                <div class="col-6 text-start">
+                                    <button id="return_to_dist_error" class="btn btn-secondary">Back</button>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <button id="submit_azim_error" class="btn btn-primary">Submit direction error</button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="d-none col-md-12" id="input_pace_test">
-                            <p>Walk the distance between the points repeatedly, submitting the number of paces you took to complete the distance.</p>
-                            <label>Number of paces</label>
-                            <input type="number" class="form-control" id="pacing_trial_value" placeholder="number of paces in trial" required>
-                            <div class="form-text">Providing decimals increases accuracy</div>
-                            <div class="text-end">
-                                <button id="submit_pace_trial" class="btn btn-primary">Submit pace trial</button>
-                            </div>
-                        </div>
-
-                        <div class="d-none col-sm-12 mt-4" id="pace_data_table">
                         </div>
                     </div>
-                </div>
 
-                <div id="panel_azimuth_error" class="col-md-12 mb-4">
-                    <h4>Direction / Azimuth error</h4>
-                    <p>Azimuth is the compass direction. Compass directions also have error.</p>
-                    <p>While distance error will be percentage based, azimuth error is value based.</p>
-                    <label>Please estimate your azimuth accuracy in degrees:</label>
-                    <input type="number" class="form-control" id="azim_error_input" placeholder="e.g., 2">
-                    <div class="form-text">We will improve this to test your error assumptions in the future</div>
-                    <div class="text-end">
-                        <button id="submit_azim_error" class="btn btn-primary">Submit direction error</button>
-                    </div>
-
+                    <p id="start_activity_button" class="text-end mt-3 d-none">
+                        <button id="goto_section3" class="btn btn-success">Start activity</button>
+                    </p>
                 </div>
             </div>
 
-            <hr>
-
-            <div class="row">
+            <div id="section3" class="row tab-pane fade" role="tabpanel" aria-labelledby="section3" tabindex="0">
                 <div class="col-md-12">
                     <h2 id="begin_survey_traverse">Begin survey traverse</h2>
                     <p>The area below represents your field space. The icon in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
-                    <p><strong>Select the benchmark or stations to see possible operations.</strong></p>
-                    <div id="controls" class="invisible">
+                    <p><strong>Select a benchmark or station to see possible operations below the map.</strong></p>
+
+                    <!-- SVG CSS -->
+                    <style>
+                    .pointer {
+                        cursor: pointer;
+                    }
+                    .leg_line {
+                        stroke-dasharray: 2 1;
+                    }
+                    .leg_line, .marker_benchmark, .marker_point, .error_poly {
+                        stroke: black;
+                        stroke-width: 0.5;
+                        fill: white;
+                    }
+                    .error_poly {
+                        opacity: 0.3;
+                    }
+                    .selection {
+                        fill: #0B5ED7;
+                    }
+                    .hover {
+                        cursor: pointer;
+                        transition: opacity 0.5s;
+                    }
+                    .hover:hover {
+                        opacity: 1;
+                    }
+                    svg {
+                        background-color: #acd1af;
+                        max-height: 600px;
+                    }
+
+                    </style>
+
+                    <p id="results"></p>
+                    <div id="controls" class="d-none">
                         <p>
                             <button id="control_add_leg" class="btn btn-primary">Add leg</button>
                             <button id="control_edit" class="btn btn-secondary">Edit station</button>
                             <button id="control_mergebm" class="btn btn-success" disabled>Merge BM</button>
                             <button id="control_wall" class="btn btn-secondary" disabled>Draw wall to point</button>
-                            <button id="control_delete" class="btn btn-danger" disabled>Delete point</button>
+                            <button id="control_delete" class="btn btn-danger">Delete point</button>
                             <button id="control_close" class="btn btn-dark float-end">X</button>
                         </p>
                     </div>
@@ -182,13 +251,13 @@
                     <div id="form_edit" class="d-none">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label>Edit azimuth to this station:</label>
+                                <label>Edit azimuth <strong>to this station</strong>:</label>
                                 <input type="number" class="form-control" id="edit_station_azim" placeholder="" required>
                                 <div class="form-text"></div>
                             </div>
 
                             <div class="col-md-6">
-                                <label>Edit pace count to this station:</label>
+                                <label>Edit pace count <strong>to this station</strong>:</label>
                                 <input type="number" class="form-control" id="edit_station_paces" placeholder="" required>
                                 <div class="form-text">In paces</div>
                             </div>
@@ -218,55 +287,25 @@
                         <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
                     </div>
 
-                    <!-- SVG CSS -->
-                    <style>
-                    .pointer {
-                        cursor: pointer;
-                        stroke: black;
-                        fill: white;
-                    }
-                    .selection {
-                        fill: #0B5ED7;
-                    }
-                    .leg_line {
-                        stroke-dasharray: 2;
-                        stroke: black;
-                    }
-                    .error_poly {
-                        opacity: 0.3;
-                        stroke: black;
-                        fill: white;
-                    }
-                    .hover {
-                        cursor: pointer;
-                        transition: opacity 0.5s;
-                    }
-                    .hover:hover {
-                        opacity: 1;
-                    }
-                    svg {
-                        background-color: #acd1af;
-                        max-height: 600px;
-                    }
-
-                    </style>
-
-                    <p id="results"></p>
                 </div>
             </div>
 
-            <hr>
-
-            <div class="row">
+            <div id="section4" class="row tab-pane fade" role="tabpanel" aria-labelledby="section4" tabindex="0">
                 <div class="col-md-12">
                     <h2>Export</h2>
                     <p>Working on making it so you can export the data based on provided coordinates for benchmark (not yet implemented)</p>
                 </div>
+            </div>
+
+            <div id="section5" class="row tab-pane fade" role="tabpanel" aria-labelledby="section5" tabindex="0">
                 <div class="col-md-12">
-                    <h2>Objective</h2>
+                    <h2>Learning objectives</h2>
                     <p>To provide a follow-up exercise to traditional traverse exercises that consist of field work, returning to the lab for trigonometric computation of point locations along the traverse and graphing of the points. This tool allows easier graphing of points, reducing error of that process when surveying error is already significant.</p>
                     <p>Secondly the tool allows better visualization of measurements error and (eventually) allows the comparisons of open traverse errors and closed traverse errors.</p>
                 </div>
+            </div>
+
+            <div id="section6" class="row d-none">
                 <div class="col-md-12">
                     <h2>Aspects to still develop:</h2>
                     <ul>
@@ -285,6 +324,7 @@
                     </ul>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <h2>Test</h2>
@@ -310,6 +350,7 @@
             </div>
 
         </div>
+
         <footer class="container-fluid mt-5 pb-5 bg-dark text-light">
             <div class="container">
                 <div class="row align-items-start">

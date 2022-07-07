@@ -12,7 +12,6 @@ TSE.test = function(test_num)
             // generate pace trials and azim error
             document.getElementById('distance_error_no').click();
             document.getElementById('pacing_distance').value = 60.7;
-            document.getElementById('submit_pace_distance').click();
             document.getElementById('pacing_trial_value').value = 70.5;
             document.getElementById('submit_pace_trial').click();
             document.getElementById('pacing_trial_value').value = 80;
@@ -31,6 +30,9 @@ TSE.test = function(test_num)
             document.getElementById('submit_pace_trial').click();
             document.getElementById('pacing_trial_value').value = 78;
             document.getElementById('submit_pace_trial').click();
+
+            // submit
+            document.getElementById('finish_pace_trials').click();
             
             // add direction error
             document.getElementById('azim_error_input').value = 2.5;
@@ -38,15 +40,10 @@ TSE.test = function(test_num)
             break;
 
         case 2:
-            TSE.projects.main = {
-  "pacing_distance": 60.7,
-  "pace_trials": [ 70.5, 80, 75, 73, 77.5, 74, 76, 72, 78 ],
-  "pacing_error_percentage": 8.186035527621778,
-  "pace_length": 0.8081360946745563,
-  "azim_error": 2.5,
-  "id_counter": 12,
-  "connections": [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ],
-  "survey": [
+            TSE.test(1);
+            TSE.projects.main.id_counter = 12;
+            TSE.projects.main.connections = [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ];
+            TSE.projects.main.survey = [
     {
       "type": "benchmark",
       "name": "Starting benchmark",
@@ -176,10 +173,8 @@ TSE.test = function(test_num)
       "dependence": 4,
       "azimuth": 60
     }
-  ],
-  "selected": 7
-};
-            TSE.active = "main";
+  ];
+            TSE.projects.main.selected = 7;
             TSE.updateSVG();
             break;
 
@@ -213,13 +208,20 @@ TSE.getBounds = function(points)
 };
 
 // displays the table of pace trials
+// also does some necessary calculations
 TSE.update_pace_trials_table = function()
 {
     let table_div = document.getElementById('pace_data_table');
     let prj = TSE.projects[TSE.active];
+
     // reduce((a,b)=>a+b) sums all values in array
-    let trials_pace_mean = prj.pace_trials.reduce((a,b)=>a+b)/prj.pace_trials.length;
-    let pacelen_mean = prj.pacing_distance/trials_pace_mean;
+    let pace_lengths_mean= 0;
+
+    if (prj.pace_trials.length > 0) {
+        let trials_pace_lengths = prj.pace_trials.map((t)=>t.d/t.p);
+        pace_lengths_mean = trials_pace_lengths.reduce((a,b)=>a+b)/prj.pace_trials.length;
+    }
+
     let variance_sum = 0;
     let tc = "<table class='table table-striped'>" +
         "<thead>" +
@@ -233,37 +235,41 @@ TSE.update_pace_trials_table = function()
 
     tc += "<tbody>";
     for (let trial_num = 0; trial_num < prj.pace_trials.length; trial_num+=1) {
-        let paces = prj.pace_trials[trial_num];
-        let pacelen = prj.pacing_distance/paces;
+        let pdist = prj.pace_trials[trial_num].d;
+        let paces = prj.pace_trials[trial_num].p;
+        let pacelen = pdist/paces;
 
         tc += "<tr>" +
             "<td>" + (trial_num + 1) + "</td>" +
             "<td>" + paces + "</td>" +
-            "<td>" + prj.pacing_distance + "</td>" +
+            "<td>" + pdist + "</td>" +
             "<td>" + (Math.round(pacelen * 100) / 100) + "</td>" +
-            "<td>" + (Math.round(Math.pow(pacelen - pacelen_mean, 2) * 10000) / 10000) + "</td>" +
+            "<td>" + (Math.round(Math.pow(pacelen - pace_lengths_mean, 2) * 10000) / 10000) + "</td>" +
             "<td><a href='#/' onclick='TSE.delete_pace_trial(" + trial_num + ")'>del</a></td>" +
             "</tr>";
-        variance_sum += Math.pow(pacelen - pacelen_mean, 2);
+        variance_sum += Math.pow(pacelen - pace_lengths_mean, 2);
     }
 
     tc += "<tr><td></td><td></td><td></td>" +
-        "<td>mean=" + (Math.round(pacelen_mean * 1000) / 1000) + "</td><td>&Sigma;=" + (Math.round(variance_sum * 10000)/10000) + "</td>" +
+        "<td>mean=" + (Math.round(pace_lengths_mean * 1000) / 1000) + "</td><td>&Sigma;=" + (Math.round(variance_sum * 10000)/10000) + "</td>" +
         "<td></td></tr>" +
         "</tbody></table>";
 
     // calculate the standard deviation and standard error
     let stddev = Math.sqrt(variance_sum/(prj.pace_trials.length - 1));
-    let stderr = 2 * stddev * 100 / pacelen_mean;
+    let stderr = 2 * stddev * 100 / pace_lengths_mean;
 
-    tc += "<p class='m-4'>" +
-        "<strong>Standard deviation: " + (Math.round(stddev * 10000) / 10000) + "<br>" +
-        "Standard error: " + (Math.round(stderr * 10000) / 10000) + "%<br>" +
-        "Mean pace length: " + (Math.round(pacelen_mean * 100) / 100) + "</p>";
+    // only show summary if there are mutliple trials
+    if (prj.pace_trials.length > 1) {
+        tc += "<p class='m-4'>" +
+            "<strong>Standard deviation: " + (Math.round(stddev * 10000) / 10000) + "<br>" +
+            "Standard error: " + (Math.round(stderr * 10000) / 10000) + "%<br>" +
+            "Mean pace length: " + (Math.round(pace_lengths_mean * 100) / 100) + "</p>";
+    }
 
     // save the stderr and pace length to the project
     TSE.projects[TSE.active].pacing_error_percentage = stderr;
-    TSE.projects[TSE.active].pace_length = pacelen_mean;
+    TSE.projects[TSE.active].pace_length = pace_lengths_mean;
 
     // update the div and make sure it's visible
     table_div.innerHTML = tc;
@@ -276,6 +282,24 @@ TSE.delete_pace_trial = function(i)
     // remove pacing trial
     TSE.projects[TSE.active].pace_trials.splice(i, 1);
     TSE.update_pace_trials_table();
+};
+
+TSE.deleteStation = function(stnid)
+{
+    console.log("Deleting stnid:" + stnid);
+
+    // delete item from survey
+    TSE.projects[TSE.active].survey = TSE.projects[TSE.active].survey.filter( s => s.id !== stnid);
+
+    // delete (filter out) this id from the connections - as a parent/dependence
+    TSE.projects[TSE.active].connections = TSE.projects[TSE.active].connections.filter(con => con[1] !== stnid);
+
+    // retrieve child/dependent stations
+    let childstns = TSE.projects[TSE.active].connections.filter(con => con[0] === stnid );
+    console.log(childstns.map(c=>c[1]));
+    childstns.map(cstn => TSE.deleteStation(cstn[1]));
+    console.log("done");
+
 };
 
 // draws the SVG elements from the data
@@ -294,6 +318,7 @@ TSE.updateSVG = function()
     let svg = d3.select("#results")
         .append("svg")
         .attr("id", "surveyfigure")
+        .attr("width", "100%")
         .attr("viewBox",
             // compensate for y-inversion
             (bounds.xmin - padding) + " " + (-bounds.ymax - padding) + " " +
@@ -335,12 +360,12 @@ TSE.updateSVG = function()
             .attr("id", "station_" + n.id)
             //.attr("stroke", "black")
             //.attr("fill", "white")
-            .attr("class", "pointer")
+            .attr("class", "pointer marker_" + n.type)
             .on("click", function() {
                 // save index of selected node/point/bm
                 TSE.selectStation(n.id);
                 // show controls
-                document.getElementById('controls').classList.remove('invisible');
+                document.getElementById('controls').classList.remove('d-none');
             })
             // note that y is inverted as SVG postive values go down
             .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
@@ -428,10 +453,15 @@ TSE.updateSVG = function()
     }
 };
 
-// hides all station controls
+TSE.hideControlButtons = function()
+{
+    document.getElementById('controls').classList.add('d-none');
+};
+
+// hides all station controls and forms
 TSE.resetControls = function()
 {
-    document.getElementById('controls').classList.add('invisible');
+    // hide the control buttons
     document.getElementById('form_add_leg').classList.add('d-none');
     document.getElementById('form_edit').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
@@ -486,13 +516,14 @@ TSE.getStationFromId = function(stnid)
 // makes a station selected in gui and data
 TSE.selectStation = function(stnid)
 {
-    //console.log("Requesting selection of " + stnid);
-    //console.log("Previous selection was of " + TSE.projects[TSE.active].selected);
-
-    // deselect previous
+    // deselect previous (if any)
     // checking with isNaN otherwise id of 0 will be false
     if (!isNaN(TSE.projects[TSE.active].selected)) {
-        document.getElementById('station_' + TSE.projects[TSE.active].selected).classList.remove("selection")
+        let selected = document.getElementById('station_' + TSE.projects[TSE.active].selected);
+        // if selected exists (we may have deleted it) - then deselect it
+        if (selected) {
+            selected.classList.remove("selection");
+        }
     }
 
     // select new
@@ -541,6 +572,7 @@ TSE.successToast = function(msg)
 {
     TSE.toast(msg, "Success", "bg-success", "text-light");
 };
+
 TSE.warnToast = function(msg)
 {
     TSE.toast(msg, "Warning", "bg-warning", "text-dark");
@@ -576,8 +608,9 @@ TSE.toast = function(msg, head_text, type, text_colour)
         let yesb = document.getElementById('distance_error_yes');
         let nob = document.getElementById('distance_error_no');
         let yesf = document.getElementById('known_pace_and_error_input');
-        let nof = document.getElementById('calc_error_input');
+        let nof = document.getElementById('calc_dist_error_input');
 
+        // update buttons to show un/activite button
         yesb.classList.remove('btn-outline-primary')
         yesb.classList.add('btn-primary')
         nob.classList.remove('btn-primary')
@@ -590,7 +623,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         let yesb = document.getElementById('distance_error_yes');
         let yesf = document.getElementById('known_pace_and_error_input');
         let nob = document.getElementById('distance_error_no');
-        let nof = document.getElementById('calc_error_input');
+        let nof = document.getElementById('calc_dist_error_input');
 
         nob.classList.remove('btn-outline-primary')
         nob.classList.add('btn-primary')
@@ -600,56 +633,76 @@ TSE.toast = function(msg, head_text, type, text_colour)
         yesf.classList.add('d-none');
         nof.classList.remove('d-none');
     };
+    document.getElementById('finish_pace_trials').onclick = function() {
+        // hide the dist error form
+        document.getElementById('dist_error_select').classList.add('d-none');
+        // show the azim error form
+        document.getElementById('calc_azim_error_input').classList.remove('d-none');
+    };
     document.getElementById('submit_distance_error').onclick = function() {
-        if (TSE.active === null) {
-            TSE.active = 'main';
-        }
-        if (!TSE.projects[TSE.active]) {
-            TSE.projects[TSE.active] = {};
-        }
+        // some initialization
+        if (TSE.active === null) { TSE.active = 'main'; }
+        if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
+
         TSE.projects[TSE.active].pacing_error_percentage = parseFloat(document.getElementById('known_error_percentage').value, 10);
         TSE.projects[TSE.active].pace_length = parseFloat(document.getElementById('known_pace_length').value, 10);
+
+        // check the values
+        if (isNaN(TSE.projects[TSE.active].pacing_error_percentage) || isNaN(TSE.projects[TSE.active].pace_length)) {
+            return;
+        }
+
+        // hide the dist error form
+        document.getElementById('dist_error_select').classList.add('d-none');
+        // show the azim error form
+        document.getElementById('calc_azim_error_input').classList.remove('d-none');
         
         // try to setup the graph area if the required paramters have been provided
         TSE.tryInitialization();
     };
-    document.getElementById('submit_pace_distance').onclick = function() {
-        if (TSE.active === null) {
-            TSE.active = 'main';
-        }
-        if (!TSE.projects[TSE.active]) {
-            TSE.projects[TSE.active] = {};
-        }
-        TSE.projects[TSE.active].pacing_distance = parseFloat(document.getElementById('pacing_distance').value, 10);
-
-        // show the input form for pace measurement tests
-        document.getElementById('input_pace_test').classList.remove('d-none');
-
+    document.getElementById('return_to_dist_error').onclick = function() {
+        // hide the azim error form
+        document.getElementById('dist_error_select').classList.remove('d-none');
+        // show the dist error form
+        document.getElementById('calc_azim_error_input').classList.add('d-none');
     };
     document.getElementById('submit_pace_trial').onclick = function() {
+        // some initialization
+        if (TSE.active === null) { TSE.active = 'main'; }
+        if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
+
+        let pdinput = document.getElementById('pacing_distance');
         let pinput = document.getElementById('pacing_trial_value');
+        let pdist = parseFloat(pdinput.value, 10);
         let paces = parseFloat(pinput.value);
-        // clear  input value
+        
+        // validation
+        if (isNaN(pdist) || isNaN(paces)) { return; }
+
+        // save values
+
+        // clear paces input value but not pace distance
         pinput.value = "";
 
         if (!TSE.projects[TSE.active].pace_trials) {
             TSE.projects[TSE.active].pace_trials = [];
         }
-        TSE.projects[TSE.active].pace_trials.push(paces);
+
+        TSE.projects[TSE.active].pace_trials.push({"d": pdist, "p": paces});
         TSE.update_pace_trials_table();
 
-        // try to setup the graph area if the required paramters have been provided
-        TSE.tryInitialization();
+        // if we have at least 8 trials, enable the progress button
+        if (TSE.projects[TSE.active].pace_trials.length >= 8) {
+            document.getElementById('finish_pace_trials').disabled = false;
+        }
+
     };
     document.getElementById('submit_azim_error').onclick = function() {
-        if (TSE.active === null) {
-            TSE.active = 'main';
-        }
-        let azim = parseFloat(document.getElementById('azim_error_input').value);
+        // some initialization
+        if (TSE.active === null) { TSE.active = 'main'; }
+        if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
-        if (!TSE.projects[TSE.active]) {
-            TSE.projects[TSE.active] = {};
-        }
+        let azim = parseFloat(document.getElementById('azim_error_input').value);
         TSE.projects[TSE.active].azim_error = azim;
 
         // try to setup the graph area if the required paramters have been provided
@@ -657,11 +710,20 @@ TSE.toast = function(msg, head_text, type, text_colour)
             // it's initializing, so go to traverse
             document.getElementById("begin_survey_traverse").scrollIntoView({behavior: 'smooth'});
         }
+
+        // go to the activity tab
+        let acttab = document.getElementById('section3-tab');
+        acttab.disabled = false;
+        acttab.click();
+        // also enable the export function
+        document.getElementById('section4-tab').disabled = false;
     };
     document.getElementById('control_add_leg').onclick = function() {
+        TSE.resetControls();
         document.getElementById('form_add_leg').classList.remove('d-none');
     };
     document.getElementById('control_edit').onclick = function() {
+        TSE.resetControls();
         document.getElementById('form_edit').classList.remove('d-none');
 
         // populate the edit form with the select station's data
@@ -711,17 +773,22 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // update SVG display
         TSE.updateSVG();
+        TSE.hideControlButtons();
         TSE.resetControls();
     };
     document.getElementById('control_wall').onclick = function() {
         document.getElementById('form_wall_instructions').classList.remove('d-none');
     };
     document.getElementById('control_delete').onclick = function() {
-        let selection = TSE.projects[TSE.active].selected;
-        TSE.projects[TSE.active].survey.splice(selection, 1);
+        // delete stations and dependencies
+        TSE.deleteStation(TSE.projects[TSE.active].selected);
+        
+        // update display
         TSE.updateSVG();
+        TSE.hideControlButtons();
     };
     document.getElementById('control_close').onclick = function() {
+        TSE.hideControlButtons();
         TSE.resetControls();
         TSE.selectStation(undefined);
     };
@@ -780,9 +847,12 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.projects[TSE.active].connections.push([dependent.id, stnid]);
 
         // gui update controls and SVG graphics
-        TSE.resetControls();
+        TSE.hideControls();
         TSE.updateSVG();
         TSE.resetControls();
+    };
+    document.getElementById('goto_section2').onclick = function() {
+        document.getElementById('section2-tab').click();
     };
     
 }());
