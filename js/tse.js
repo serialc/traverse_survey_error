@@ -463,7 +463,9 @@ TSE.resetControls = function()
 {
     // hide the control buttons
     document.getElementById('form_add_leg').classList.add('d-none');
+    document.getElementById('form_edit_bm').classList.add('d-none');
     document.getElementById('form_edit').classList.add('d-none');
+    document.getElementById('edit_form_submit_btn').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
 };
 
@@ -723,11 +725,20 @@ TSE.toast = function(msg, head_text, type, text_colour)
         document.getElementById('form_add_leg').classList.remove('d-none');
     };
     document.getElementById('control_edit').onclick = function() {
+        let stn = TSE.getStationFromId(TSE.projects[TSE.active].selected);
+
         TSE.resetControls();
-        document.getElementById('form_edit').classList.remove('d-none');
+
+        // if editing the starting benchmark or any benchmark, display northing/easting options as well
+        if (stn.type === "benchmark") {
+            document.getElementById('form_edit_bm').classList.remove('d-none');
+        }
+        if (stn.id !== 0) {
+            document.getElementById('form_edit').classList.remove('d-none');
+        }
+        document.getElementById('edit_form_submit_btn').classList.remove('d-none');
 
         // populate the edit form with the select station's data
-        let stn = TSE.getStationFromId(TSE.projects[TSE.active].selected);
         document.getElementById('edit_station_azim').value = stn.azimuth;
         document.getElementById('edit_station_paces').value = stn.paces;
         document.getElementById('edit_station_description').value = stn.name;
@@ -780,6 +791,13 @@ TSE.toast = function(msg, head_text, type, text_colour)
         document.getElementById('form_wall_instructions').classList.remove('d-none');
     };
     document.getElementById('control_delete').onclick = function() {
+
+        let target = TSE.projects[TSE.active].selected;
+        if (target === 0) {
+            TSE.warnToast("Starting benchmark cannot be deleted");
+            return;
+        }
+
         // delete stations and dependencies
         TSE.deleteStation(TSE.projects[TSE.active].selected);
         
@@ -847,7 +865,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.projects[TSE.active].connections.push([dependent.id, stnid]);
 
         // gui update controls and SVG graphics
-        TSE.hideControls();
+        TSE.hideControlButtons();
         TSE.updateSVG();
         TSE.resetControls();
     };
