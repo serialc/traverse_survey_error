@@ -25,8 +25,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.3273709"
-     inkscape:cx="441.0975"
-     inkscape:cy="71.193363"
+     inkscape:cx="396.27206"
+     inkscape:cy="71.193364"
      inkscape:window-width="2560"
      inkscape:window-height="1376"
      inkscape:window-x="1920"
@@ -45,8 +45,8 @@
     <rect
        x="328.31256"
        y="-89.445396"
-       width="309.27875"
-       height="84.114204"
+       width="365.8743"
+       height="68.170684"
        id="rect23155" />
     <rect
        x="328.31256"
@@ -570,19 +570,19 @@
        ry="0.5" />
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,2.7024201,25.015061)"
+       transform="matrix(0.26458333,0,0,0.26458333,-7.7068653,25.015061)"
        id="text23153"
-       style="font-size:16px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect23155)"><tspan
+       style="font-size:21.3333px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect23155)"><tspan
          x="328.3125"
-         y="-75.289062"
-         id="tspan38906">Great, full, or geometric pace</tspan></text>
+         y="-70.570342"
+         id="tspan10805">Great, full, or geometric pace</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,-10.888183,56.284724)"
+       transform="matrix(0.26458333,0,0,0.26458333,-15.263426,56.284724)"
        id="text23153-9"
-       style="font-size:16px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect23155-8)"><tspan
+       style="font-size:21.3333px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect23155-8)"><tspan
          x="328.3125"
-         y="-75.289062"
-         id="tspan38908">Pace or step</tspan></text>
+         y="-70.570342"
+         id="tspan10807">Pace or step</tspan></text>
   </g>
 </svg>
