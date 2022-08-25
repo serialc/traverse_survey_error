@@ -43,6 +43,7 @@ TSE.test = function(test_num)
             TSE.test(1);
             TSE.projects.main.id_counter = 12;
             TSE.projects.main.connections = [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ];
+            TSE.projects.main.walls = [ { "op": 8, "dp": 9 }, { "op": 9, "dp": 10 }, { "op": 10, "dp": 11 }, { "op": 11, "dp": 6 }, { "op": 6, "dp": 7 }, { "op": 7, "dp": 8 } ];
             TSE.projects.main.survey = [
     {
       "type": "benchmark",
@@ -50,6 +51,8 @@ TSE.test = function(test_num)
       "id": 0,
       "x": 0,
       "y": 0,
+      "n": 0,
+      "e": 0,
       "dependence": -1
     },
     {
@@ -104,6 +107,8 @@ TSE.test = function(test_num)
       "paces": 63,
       "x": -13.841517056340624,
       "y": 2.525672067157906,
+      "n": 0,
+      "e": 0,
       "dependence": 4,
       "azimuth": 160
     },
@@ -276,6 +281,28 @@ TSE.update_pace_trials_table = function()
     table_div.classList.remove('d-none');
 };
 
+// add a wall to the data model
+TSE.addWall = function(op, dp)
+{
+    if (op === dp) {
+        TSE.warnToast("Select two different stations to create a wall");
+        return false;
+    }
+
+    // new wall object
+    let nwall = {op, dp};
+
+    // add to project array of walls
+    if (TSE.projects[TSE.active].walls) {
+        TSE.projects[TSE.active].walls.push(nwall);
+    } else {
+        TSE.projects[TSE.active].walls = [nwall];
+    }
+
+    // redraw the map with the added wall
+    TSE.updateSVG();
+};
+
 // deletes one trial of the pacing activity
 TSE.delete_pace_trial = function(i)
 {
@@ -286,8 +313,6 @@ TSE.delete_pace_trial = function(i)
 
 TSE.deleteStation = function(stnid)
 {
-    console.log("Deleting stnid:" + stnid);
-
     // delete item from survey
     TSE.projects[TSE.active].survey = TSE.projects[TSE.active].survey.filter( s => s.id !== stnid);
 
@@ -296,10 +321,11 @@ TSE.deleteStation = function(stnid)
 
     // retrieve child/dependent stations
     let childstns = TSE.projects[TSE.active].connections.filter(con => con[0] === stnid );
-    console.log(childstns.map(c=>c[1]));
     childstns.map(cstn => TSE.deleteStation(cstn[1]));
-    console.log("done");
 
+    // delete any wall that uses this station
+    let del_walls = TSE.projects.main.walls.filter(w => w.op === stnid || w.dp === stnid );
+    del_walls.map(w => TSE.deleteWall(w, false));
 };
 
 // draws the SVG elements from the data
@@ -328,6 +354,10 @@ TSE.updateSVG = function()
     // add groups to contain and order layers of map elements/hierarchy
     let layer_error = svg.append("g")
         .attr("id", "map_error")
+    let layer_scalebar = svg.append("g")
+        .attr("id", "map_scalebar")
+    let layer_walls = svg.append("g")
+        .attr("id", "map_walls")
     let layer_lines = svg.append("g")
         .attr("id", "map_lines")
     let layer_stations = svg.append("g")
@@ -362,10 +392,38 @@ TSE.updateSVG = function()
             //.attr("fill", "white")
             .attr("class", "pointer marker_" + n.type)
             .on("click", function() {
+                // check if this click is completing some other operation besides selection
+                if (TSE.projects[TSE.active].mode) {
+                    switch(TSE.projects[TSE.active].mode) {
+                        case "wall":
+                            // create the wall in the data
+                            TSE.addWall(TSE.projects[TSE.active].selected, n.id);
+
+                            // remove the mode and hide the controls, remove selection
+                            delete(TSE.projects[TSE.active].mode);
+                            TSE.hideControlButtons();
+                            TSE.resetControls();
+                            TSE.selectStation(undefined);
+                            return;
+                            //break;
+                        default:
+                    }
+                }
+
                 // save index of selected node/point/bm
                 TSE.selectStation(n.id);
+
                 // show controls
                 document.getElementById('controls').classList.remove('d-none');
+
+                // don't show the merge button/action except for bm
+                /*
+                let mergebm_button = document.getElementById('control_mergebm');
+                if (n.type === "benchmark") {
+                    mergebm_button.classList.remove('d-none');
+                } else {
+                    mergebm_button.classList.add('d-none');
+                }*/
             })
             // note that y is inverted as SVG postive values go down
             .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
@@ -451,6 +509,119 @@ TSE.updateSVG = function()
             .attr("y2", -dest.y)
             .attr("class", "leg_line");
     }
+
+    // Add scale bar
+    // Calculate scale bar width in metres that takes roughly 1/3 width of map
+    let sbwm = parseInt((bounds.xmax - bounds.xmin + 2 * padding)/2, 10);
+    let sb_tickheight = (bounds.ymax - bounds.ymin + 2 * padding)/100;
+    sb_tickheight = sb_tickheight < 1 ? 1 : sb_tickheight;
+    let sbdivs = 4;
+    let sbint = parseInt(sbwm/4, 10);
+    let sbxpad = 3
+    let sbypad = 1
+
+    // construct and add to svg
+    // add scale bar vertical tick marks and values/numbers
+    for (let i = 0; i < sbdivs; i+=1) {
+        layer_scalebar.append("line")
+            .attr("x1", bounds.xmax + padding - (i * sbint) - sbxpad)
+            .attr("y1", (-bounds.ymin + padding/2) - sbypad)
+            .attr("x2", bounds.xmax  + padding - (i * sbint) - sbxpad)
+            .attr("y2", (-bounds.ymin + padding/2 + sb_tickheight) - sbypad)
+            .attr("class", "sb_line");
+
+        let sval = (sbdivs - 1 - i) * sbint;
+
+        layer_scalebar.append("text")
+            .attr("x", bounds.xmax + padding - (i * sbint) - String(sval).length - sbxpad)
+            .attr("y", (-bounds.ymin + padding) - sbypad)
+            .attr("class", "sb_text")
+            .text(sval);
+    }
+
+    // scale bar unit text
+    layer_scalebar.append("text")
+        .attr("x", bounds.xmax + padding - (2 * sbint) - sbxpad)
+        .attr("y", (-bounds.ymin + padding) - sbypad - 6)
+        .attr("class", "sb_text")
+        .text("metres");
+
+    // horizontal line
+    layer_scalebar.append("line")
+            .attr("x1", bounds.xmax + padding - sbxpad)
+            .attr("y1", (-bounds.ymin + padding/2) - sbypad)
+            .attr("x2", bounds.xmax  + padding - ((sbdivs - 1) * sbint) - sbxpad)
+            .attr("y2", (-bounds.ymin + padding/2) - sbypad)
+            .attr("class", "sb_line");
+
+
+    // add the walls if there are any
+    if (prj.walls) {
+
+        let walls = prj.walls;
+        // iterate through each wall
+        for (let w = 0; w < walls.length; w+=1) {
+            let wo = TSE.getStationFromId(walls[w].op);
+            let wd = TSE.getStationFromId(walls[w].dp);
+            
+            // 'draw' the wall
+            // note the inverted y axis
+            layer_walls.append("line")
+                .attr("x1", wo.x)
+                .attr("y1", -wo.y)
+                .attr("x2", wd.x)
+                .attr("y2", -wd.y)
+                .attr("class", "wall_line pointer")
+                .on("click", function() {
+                    TSE.promptWallDelete(walls[w]);
+                });
+        }
+    }
+};
+
+TSE.promptWallDelete = function(wall)
+{
+    if (TSE.projects[TSE.active].wall_click_time && 
+        new Date() - TSE.projects[TSE.active].wall_click_time < 1000 &&
+        TSE.projects[TSE.active].wall_clicked === wall) {
+        TSE.deleteWall(wall);
+    } else {
+        TSE.infoToast("Double-click wall to delete it");
+        TSE.projects[TSE.active].wall_click_time = new Date();
+        TSE.projects[TSE.active].wall_clicked = wall;
+    }
+};
+
+TSE.deleteWall = function(wall, update=true)
+{
+    // get index of wall to delete
+    let wall_index = TSE.projects[TSE.active]
+        .walls.map(w => w === wall) // find match
+        .findIndex(i => i); // get index
+    // delete from list
+    TSE.projects[TSE.active].walls.splice(wall_index, 1);
+
+    // update map
+    if (update) {
+        TSE.updateSVG();
+    }
+};
+
+TSE.mergeBM = function(bm1id, bm2id)
+{
+    let bm1 = TSE.getStationFromId(bm1id);
+    let bm2 = TSE.getStationFromId(bm2id);
+
+    // calculate the closing error
+    let nsd = bm1.y - bm2.y;
+    let ewd = bm1.x - bm2.x;
+
+    // get the nodes in sequence that form the closed traverse
+    // Use Dijkstra's algorithm to find the shortest path to bm
+
+
+    console.log(bm1, bm2);
+    console.log(nsd, ewd);
 };
 
 TSE.hideControlButtons = function()
@@ -465,6 +636,8 @@ TSE.resetControls = function()
     document.getElementById('form_add_leg').classList.add('d-none');
     document.getElementById('form_edit_bm').classList.add('d-none');
     document.getElementById('form_edit').classList.add('d-none');
+    document.getElementById('form_wall_instructions').classList.add('d-none');
+    document.getElementById('form_bm_merge').classList.add('d-none');
     document.getElementById('edit_form_submit_btn').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
 };
@@ -543,6 +716,7 @@ TSE.recomputeAllXY = function()
     function updateXY(stnid) {
 
         // get the index of the edited station in the array
+        // Note that findIndex "returns the index of the first element in an array that satisfies the provided testing function" (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
         let stnindex = TSE.projects.main.survey.findIndex( (o) => o.id == stnid)
         // get the station for ease of reading
         let stn = TSE.getStationFromId(stnid);
@@ -570,14 +744,19 @@ TSE.recomputeAllXY = function()
 };
 
 // display notifications
-TSE.successToast = function(msg)
+TSE.successToast = function(msg, head_text = "Success")
 {
-    TSE.toast(msg, "Success", "bg-success", "text-light");
+    TSE.toast(msg, head_text, "bg-success", "text-light");
 };
 
-TSE.warnToast = function(msg)
+TSE.infoToast = function(msg, head_text = "Information")
 {
-    TSE.toast(msg, "Warning", "bg-warning", "text-dark");
+    TSE.toast(msg, head_text, "bg-primary", "text-light");
+};
+
+TSE.warnToast = function(msg, head_text = "Warning")
+{
+    TSE.toast(msg, head_text, "bg-warning", "text-dark");
 };
 
 TSE.toast = function(msg, head_text, type, text_colour)
@@ -646,13 +825,18 @@ TSE.toast = function(msg, head_text, type, text_colour)
         if (TSE.active === null) { TSE.active = 'main'; }
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
-        TSE.projects[TSE.active].pacing_error_percentage = parseFloat(document.getElementById('known_error_percentage').value, 10);
-        TSE.projects[TSE.active].pace_length = parseFloat(document.getElementById('known_pace_length').value, 10);
+        let pep = parseFloat(document.getElementById('known_error_percentage').value, 10);
+        let pl = parseFloat(document.getElementById('known_pace_length').value, 10);
+
 
         // check the values
-        if (isNaN(TSE.projects[TSE.active].pacing_error_percentage) || isNaN(TSE.projects[TSE.active].pace_length)) {
-            return;
+        if (pep.length === 0 || isNaN(pep) || pl.length === 0 || isNaN(pl)) {
+            TSE.warnToast("Pace length and error percentage must have valid values");
+            return false;
         }
+
+        TSE.projects[TSE.active].pacing_error_percentage = pep;
+        TSE.projects[TSE.active].pace_length = pl;
 
         // hide the dist error form
         document.getElementById('dist_error_select').classList.add('d-none');
@@ -705,6 +889,11 @@ TSE.toast = function(msg, head_text, type, text_colour)
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
         let azim = parseFloat(document.getElementById('azim_error_input').value);
+        if(azim.length === 0 || isNaN(azim)) {
+            TSE.warnToast("Azimuth error must have a valid value");
+            return false;
+        }
+
         TSE.projects[TSE.active].azim_error = azim;
 
         // try to setup the graph area if the required paramters have been provided
@@ -732,6 +921,8 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // if editing the starting benchmark or any benchmark, display northing/easting options as well
         if (stn.type === "benchmark") {
             document.getElementById('form_edit_bm').classList.remove('d-none');
+            document.getElementById('edit_bm_northing').value = stn.n;
+            document.getElementById('edit_bm_easting').value = stn.e;
         }
         if (stn.id !== 0) {
             document.getElementById('form_edit').classList.remove('d-none');
@@ -748,6 +939,28 @@ TSE.toast = function(msg, head_text, type, text_colour)
             document.getElementById('edit_station_type_benchmark').checked = true;
         }
     };
+    /*document.getElementById('control_mergebm').onclick = function() {
+        document.getElementById('form_bm_merge').classList.remove('d-none');
+
+        // which station id is selected
+        let stnid = TSE.projects[TSE.active].selected;
+
+        // get the benchmark stations (that are not this one)
+        let bmlist = TSE.projects[TSE.active].survey
+            .map(s => s.type === "benchmark" ? s.id : false) // get boolean
+            .reduce( (out, val, index) => val === false ? out : out.concat(val), []);
+
+        // remove the selected bm from the list
+        bmlist = bmlist.reduce( (out, val, i) => val === stnid ? out : out.concat(val), []);
+
+        let bmlist_el = document.getElementById('bmlist');
+        let bmbuttons_html = '';
+        for (let i = 0; i < bmlist.length; i+=1) {
+            let istn = TSE.getStationFromId(bmlist[i]);
+            bmbuttons_html += '<button id="' + bmlist[i] + '" onclick="TSE.mergeBM(' + bmlist[i] + ',' + stnid + ')" class="btn btn-primary">' + istn.name + '</button>';
+        }
+        bmlist_el.innerHTML = bmbuttons_html;
+    }; */
     document.getElementById('submit_station_edit').onclick = function() {
         // retrieve data from form
         let azim = parseFloat(document.getElementById('edit_station_azim').value);
@@ -763,18 +976,30 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // get the object we want to update
         let stn = TSE.projects[TSE.active].survey[stnindex];
 
-        // calculate
-        let dist = TSE.projects[TSE.active].pace_length * paces;
-        // get the object this station is dependent on
-        let dependent = TSE.getStationFromId(stn.dependence);
-
-        stn.azimuth = azim;
-        stn.paces = paces;
-        stn.distance = dist;
+        // update name and station type
         stn.name = desc;
         stn.type = ptype;
-        stn.x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
-        stn.y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+
+        // update the N/E for benchmarks
+        if (stn.type === "benchmark") {
+            stn.n = parseFloat(document.getElementById('edit_bm_northing').value);
+            stn.e = parseFloat(document.getElementById('edit_bm_easting').value);
+        }
+
+        // update the x/y coordinates and other attributes (except for the starting benchmark)
+        if (stn.id !== 0) {
+            stn.azimuth = azim;
+            stn.paces = paces;
+
+            // calculate
+            let dist = TSE.projects[TSE.active].pace_length * paces;
+            stn.distance = dist;
+
+            // get the object this station is dependent on
+            let dependent = TSE.getStationFromId(stn.dependence);
+            stn.x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
+            stn.y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+        }
 
         // replace the object we want to update
         TSE.projects[TSE.active].survey[stnindex] = stn;
@@ -789,6 +1014,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
     };
     document.getElementById('control_wall').onclick = function() {
         document.getElementById('form_wall_instructions').classList.remove('d-none');
+        TSE.projects[TSE.active].mode = "wall";
     };
     document.getElementById('control_delete').onclick = function() {
 

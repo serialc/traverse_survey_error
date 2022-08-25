@@ -49,8 +49,15 @@
             <div id="section1" class="row tab-pane fade show active" role="tabpanel" aria-labelledby="section1" tabindex="0">
                 <div class="col-12">
                     <h2>Compass and Pace Traverse Surveying</h2>
-                    <p>This tool assists traverse survey exercise data collection, graphing, and error illustratation. The focus here is on the use of compasses and pacing to measure angle and distance but other tools could be used.</p>
-                    <p>Follow the instructions below for the activity.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>This tool assists traverse survey exercise data collection, graphing, and error illustratation. The focus here is on the use of compasses and pacing to measure angle and distance but other tools could be used.</p>
+                            <p>Follow the instructions below for the activity.</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                                <img src="rsc/ex1.svg" class="sizelim" width="100%"><br>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-12 mb-4">
@@ -89,7 +96,7 @@
             <div id="section2" class="row tab-pane fade" role="tabpanel" aria-labelledby="section2" tabindex="0">
                 <div class="col-12">
                     <h2>Calculating your error</h2>
-                    <p>Preceeding your traverse measurements relative to your bench mark, it is necessary to calculate your error in distance and direction measurements.</p>
+                    <p>Preceeding traverse measurements relative to a bench mark it is necessary to <strong>calculate your error in distance and direction measurements</strong>.</p>
 
                     <div id="dist_error_select" class="row">
                         <h4>Distance error</h4>
@@ -112,7 +119,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label>Enter your known error percentage:</label>
-                                    <input type="number" class="form-control" id="known_error_percentage" placeholder="e.g., 7%" required>
+                                    <input type="number" class="form-control" id="known_error_percentage" placeholder="e.g., 7" required>
                                     <div class="form-text">The percentage error</div>
                                 </div>
                             </div>
@@ -124,8 +131,8 @@
 
                         <div id="calc_dist_error_input" class="d-none row">
                             <h4>Pace measurement exercise</h4>
-                            <p>To calculate your distance measurement error we will take measurements between various points of <strong>known distance</strong>.</p>
-                            <p>And then walk the distances between the points repeatedly, submitting the number of paces you took to complete the distance.</p>
+                            <p>To calculate your pace and distance measurement error you must complete pacing trials between points of <strong>known distance</strong>.</p>
+                            <p>Walk repeatedly between points of known distance, submitting the number of paces you took to complete the distance.</p>
                             <p><img src="rsc/pacetrial.svg" width="100%"></p>
                             <div class="col-md-6">
                                 <label>The pacing distance</label>
@@ -151,11 +158,11 @@
                     <div id="calc_azim_error_input" class="d-none row">
                         <h4>Direction / Azimuth error</h4>
                         <div class="col-md-12 mb-3">
-                            <p>Azimuth is the compass direction. Compass directions also have error.</p>
-                            <p>While distance error will be percentage based, azimuth error is value based.</p>
+                            <p>The azimuth is the compass direction. Compass direction measurements also have error.</p>
+                            <p>While distance error is percentage based, azimuth error is value based.</p>
                             <label>Please estimate your azimuth accuracy in degrees:</label>
-                            <input type="number" class="form-control" id="azim_error_input" placeholder="e.g., 2">
-                            <div class="form-text">We will improve this to test your error assumptions in the future</div>
+                            <input type="number" class="form-control" id="azim_error_input" placeholder="">
+                            <div class="form-text">E.g., 2</div>
                             <div class="row mt-3">
                                 <div class="col-6 text-start">
                                     <button id="return_to_dist_error" class="btn btn-secondary">Back</button>
@@ -188,10 +195,22 @@
                     .leg_line {
                         stroke-dasharray: 2 1;
                     }
-                    .leg_line, .marker_benchmark, .marker_point, .error_poly {
+                    .leg_line, .wall_line, .marker_benchmark, .marker_point, .error_poly {
                         stroke: black;
                         stroke-width: 0.5;
+                    }
+                    .marker_benchmark, .marker_point, .error_poly {
                         fill: white;
+                    }
+                    .wall_line {
+                        stroke-width: 1;
+                    }
+                    .sb_line {
+                        stroke: black;
+                        stroke-width: 0.5;
+                    }
+                    .sb_text {
+                        font-size: 4px;
                     }
                     .error_poly {
                         opacity: 0.3;
@@ -206,24 +225,28 @@
                     .hover:hover {
                         opacity: 1;
                     }
-                    svg {
+                    #surveyfigure {
                         background-color: #acd1af;
                         max-height: 600px;
+                        background-image: url(rsc/narrow.svg);
+                        background-repeat: no-repeat;
+                        background-position: 10px 10px;
+                        background-size: 25px;
                     }
 
                     </style>
 
-                    <p id="results"></p>
-                    <div id="controls" class="d-none">
-                        <p>
+                    <div id="results" class="mb-3">
+                        <div id="controls" class="rounded d-none">
                             <button id="control_add_leg" class="btn btn-primary">Add leg</button>
                             <button id="control_edit" class="btn btn-secondary">Edit station</button>
-                            <button id="control_mergebm" class="btn btn-success" disabled>Merge BM</button>
-                            <button id="control_wall" class="btn btn-secondary" disabled>Draw wall to point</button>
+                            <!-- <button id="control_mergebm" class="btn btn-secondary">Merge BM</button> -->
+                            <button id="control_wall" class="btn btn-secondary">Add wall</button>
                             <button id="control_delete" class="btn btn-danger">Delete point</button>
-                            <button id="control_close" class="btn btn-dark float-end">X</button>
-                        </p>
+                            <button id="control_close" class="btn btn-dark">X</button>
+                        </div>
                     </div>
+
                     <div id="form_add_leg" class="d-none mb-3">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -300,12 +323,17 @@
 
                     <div id="edit_form_submit_btn" class="d-none">
                         <div class="text-end">
-                            <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
+                            <button id="submit_station_edit" class="btn btn-primary">Edit station</button>
                         </div>
                     </div>
 
+                    <div id="form_bm_merge" class="d-none">
+                        <p>If you are perfroming a closed traverse you will have two points, likely not at the exact same location. As we know that these two points should be at the same location we can correct some of the error, particularly near the end of the traverse. Completing this operation will allow you to toggle between viewing the surveyed and corrected points mapped.</p>
+                        <p>Merge a BM from the list below with the selected benchmark:</p>
+                        <p><div id="bmlist"></div></p>
+                    </div>
                     <div id="form_wall_instructions" class="d-none">
-                        <p>Click on another point to create a wall from between points.</p>
+                        <p>Click on another point/station to create a wall to it.</p>
                     </div>
                     <div id="merge_bm_instructions" class="d-none">
                         <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
@@ -331,18 +359,22 @@
 
             <div id="section6" class="row d-none">
                 <div class="col-md-12">
+                    <h2>Additional concepts</h2>
+                    <p>This activity depends on existing understanding of other concepts and skills, such as how to use a compass. Here further information is provided to suggest topics for further exploration.</p>
+                        <li>Discuss open and closed (loop and between BM) traverses</li>
+                        <li>What is North: Magnetic vs true</li>
+                </div>
+            </div>
+
+            <div id="section7" class="row d-none">
+                <div class="col-md-12">
                     <h2>Aspects to still develop:</h2>
                     <ul>
-                        <li>Discuss open and closed (loop and between BM) traverses</li>
-                        <li>Provide ability to add backsights to increase azimuth accuracy</li>
-                        <li>What is North: Magnetic vs true</li>
+                        <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
                         <li>Enable showing of work to calculate point locations, error correction.</li>
                         <li>Integrate level-traverse visualization - see <a href="https://www.boeingconsult.com/tafe/ss&so/survey1/level/notes-sur1.htm#sect1">example</a>.</li>
-                        <li>Improve layout - flow of data entry and narrative</li>
-                        <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
                         <li>Add exercise context of field notes - TSE can be used in parallel but shouldn't replace.</li>
                         <li>Harmonize terms - define them (e.g., leg, station, position)</li>
-                        <li>Add scale bar, north arrow</li>
                         <li>Add table view of legs/stations</li>
                         <li>Add export of data (GeoJSON?)</li>
                     </ul>
