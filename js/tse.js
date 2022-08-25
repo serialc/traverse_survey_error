@@ -939,7 +939,8 @@ TSE.toast = function(msg, head_text, type, text_colour)
             document.getElementById('edit_station_type_benchmark').checked = true;
         }
     };
-    /*document.getElementById('control_mergebm').onclick = function() {
+    /*
+    document.getElementById('control_mergebm').onclick = function() {
         document.getElementById('form_bm_merge').classList.remove('d-none');
 
         // which station id is selected
@@ -960,7 +961,8 @@ TSE.toast = function(msg, head_text, type, text_colour)
             bmbuttons_html += '<button id="' + bmlist[i] + '" onclick="TSE.mergeBM(' + bmlist[i] + ',' + stnid + ')" class="btn btn-primary">' + istn.name + '</button>';
         }
         bmlist_el.innerHTML = bmbuttons_html;
-    }; */
+    };
+    */
     document.getElementById('submit_station_edit').onclick = function() {
         // retrieve data from form
         let azim = parseFloat(document.getElementById('edit_station_azim').value);
@@ -1013,6 +1015,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.resetControls();
     };
     document.getElementById('control_wall').onclick = function() {
+        TSE.resetControls();
         document.getElementById('form_wall_instructions').classList.remove('d-none');
         TSE.projects[TSE.active].mode = "wall";
     };

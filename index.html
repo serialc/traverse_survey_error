@@ -51,7 +51,9 @@
                     <h2>Compass and Pace Traverse Surveying</h2>
                     <div class="row">
                         <div class="col-md-6">
-                            <p>This tool assists traverse survey exercise data collection, graphing, and error illustratation. The focus here is on the use of compasses and pacing to measure angle and distance but other tools could be used.</p>
+                            <p>This tool assists traverse survey exercise data collection, graphing, and error illustratation.</p>
+                            <p>While the activity focuses on the use of compasses and pacing to measure angle and distance, other tools could be used.</p>
+                            <p><strong>The contribution of this tool aims to ease the graphing and illustration of error in traverse surveying.</strong> This exercise should not replace the process of learning how to manually perform graphing calculations - but perhaps to check them.</p>
                             <p>Follow the instructions below for the activity.</p>
                         </div>
                         <div class="col-md-6 mb-4">
@@ -65,7 +67,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>The situation.</strong> You only have a compass (or no GPS reception) and would like to record the location of other features relative to a chosen point (e.g., a rock cairn or geodetic benchmark).</p>
+                            <p><strong>The situation.</strong> You only have a compass (or no GPS reception) and would like to record the location of other features relative to a chosen point (e.g., a tree, rock cairn, or geodetic benchmark).</p>
                             <p>
                             A <strong>benchmark</strong> is a good point to start such an activity, but not necessary.<br>
                             A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating points for an area).<br>
@@ -238,16 +240,16 @@
 
                     <div id="results" class="mb-3">
                         <div id="controls" class="rounded d-none">
+                            <button id="control_close" class="btn btn-dark">X</button>
                             <button id="control_add_leg" class="btn btn-primary">Add leg</button>
-                            <button id="control_edit" class="btn btn-secondary">Edit station</button>
+                            <button id="control_edit" class="btn btn-secondary">Edit leg</button>
                             <!-- <button id="control_mergebm" class="btn btn-secondary">Merge BM</button> -->
                             <button id="control_wall" class="btn btn-secondary">Add wall</button>
-                            <button id="control_delete" class="btn btn-danger">Delete point</button>
-                            <button id="control_close" class="btn btn-dark">X</button>
+                            <button id="control_delete" class="btn btn-danger mt-3">Delete leg</button>
                         </div>
                     </div>
 
-                    <div id="form_add_leg" class="d-none mb-3">
+                    <div id="form_add_leg" class="d-none mb-3 tse_form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label>Enter target azimuth:</label>
@@ -279,7 +281,8 @@
                             <button id="submit_new_leg" class="btn btn-primary">Add leg</button>
                         </div>
                     </div>
-                    <div id="form_edit_bm" class="d-none">
+
+                    <div id="form_edit_bm" class="d-none tse_form">
                         <div class="row">
                             <div class="col-sm-6 mb-3">
                                 <label>Northing:</label>
@@ -293,7 +296,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="form_edit" class="d-none">
+
+                    <div id="form_edit" class="d-none tse_form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label>Edit azimuth <strong>to this station</strong>:</label>
@@ -312,30 +316,31 @@
                                 <div class="form-text"></div>
                             </div>
                             <div class="col-md-6">
-                                <p>Edit station type:</p>
+                                <p>Edit leg station type:</p>
                                 <input type="radio" name="edit_station_type" id="edit_station_type_point" value="point">
                                 <label for="edit_station_type_point" class="me-4">Station</label>
                                 <input type="radio" name="edit_station_type" id="edit_station_type_benchmark" value="benchmark">
                                 <label for="edit_station_type_benchmark">Benchmark</label>
                             </div>
                         </div>
-                    </div>
 
-                    <div id="edit_form_submit_btn" class="d-none">
-                        <div class="text-end">
-                            <button id="submit_station_edit" class="btn btn-primary">Edit station</button>
+                        <div id="edit_form_submit_btn" class="d-none">
+                            <div class="text-end">
+                                <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
+                            </div>
                         </div>
                     </div>
+
 
                     <div id="form_bm_merge" class="d-none">
                         <p>If you are perfroming a closed traverse you will have two points, likely not at the exact same location. As we know that these two points should be at the same location we can correct some of the error, particularly near the end of the traverse. Completing this operation will allow you to toggle between viewing the surveyed and corrected points mapped.</p>
                         <p>Merge a BM from the list below with the selected benchmark:</p>
                         <p><div id="bmlist"></div></p>
                     </div>
-                    <div id="form_wall_instructions" class="d-none">
+                    <div id="form_wall_instructions" class="d-none tse_form">
                         <p>Click on another point/station to create a wall to it.</p>
                     </div>
-                    <div id="merge_bm_instructions" class="d-none">
+                    <div id="merge_bm_instructions" class="d-none tse_form">
                         <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
                     </div>
 
@@ -345,7 +350,7 @@
             <div id="section4" class="row tab-pane fade" role="tabpanel" aria-labelledby="section4" tabindex="0">
                 <div class="col-md-12">
                     <h2>Export</h2>
-                    <p>Working on making it so you can export the data based on provided coordinates for benchmark (not yet implemented)</p>
+                    <p>Coming soon - export data to a GIS.</p>
                 </div>
             </div>
 
