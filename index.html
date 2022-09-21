@@ -7,6 +7,7 @@
         <meta name="author" content="Cyrille Médard de Chardon">
 
         <title>Traverse Survey Error Exercise</title>
+        <link rel="shortcut icon" href="favicon.ico">
 
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
@@ -249,101 +250,100 @@
                         </div>
                     </div>
 
-                    <div id="form_add_leg" class="d-none mb-3 tse_form">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Enter target azimuth:</label>
-                                <input type="number" class="form-control" id="target_azim" placeholder="" required>
-                                <div class="form-text">In degrees (0-360&deg;)</div>
+                    <div id="forms_and_instructions" class="d-none tse_form position-sticky">
+                        <div id="form_add_leg" class="d-none mb-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Enter target azimuth:</label>
+                                    <input type="number" class="form-control" id="target_azim" placeholder="" required>
+                                    <div class="form-text">In degrees (0-360&deg;)</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Enter target distance:</label>
+                                    <input type="number" class="form-control" id="target_distance" placeholder="" required>
+                                    <div class="form-text">In number of paces</div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <label>Target description or name:</label>
+                                    <input type="text" class="form-control" id="target_description" placeholder="">
+                                    <div class="form-text">Some notes or a name for the feature (e.g., Tree A)</div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <p class="me-3">Target is of type:</p>
+                                    <input type="radio" name="target_type" id="target_type_point" value="point" checked>
+                                    <label for="target_type_point" class="me-4">Station</label>
+                                    <input type="radio" name="target_type" id="target_type_benchmark" value="benchmark">
+                                    <label for="target_type_benchmark">Benchmark</label>
+                                </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <label>Enter target distance:</label>
-                                <input type="number" class="form-control" id="target_distance" placeholder="" required>
-                                <div class="form-text">In number of paces</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Target description or name:</label>
-                                <input type="text" class="form-control" id="target_description" placeholder="">
-                                <div class="form-text">Some notes or a name for the feature (e.g., Tree A)</div>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Target is of type:</p>
-                                <input type="radio" name="target_type" id="target_type_point" value="point" checked>
-                                <label for="target_type_point" class="me-4">Station</label>
-                                <input type="radio" name="target_type" id="target_type_benchmark" value="benchmark">
-                                <label for="target_type_benchmark">Benchmark</label>
+                            <div class="text-end mt-3">
+                                <button id="submit_new_leg" class="btn btn-primary">Add leg</button>
                             </div>
                         </div>
 
+                        <div id="form_edit" class="d-none">
+                            <div class="row">
+                                <div class="col-md-12 col-12">
+                                    <p>Edit measurments <strong>to the selected station</strong>.</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label>Azimuth:</label>
+                                    <input type="number" class="form-control" id="edit_station_azim" placeholder="Degrees" required>
+                                    <div class="form-text"></div>
+                                </div>
 
-                        <div class="text-end">
-                            <button id="submit_new_leg" class="btn btn-primary">Add leg</button>
-                        </div>
-                    </div>
+                                <div class="col-6">
+                                    <label>Pace count:</label>
+                                    <input type="number" class="form-control" id="edit_station_paces" placeholder="Number of paces" required>
+                                    <div class="form-text"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Edit description or name:</label>
+                                    <input type="text" class="form-control" id="edit_station_description" placeholder="">
+                                    <div class="form-text"></div>
+                                </div>
 
-                    <div id="form_edit_bm" class="d-none tse_form">
-                        <div class="row">
-                            <div class="col-sm-6 mb-3">
-                                <label>Northing:</label>
-                                <input type="number" class="form-control" id="edit_bm_northing" placeholder="" required>
-                                <div class="form-text"></div>
-                            </div>
-                            <div class="col-sm-6 mb-3">
-                                <label>Easting:</label>
-                                <input type="number" class="form-control" id="edit_bm_easting" placeholder="" required>
-                                <div class="form-text"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="form_edit" class="d-none tse_form">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Edit azimuth <strong>to this station</strong>:</label>
-                                <input type="number" class="form-control" id="edit_station_azim" placeholder="" required>
-                                <div class="form-text"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label>Edit pace count <strong>to this station</strong>:</label>
-                                <input type="number" class="form-control" id="edit_station_paces" placeholder="" required>
-                                <div class="form-text">In paces</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Edit description or name:</label>
-                                <input type="text" class="form-control" id="edit_station_description" placeholder="">
-                                <div class="form-text"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Edit leg station type:</p>
-                                <input type="radio" name="edit_station_type" id="edit_station_type_point" value="point">
-                                <label for="edit_station_type_point" class="me-4">Station</label>
-                                <input type="radio" name="edit_station_type" id="edit_station_type_benchmark" value="benchmark">
-                                <label for="edit_station_type_benchmark">Benchmark</label>
+                                <div class="col-md-6">
+                                    <p class="me-3">Station type:</p>
+                                    <input type="radio" name="edit_station_type" id="edit_station_type_point" value="point">
+                                    <label for="edit_station_type_point" class="me-4">Station</label>
+                                    <input type="radio" name="edit_station_type" id="edit_station_type_benchmark" value="benchmark">
+                                    <label for="edit_station_type_benchmark">Benchmark</label>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="edit_form_submit_btn" class="d-none">
-                            <div class="text-end">
-                                <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
+                        <div id="form_edit_bm" class="d-none mt-3">
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label>Northing:</label>
+                                    <input type="number" class="form-control" id="edit_bm_northing" placeholder="" required>
+                                    <div class="form-text"></div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label>Easting:</label>
+                                    <input type="number" class="form-control" id="edit_bm_easting" placeholder="" required>
+                                    <div class="form-text"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                        <div id="edit_form_submit_btn" class="d-none text-end mt-3">
+                            <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
+                        </div>
 
-                    <div id="form_bm_merge" class="d-none">
-                        <p>If you are perfroming a closed traverse you will have two points, likely not at the exact same location. As we know that these two points should be at the same location we can correct some of the error, particularly near the end of the traverse. Completing this operation will allow you to toggle between viewing the surveyed and corrected points mapped.</p>
-                        <p>Merge a BM from the list below with the selected benchmark:</p>
-                        <p><div id="bmlist"></div></p>
+                        <div id="form_bm_merge" class="d-none">
+                            <p>If you are perfroming a closed traverse you will likely have the same benchmark appear in the map above as two points, not at the exact same location. As we know that these two points should be at the same location we can correct some of the error. This operation will allow you to toggle between viewing the measured and corrected points mapped.</p>
+                        </div>
+                        <div id="form_wall_instructions" class="d-none">
+                            <p>Click on another point/station to create a wall to it.</p>
+                        </div>
+                        <div id="merge_bm_instructions" class="d-none">
+                            <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
+                        </div>
                     </div>
-                    <div id="form_wall_instructions" class="d-none tse_form">
-                        <p>Click on another point/station to create a wall to it.</p>
-                    </div>
-                    <div id="merge_bm_instructions" class="d-none tse_form">
-                        <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
-                    </div>
-
                 </div>
             </div>
 
