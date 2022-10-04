@@ -481,6 +481,9 @@ TSE.updateSVG = function()
             case "benchmark":
                 marker = triangle;
                 break;
+
+            default:
+                // nothing
         }
 
         // add the marker to the SVG
@@ -499,7 +502,6 @@ TSE.updateSVG = function()
                             TSE.addWall(TSE.projects[TSE.active].selected, n.id);
 
                             // remove the mode and hide the controls, remove selection
-                            delete(TSE.projects[TSE.active].mode);
                             TSE.hideControlButtons();
                             TSE.resetControls();
                             TSE.selectStation(undefined);
@@ -743,6 +745,8 @@ TSE.resetControls = function()
     document.getElementById('form_bm_merge').classList.add('d-none');
     document.getElementById('edit_form_submit_btn').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
+    document.getElementById('forms_and_instructions').classList.add('d-none');
+    delete(TSE.projects[TSE.active].mode);
 };
 
 // autoincrements the id counter and returns available id
@@ -1021,6 +1025,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
     document.getElementById('control_add_leg').onclick = function() {
         TSE.resetControls();
         document.getElementById('form_add_leg').classList.remove('d-none');
+        document.getElementById('forms_and_instructions').classList.remove('d-none');
     };
     document.getElementById('control_edit').onclick = function() {
         let stn = TSE.getStationFromId(TSE.projects[TSE.active].selected);
@@ -1037,6 +1042,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
             document.getElementById('form_edit').classList.remove('d-none');
         }
         document.getElementById('edit_form_submit_btn').classList.remove('d-none');
+        document.getElementById('forms_and_instructions').classList.remove('d-none');
 
         // populate the edit form with the select station's data
         document.getElementById('edit_station_azim').value = stn.azimuth;
@@ -1133,6 +1139,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
     document.getElementById('control_wall').onclick = function() {
         TSE.resetControls();
         document.getElementById('form_wall_instructions').classList.remove('d-none');
+        document.getElementById('forms_and_instructions').classList.remove('d-none');
         TSE.projects[TSE.active].mode = "wall";
     };
     document.getElementById('control_delete').onclick = function() {
@@ -1148,7 +1155,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         
         // update display
         TSE.updateSVG();
-        TSE.hideControlButtons();
+        TSE.resetControls();
     };
     document.getElementById('control_close').onclick = function() {
         TSE.hideControlButtons();
