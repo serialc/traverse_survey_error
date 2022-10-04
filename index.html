@@ -30,7 +30,10 @@
                     <button class="nav-link active" id="section1-tab" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab" aria-controls="section1" aria-selected="true">Introduction</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section2-tab" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab" aria-controls="section2" aria-selected="false">Error</button>
+                    <button class="nav-link" id="section_project_tab" data-bs-toggle="tab" data-bs-target="#section_project" type="button" role="tab" aria-controls="section_project" aria-selected="false">Project</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="section2-tab" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab" aria-controls="section2" aria-selected="false" disabled>Error</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="section3-tab" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab" aria-controls="section3" aria-selected="false" disabled>Activity</button>
@@ -90,8 +93,31 @@
                     </div>
 
                     <p class="text-end">
-                        <button id="goto_section2" class="btn btn-primary">Next</button>
+                        <button id="goto_section_after1" class="btn btn-primary">Next</button>
                     </p>
+                </div>
+            </div>
+
+            <div id="section_project" class="row tab-pane fade" role="tabpanel" aria-labelledby="section_project" tabindex="0">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <h2>Create a new project</h2>
+                            <p>Select a project below or create a new one. Projects allow you to save multiple traverses.</p>
+                            <label for="new_project_name" class="form-label">Project name</label>
+                            <input type="text" id="new_project_name" class="form-control" placeholder="Cornett Building" aria-describedby="newProjectHelp">
+                            <div id="newProjectHelp" class="form-text">
+                                Provide a new for the project - such as a particular field site (e.g., School, Northern forest, Site A)
+                            </div>
+                            <div class="text-end mt-3">
+                                <button id="create_new_project" type="submit" class="btn btn-primary">Create project</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <h2>Select an existing project</h2>
+                            <div id="projects_list"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -104,9 +130,9 @@
                         <h4>Distance error</h4>
                         <p>Depending on your means of measuring distance you will have a different error rate in your measurements. Using paces will have more error than a tape measure for example.</p>
 
-                        <p>Do you already know your pace distance and error percentage?</p>
 
                         <div class="col-12 mb-3">
+                            <p>Do you already know your pace distance and error percentage?</p>
                             <button id="distance_error_yes" class="btn btn-outline-primary">Yes</button>
                             <button id="distance_error_no" class="btn btn-outline-primary">No</button>
                             <div class="form-text">If you're unsure, select 'No'.</div>
@@ -135,7 +161,10 @@
                             <h4>Pace measurement exercise</h4>
                             <p>To calculate your pace and distance measurement error you must complete pacing trials between points of <strong>known distance</strong>.</p>
                             <p>Walk repeatedly between points of known distance, submitting the number of paces you took to complete the distance.</p>
-                            <p><img src="rsc/pacetrial.svg" width="100%"></p>
+                            <p>
+                                <em>An example pacing trial of 32 paces for a distance of 25 metres.</em>
+                                <img src="rsc/pacetrial.svg" width="100%">
+                            </p>
                             <div class="col-md-6">
                                 <label>The pacing distance</label>
                                 <input type="number" class="form-control" id="pacing_distance" required>
@@ -323,11 +352,11 @@
                                 <label for="edit_station_type_benchmark">Benchmark</label>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="edit_form_submit_btn" class="d-none">
-                            <div class="text-end">
-                                <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
-                            </div>
+                    <div id="edit_form_submit_btn" class="d-none tse_form">
+                        <div class="text-end">
+                            <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
                         </div>
                     </div>
 

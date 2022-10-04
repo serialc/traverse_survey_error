@@ -5,6 +5,18 @@ var TSE = {
     "active": null
 };
 
+TSE.save = function()
+{
+    localStorage.setItem('projects', JSON.stringify(TSE.projects));
+};
+
+TSE.load = function()
+{
+    if (localStorage.getItem('projects')) {
+        TSE.projects = JSON.parse(localStorage.getItem('projects'));
+    }
+};
+
 TSE.test = function(test_num)
 {
     switch (test_num) {
@@ -188,11 +200,95 @@ TSE.test = function(test_num)
     };
 };
 
+// list the projects
+TSE.listProjects = function()
+{
+    let pnames = [];
+    return (Object.keys(TSE.projects));
+};
+
+TSE.loadProject = function(pn)
+{
+    TSE.active = pn;
+    // redraw canvas if necessary
+    TSE.updateSVG();
+};
+
+// Goes through points/stations network to see if there's a closed traverse (or just two benchmarks really)
+// Closed traverse can be between two benchmarks or a loop that returns to a benchmark
+TSE.checkForClosedTraverse = function()
+{
+    // get all benchmarks
+    let bms = TSE.projects[TSE.active].survey.filter( (s) => s.type === "benchmark" );
+    // get all benchmarks that have a defined and valid northing and easting (n/e)
+    let vbms = bms.filter( (s) => typeof(s.n) !== 'undefined' && !isNaN(s.n) && typeof(s.e) !== 'undefined' && !isNaN(s.e) );
+    console.log(bms);
+    console.log(vbms);
+    console.log(vbms.length > 1);
+    return vbms.length > 1;
+};
+
+TSE.resetTabsToStart = function(pn)
+{
+    let errtab = document.getElementById('section2-tab');
+    let acttab = document.getElementById('section3-tab');
+    let exptab = document.getElementById('section4-tab');
+    errtab.disabled = true;
+    acttab.disabled = true;
+    exptab.disabled = true;
+};
+
+TSE.updateProjectButtons = function()
+{
+    let pnames = TSE.listProjects();
+    let target = document.getElementById('projects_list');
+    // delete contents/children
+    target.textContent= '';
+
+    for (let i in pnames) {
+        let pn = pnames[i];
+        let btn = document.createElement('button');
+        btn.innerHTML = pn;
+        btn.classList.add('btn', 'btn-success', 'me-2');
+
+        btn.addEventListener('click', (function() {
+            // reset tab visibilities
+            TSE.resetTabsToStart();
+
+            // set active project
+            TSE.loadProject(pn);
+
+            // jump to next activity (error or map depending)
+            // enable error tab
+            let errtab = document.getElementById('section2-tab');
+            errtab.disabled = false;
+            errtab.click();
+
+            // if they have already provided the pacing error percentage jump to main activity
+            let pep = TSE.projects[TSE.active].pacing_error_percentage;
+            if (pep && !isNaN(pep)) {
+                let acttab = document.getElementById('section3-tab');
+                acttab.disabled = false;
+                acttab.click();
+                // also enable the export function
+                document.getElementById('section4-tab').disabled = false;
+            }
+        }));
+
+        // add button to target
+        target.appendChild(btn);
+    }
+};
+
 // returns the bounds of an array of points with structure {x: #, y: #}
 TSE.getBounds = function(points)
 {
+    // only works if we have points 
+    if (!points || points.length === 0) { return false; };
+
     // get bounds
     let bounds = {"xmin": null, "ymin": null, "xmax": null, "ymax": null};
+
     for (let k = 0; k < points.length; k+=1) {
         let p = points[k];
         if (bounds.xmax === null || p.x > bounds.xmax) {
@@ -336,6 +432,9 @@ TSE.updateSVG = function()
     // get the bounds
     let bounds = TSE.getBounds(prj.survey);
     let padding = 10;
+
+    // check if we have any bounds/points and stop if not
+    if (!bounds) { return false; };
 
     // remove svg if already exists
     d3.select("#surveyfigure").remove();
@@ -497,7 +596,8 @@ TSE.updateSVG = function()
     // iterate through lines and populate svg
     for (let i = 0; i < prj.connections.length; i+=1) {
         let cnx = prj.connections[i];
-        // for each connection create a line
+
+        // for each connection create a line - get the station x,y for each id in cnx
         let orig = prj.survey.filter( obj => obj.id == cnx[0] )[0]
         let dest = prj.survey.filter( obj => obj.id == cnx[1] )[0]
 
@@ -577,6 +677,9 @@ TSE.updateSVG = function()
                 });
         }
     }
+
+    // anytime we update the display, update the localStorage
+    TSE.save();
 };
 
 TSE.promptWallDelete = function(wall)
@@ -717,7 +820,7 @@ TSE.recomputeAllXY = function()
 
         // get the index of the edited station in the array
         // Note that findIndex "returns the index of the first element in an array that satisfies the provided testing function" (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
-        let stnindex = TSE.projects.main.survey.findIndex( (o) => o.id == stnid)
+        let stnindex = TSE.projects[TSE.active].survey.findIndex( (o) => o.id == stnid)
         // get the station for ease of reading
         let stn = TSE.getStationFromId(stnid);
 
@@ -785,6 +888,13 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
 // initialization
 (function(){
+
+    // retrieve projects from browser data
+    TSE.load();
+
+    // update list of projects
+    TSE.updateProjectButtons();
+
     document.getElementById('distance_error_yes').onclick = function() {
         let yesb = document.getElementById('distance_error_yes');
         let nob = document.getElementById('distance_error_no');
@@ -877,11 +987,10 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.projects[TSE.active].pace_trials.push({"d": pdist, "p": paces});
         TSE.update_pace_trials_table();
 
-        // if we have at least 8 trials, enable the progress button
-        if (TSE.projects[TSE.active].pace_trials.length >= 8) {
+        // if we have at least 6 trials, enable the progress button
+        if (TSE.projects[TSE.active].pace_trials.length >= 6) {
             document.getElementById('finish_pace_trials').disabled = false;
         }
-
     };
     document.getElementById('submit_azim_error').onclick = function() {
         // some initialization
@@ -974,7 +1083,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // get station id/index/object
         let stnid = TSE.projects[TSE.active].selected;
         // get the index of the edited station in the array
-        let stnindex = TSE.projects.main.survey.findIndex( (o) => o.id == stnid)
+        let stnindex = TSE.projects[TSE.active].survey.findIndex( (o) => o.id == stnid)
         // get the object we want to update
         let stn = TSE.projects[TSE.active].survey[stnindex];
 
@@ -1008,6 +1117,13 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // recompute all X,Y as we've made changes
         TSE.recomputeAllXY();
+
+        // check if we have a closed traverse, between benchmarks either A-A or A-B 
+        if (TSE.checkForClosedTraverse()) {
+            console.log('Show *close traverse* button');
+        } else {
+            console.log('Hide *close traverse* button');
+        }
 
         // update SVG display
         TSE.updateSVG();
@@ -1098,8 +1214,20 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.updateSVG();
         TSE.resetControls();
     };
-    document.getElementById('goto_section2').onclick = function() {
-        document.getElementById('section2-tab').click();
+    document.getElementById('goto_section_after1').onclick = function() {
+        document.getElementById('section_project_tab').click();
+    };
+    document.getElementById('create_new_project').onclick = function() {
+        let npn = document.getElementById('new_project_name').value;
+        // check if a project with this name already exists
+        if (TSE.projects[npn]) {
+        } else {
+            TSE.active = npn;
+            TSE.projects[TSE.active] = {};
+        }
+
+        // update list of projects
+        TSE.updateProjectButtons();
     };
     
 }());
