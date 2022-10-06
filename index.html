@@ -43,7 +43,7 @@
                     <button class="nav-link" id="section4-tab" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab" aria-controls="section4" aria-selected="false" disabled>Export</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section5-tab" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab" aria-controls="section5" aria-selected="false">Objectives</button>
+                    <button class="nav-link" id="section5-tab" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab" aria-controls="section5" aria-selected="false">Follow-up</button>
                 </li>
             </ul>
         </div>
@@ -106,9 +106,9 @@
                             <h2>Create a new project</h2>
                             <p>Select a project below or create a new one. Projects allow you to save multiple traverses.</p>
                             <label for="new_project_name" class="form-label">Project name</label>
-                            <input type="text" id="new_project_name" class="form-control" placeholder="Cornett Building" aria-describedby="newProjectHelp">
+                            <input type="text" id="new_project_name" class="form-control" placeholder="e.g., Cornett Building" aria-describedby="newProjectHelp">
                             <div id="newProjectHelp" class="form-text">
-                                Provide a new for the project - such as a particular field site (e.g., School, Northern forest, Site A)
+                                Provide new project name (e.g., School, Northern forest, Site A)
                             </div>
                             <div class="text-end mt-3">
                                 <button id="create_new_project" type="submit" class="btn btn-primary">Create project</button>
@@ -216,23 +216,30 @@
             <div id="section3" class="row tab-pane fade" role="tabpanel" aria-labelledby="section3" tabindex="0">
                 <div class="col-md-12">
                     <h2 id="begin_survey_traverse">Begin survey traverse</h2>
-                    <p>The area below represents your field space. The icon in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
-                    <p><strong>Select a benchmark or station to see possible operations below the map.</strong></p>
+                    <p>The area below represents your field space. The triangular marker in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
+                    <p><strong>Select a benchmark or station to see possible operations.</strong></p>
 
                     <!-- SVG CSS -->
                     <style>
                     .pointer {
                         cursor: pointer;
                     }
-                    .leg_line {
+                    .leg_line, .leg_line_ctp {
                         stroke-dasharray: 2 1;
                     }
-                    .leg_line, .wall_line, .marker_benchmark, .marker_point, .error_poly {
+                    .leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly {
                         stroke: black;
                         stroke-width: 0.5;
                     }
+                    .leg_line_ctp {
+                        stroke: blue;
+                        stroke-width: 0.8;
+                    }
                     .marker_benchmark, .marker_point, .error_poly {
                         fill: white;
+                    }
+                    .faded {
+                        opacity: 0.2;
                     }
                     .wall_line {
                         stroke-width: 1;
@@ -272,10 +279,15 @@
                         <div id="controls" class="rounded d-none">
                             <button id="control_close" class="btn btn-dark">X</button>
                             <button id="control_add_leg" class="btn btn-primary">Add leg</button>
-                            <button id="control_edit" class="btn btn-secondary">Edit leg</button>
-                            <!-- <button id="control_mergebm" class="btn btn-secondary">Merge BM</button> -->
+                            <button id="control_edit" class="btn btn-secondary">Edit station</button>
                             <button id="control_wall" class="btn btn-secondary">Add wall</button>
-                            <button id="control_delete" class="btn btn-danger mt-3">Delete leg</button>
+                            <button id="control_delete" class="btn btn-danger mt-3">Delete station</button>
+                        </div>
+                        <div id="error_controls" class="rounded d-none">
+                            <div class="form-check form-switch" title="Enable closed traverse error correction">
+                                <input class="form-check-input pointer" type="checkbox" role="switch" id="closed_traverse_error_correction">
+                                <label class="form-check-label pointer" for="closed_traverse_error_correction">CTEC</label>
+                            </div>
                         </div>
                     </div>
 
@@ -363,9 +375,6 @@
                             <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
                         </div>
 
-                        <div id="form_bm_merge" class="d-none">
-                            <p>If you are perfroming a closed traverse you will likely have the same benchmark appear in the map above as two points, not at the exact same location. As we know that these two points should be at the same location we can correct some of the error. This operation will allow you to toggle between viewing the measured and corrected points mapped.</p>
-                        </div>
                         <div id="form_wall_instructions" class="d-none">
                             <p>Click on another point/station to create a wall to it.</p>
                         </div>
@@ -388,37 +397,38 @@
                     <h2>Learning objectives</h2>
                     <p>To provide a follow-up exercise to traditional traverse exercises that consist of field work, returning to the lab for trigonometric computation of point locations along the traverse and graphing of the points. This tool allows easier graphing of points, reducing error of that process when surveying error is already significant.</p>
                     <p>Secondly the tool allows better visualization of measurements error and (eventually) allows the comparisons of open traverse errors and closed traverse errors.</p>
-                </div>
-            </div>
 
-            <div id="section6" class="row d-none">
+                    <h2>Closing error and balancing the traverse</h2>
+                    <p>The error correction from a closed traverse is performed using Bowditch’s Rule.</p>
+                    <p>Correction is only applied to the station legs between the original benchmark and the next applied, at this time.</p>
+
+                </div>
+
                 <div class="col-md-12">
                     <h2>Additional concepts</h2>
                     <p>This activity depends on existing understanding of other concepts and skills, such as how to use a compass. Here further information is provided to suggest topics for further exploration.</p>
+                    <ul>
                         <li>Discuss open and closed (loop and between BM) traverses</li>
                         <li>What is North: Magnetic vs true</li>
+                    </ul>
                 </div>
-            </div>
 
-            <div id="section7" class="row d-none">
                 <div class="col-md-12">
                     <h2>Aspects to still develop:</h2>
                     <ul>
                         <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
                         <li>Enable showing of work to calculate point locations, error correction.</li>
                         <li>Integrate level-traverse visualization - see <a href="https://www.boeingconsult.com/tafe/ss&so/survey1/level/notes-sur1.htm#sect1">example</a>.</li>
-                        <li>Add exercise context of field notes - TSE can be used in parallel but shouldn't replace.</li>
+                        <li>Add exercise context of field notes - TSE shouldn't be used in the field and must not replace notebook data entry.</li>
                         <li>Harmonize terms - define them (e.g., leg, station, position)</li>
-                        <li>Add table view of legs/stations</li>
-                        <li>Add export of data (GeoJSON?)</li>
+                        <li>Add export of data (GeoJSON)</li>
                     </ul>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-md-12">
-                    <h2>Test</h2>
-                    <p>Some automated inputs for testing:</p>
+                    <h2>Testing & demonstration data</h2>
+                    <p>Some automated inputs for testing or demonstration:</p>
+                    <p><em>These will delete any existing project named 'test'.</em></p>
                     <ol>
                         <li><a href="#/" onclick="TSE.test(1)">Generate pace trials</a></li>
                         <li><a href="#/" onclick="TSE.test(2)">Add example stations</a></li>
@@ -444,17 +454,27 @@
         <footer class="container-fluid mt-5 pb-5 bg-dark text-light">
             <div class="container">
                 <div class="row align-items-start">
-                    <div class="col-sm-6 col-lg-6 mt-5">
-                        <h3 class="mb-4">By</h3>
+                    <div class="col-sm-6 col-md-4 mt-5">
+                        <h3 class="mb-4">Created by</h3>
                         <p>Cyrille Médard de Chardon</p>
                         <p>Want to <a href="https://github.com/serialc/traverse_survey_error">contribute</a>?</p>
                   </div>
 
-                  <div class="col-sm-6 col-lg-6 mt-5">
-                    <h3 class="mb-4">Using</h3>
+                  <div class="col-sm-6 col-md-4 mt-5">
+                    <h3 class="mb-4">Used resources</h3>
                     <a href="https://getbootstrap.com/">Bootstrap</a><br>
                     <a href="https://d3js.org/">D3.js</a><br>
                     <a href="https://github.com/claytongulick/quickhull">Clayton Gulick's QuickHull</a><br>
+                  </div>
+
+                  <div class="col-sm-6 col-md-4 mt-5">
+                      <h3 class="mb-4">Co-funded by</h3>
+                      <a href="https://project.digilego.eu"><img src="rsc/logo_and_text_white.svg" width="60%"></a>
+                      <a href="https://liser.lu"><img src="rsc/liser.png" width="60%"></a>
+                  </div>
+
+                  <div class="col-12">
+                      The creation of this resources has been (partially) funded by the ERASMUS+ grant program of the European Union under grant no. 2020 1 DE01 KA226 005814. Neither the European Commission nor the project's national funding agency DAAD are responsible for the content or liable for any losses or damage resulting of the use of this resource.
                   </div>
                 </div>
             </div>

@@ -21,6 +21,13 @@ TSE.test = function(test_num)
 {
     switch (test_num) {
         case 1:
+            // create project called test if it doesn't exist
+            // delete it otherwise
+
+            // create new project 
+            TSE.active = 'test';
+            TSE.projects[TSE.active] = {};
+            
             // generate pace trials and azim error
             document.getElementById('distance_error_no').click();
             document.getElementById('pacing_distance').value = 60.7;
@@ -49,18 +56,27 @@ TSE.test = function(test_num)
             // add direction error
             document.getElementById('azim_error_input').value = 2.5;
             document.getElementById('submit_azim_error').click();
+
+            // go back to project selection
+            TSE.resetTabsToStart();
+            document.getElementById('section_project_tab').click();
+
+            // save
+            TSE.save();
+            TSE.updateProjectButtons();
             break;
 
         case 2:
             TSE.test(1);
-            TSE.projects.main.id_counter = 12;
-            TSE.projects.main.connections = [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ];
-            TSE.projects.main.walls = [ { "op": 8, "dp": 9 }, { "op": 9, "dp": 10 }, { "op": 10, "dp": 11 }, { "op": 11, "dp": 6 }, { "op": 6, "dp": 7 }, { "op": 7, "dp": 8 } ];
-            TSE.projects.main.survey = [
+            TSE.projects.test.connections = [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 0, 6 ], [ 1, 7 ], [ 2, 8 ], [ 2, 9 ], [ 3, 10 ], [ 4, 11 ] ];
+            TSE.projects.test.id_counter = TSE.projects.test.connections.length + 1;
+            TSE.projects.test.walls = [ { "op": 8, "dp": 9 }, { "op": 9, "dp": 10 }, { "op": 10, "dp": 11 }, { "op": 11, "dp": 6 }, { "op": 6, "dp": 7 }, { "op": 7, "dp": 8 } ];
+            TSE.projects.test.survey = [
     {
       "type": "benchmark",
       "name": "Starting benchmark",
       "id": 0,
+      "distance": 0,
       "x": 0,
       "y": 0,
       "n": 0,
@@ -191,7 +207,7 @@ TSE.test = function(test_num)
       "azimuth": 60
     }
   ];
-            TSE.projects.main.selected = 7;
+            TSE.projects.test.selected = 7;
             TSE.updateSVG();
             break;
 
@@ -216,16 +232,13 @@ TSE.loadProject = function(pn)
 
 // Goes through points/stations network to see if there's a closed traverse (or just two benchmarks really)
 // Closed traverse can be between two benchmarks or a loop that returns to a benchmark
-TSE.checkForClosedTraverse = function()
+TSE.getGeoreferencedBM = function()
 {
     // get all benchmarks
     let bms = TSE.projects[TSE.active].survey.filter( (s) => s.type === "benchmark" );
     // get all benchmarks that have a defined and valid northing and easting (n/e)
     let vbms = bms.filter( (s) => typeof(s.n) !== 'undefined' && !isNaN(s.n) && typeof(s.e) !== 'undefined' && !isNaN(s.e) );
-    console.log(bms);
-    console.log(vbms);
-    console.log(vbms.length > 1);
-    return vbms.length > 1;
+    return vbms;
 };
 
 TSE.resetTabsToStart = function(pn)
@@ -272,6 +285,7 @@ TSE.updateProjectButtons = function()
                 acttab.click();
                 // also enable the export function
                 document.getElementById('section4-tab').disabled = false;
+                TSE.tryInitialization();
             }
         }));
 
@@ -420,14 +434,21 @@ TSE.deleteStation = function(stnid)
     childstns.map(cstn => TSE.deleteStation(cstn[1]));
 
     // delete any wall that uses this station
-    let del_walls = TSE.projects.main.walls.filter(w => w.op === stnid || w.dp === stnid );
+    let del_walls = TSE.projects[TSE.active].walls.filter(w => w.op === stnid || w.dp === stnid );
     del_walls.map(w => TSE.deleteWall(w, false));
+};
+
+TSE.isCtecEnabled = function()
+{
+    return document.getElementById('closed_traverse_error_correction').checked;
 };
 
 // draws the SVG elements from the data
 TSE.updateSVG = function()
 {
     let prj = TSE.projects[TSE.active];
+    let ctec = TSE.isCtecEnabled();
+    let bm0 = TSE.projects[TSE.active].survey[0];
 
     // get the bounds
     let bounds = TSE.getBounds(prj.survey);
@@ -451,16 +472,26 @@ TSE.updateSVG = function()
         ); // viewBox x, y, w, h
 
     // add groups to contain and order layers of map elements/hierarchy
+    // uncorrected layers
     let layer_error = svg.append("g")
-        .attr("id", "map_error")
+        .attr("id", "map_error");
     let layer_scalebar = svg.append("g")
-        .attr("id", "map_scalebar")
+        .attr("id", "map_scalebar");
     let layer_walls = svg.append("g")
-        .attr("id", "map_walls")
+        .attr("id", "map_walls");
     let layer_lines = svg.append("g")
-        .attr("id", "map_lines")
+        .attr("id", "map_lines");
     let layer_stations = svg.append("g")
-        .attr("id", "map_stations")
+        .attr("id", "map_stations");
+
+    // ctec layers
+    let layer_ctec_walls = svg.append("g")
+        .attr("id", "map_ctec_walls");
+    let layer_ctec_lines = svg.append("g")
+        .attr("id", "map_ctec_lines");
+    let layer_ctec_stations = svg.append("g")
+        .attr("id", "map_ctec_stations");
+
 
     // customize/define some symbol types
     let triangle = d3.symbol()
@@ -470,6 +501,30 @@ TSE.updateSVG = function()
         .type(d3.symbolCircle)
         .size(10);
 
+    function stnClick(n) {
+        // check if this click is completing some other operation besides selection
+        if (TSE.projects[TSE.active].mode) {
+            switch(TSE.projects[TSE.active].mode) {
+                case "wall":
+                    // create the wall in the data
+                    TSE.addWall(TSE.projects[TSE.active].selected, n.id);
+
+                    // remove the mode and hide the controls, remove selection
+                    TSE.hideControlButtons();
+                    TSE.resetControls();
+                    TSE.selectStation(undefined);
+                    return;
+                    //break;
+                default:
+            }
+        }
+
+        // save index of selected node/point/bm
+        TSE.selectStation(n.id);
+
+        // show controls
+        document.getElementById('controls').classList.remove('d-none');
+    }
 
     // iterate through stations and populate svg
     for (let i = 0; i < prj.survey.length; i+=1) {
@@ -486,53 +541,37 @@ TSE.updateSVG = function()
                 // nothing
         }
 
-        // add the marker to the SVG
+        // add the measured marker to the SVG
         layer_stations.append("path")
             .attr("d", marker)
-            .attr("id", "station_" + n.id)
-            //.attr("stroke", "black")
-            //.attr("fill", "white")
-            .attr("class", "pointer marker_" + n.type)
-            .on("click", function() {
-                // check if this click is completing some other operation besides selection
-                if (TSE.projects[TSE.active].mode) {
-                    switch(TSE.projects[TSE.active].mode) {
-                        case "wall":
-                            // create the wall in the data
-                            TSE.addWall(TSE.projects[TSE.active].selected, n.id);
-
-                            // remove the mode and hide the controls, remove selection
-                            TSE.hideControlButtons();
-                            TSE.resetControls();
-                            TSE.selectStation(undefined);
-                            return;
-                            //break;
-                        default:
-                    }
-                }
-
-                // save index of selected node/point/bm
-                TSE.selectStation(n.id);
-
-                // show controls
-                document.getElementById('controls').classList.remove('d-none');
-
-                // don't show the merge button/action except for bm
-                /*
-                let mergebm_button = document.getElementById('control_mergebm');
-                if (n.type === "benchmark") {
-                    mergebm_button.classList.remove('d-none');
-                } else {
-                    mergebm_button.classList.add('d-none');
-                }*/
-            })
+            .attr("id", "station_" + n.id + (ctec ? "_faded" : ""))
+            // class is dependent on ctec state
+            .attr("class", ctec ? "faded" : "pointer marker_" + n.type)
+            // don't provide click interaction if ctec enabled
+            .on("click", ctec ? false : (evt) => stnClick(n) )
             // note that y is inverted as SVG postive values go down
             .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
             .append("title") // add child title tag for tooltip
             .html(n.name);
+
+        // add the ctac marker to the SVG
+        if (ctec) {
+            layer_ctec_stations.append("path")
+                .attr("d", marker)
+                .attr("id", "station_" + n.id)
+                // class is dependent on ctec state
+                .attr("class", "pointer marker_" + n.type)
+                .on("click", (evt) => stnClick(n) )
+                // note that y is inverted as SVG postive values go down
+                // correct stations that are in georeferenced coordanates based on BM0
+                .attr("transform", function(d) { return "translate(" + (n.gx - bm0.gx) + "," + (-n.gy - bm0.gy) + ")"; })
+                .append("title") // add child title tag for tooltip
+                .html(n.name);
+        }
     }
     
     // a recursively called function to illustrate error
+    // is not impacted by ctec
     function calcStationError(stnid, error_points) {
 
         // get the needed stations for ease of reading
@@ -595,7 +634,7 @@ TSE.updateSVG = function()
     // call for the root, second parameter is the error area
     calcStationError(0, [{"x": 0, "y": 0}]);
     
-    // iterate through lines and populate svg
+    // iterate through leg lines and add to svg
     for (let i = 0; i < prj.connections.length; i+=1) {
         let cnx = prj.connections[i];
 
@@ -603,13 +642,26 @@ TSE.updateSVG = function()
         let orig = prj.survey.filter( obj => obj.id == cnx[0] )[0]
         let dest = prj.survey.filter( obj => obj.id == cnx[1] )[0]
 
+        // add ctec lines
+        if (ctec) {
+            // highlight the closed traverse path if CTEC is enabled
+            let ctec_line_type = TSE.getStationFromId(cnx[1]).traverse_path ? 'leg_line_ctp' : 'leg_line';
+
+            layer_ctec_lines.append("line")
+                .attr("x1", orig.gx - bm0.gx)
+                .attr("y1", -orig.gy - bm0.gy)
+                .attr("x2", dest.gx - bm0.gx)
+                .attr("y2", -dest.gy - bm0.gy)
+                .attr("class", ctec_line_type);
+        }
+
         // note the inverted y axis
         layer_lines.append("line")
             .attr("x1", orig.x)
             .attr("y1", -orig.y)
             .attr("x2", dest.x)
             .attr("y2", -dest.y)
-            .attr("class", "leg_line");
+            .attr("class", 'leg_line' + (ctec ? ' faded' : ''));
     }
 
     // Add scale bar
@@ -673,15 +725,37 @@ TSE.updateSVG = function()
                 .attr("y1", -wo.y)
                 .attr("x2", wd.x)
                 .attr("y2", -wd.y)
-                .attr("class", "wall_line pointer")
+                .attr("class", "wall_line" + (ctec ? " faded" : " pointer"))
                 .on("click", function() {
-                    TSE.promptWallDelete(walls[w]);
+                    if (!ctec) { TSE.promptWallDelete(walls[w]);}
                 });
+
+            // draw ctec walls
+            if (ctec) {
+                layer_walls.append("line")
+                    .attr("x1", wo.gx - bm0.gx)
+                    .attr("y1", -wo.gy - bm0.gy)
+                    .attr("x2", wd.gx - bm0.gx)
+                    .attr("y2", -wd.gy - bm0.gy)
+                    .attr("class", "wall_line pointer")
+                    .on("click", function() {
+                        TSE.promptWallDelete(walls[w]);
+                    });
+            }
         }
     }
 
     // anytime we update the display, update the localStorage
     TSE.save();
+
+    // check if we have a closed traverse in the data
+    if (TSE.getGeoreferencedBM().length > 1) {
+        // show the error correction checkbox
+        document.getElementById('error_controls').classList.remove('d-none');
+    } else {
+        // hide the error correction checkbox
+        document.getElementById('error_controls').classList.add('d-none');
+    }
 };
 
 TSE.promptWallDelete = function(wall)
@@ -691,7 +765,7 @@ TSE.promptWallDelete = function(wall)
         TSE.projects[TSE.active].wall_clicked === wall) {
         TSE.deleteWall(wall);
     } else {
-        TSE.infoToast("Double-click wall to delete it");
+        TSE.infoToast("Double-click a wall to delete it");
         TSE.projects[TSE.active].wall_click_time = new Date();
         TSE.projects[TSE.active].wall_clicked = wall;
     }
@@ -742,7 +816,6 @@ TSE.resetControls = function()
     document.getElementById('form_edit_bm').classList.add('d-none');
     document.getElementById('form_edit').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
-    document.getElementById('form_bm_merge').classList.add('d-none');
     document.getElementById('edit_form_submit_btn').classList.add('d-none');
     document.getElementById('form_wall_instructions').classList.add('d-none');
     document.getElementById('forms_and_instructions').classList.add('d-none');
@@ -776,10 +849,16 @@ TSE.tryInitialization = function()
             "name": "Starting benchmark",
             "id": TSE.requestAnId(),
             "x": 0,
+            "distance": 0,
             "y": 0,
             "dependence": -1 // external
         }];
     }
+
+    // reset views
+    TSE.resetControls();
+    document.getElementById('closed_traverse_error_correction').checked = false;
+    TSE.hideControlButtons();
 
     // write back any changes to global 
     TSE.projects[TSE.active] = prj;
@@ -794,6 +873,20 @@ TSE.getStationFromId = function(stnid)
 {
     return TSE.projects[TSE.active].survey.filter( obj => obj.id == stnid)[0];
 };
+
+// returns the index of a station in the survey array
+TSE.getStationIndexFromId = function(id)
+{
+    // Note that findIndex "returns the index of the first element in an array that satisfies the provided testing function" (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
+    return TSE.projects[TSE.active].survey.findIndex( (o) => o.id == id)
+};
+
+// set station value
+TSE.setStationAtIndex = function(stn, index)
+{
+    TSE.projects[TSE.active].survey[index] = stn;
+};
+
 
 // makes a station selected in gui and data
 TSE.selectStation = function(stnid)
@@ -817,17 +910,45 @@ TSE.selectStation = function(stnid)
     TSE.resetControls();
 };
 
+// returns a list of ids of nodes to form shortest path between origin and destination
+TSE.shortestPath = function(net, o, d)
+{
+    function findDestination (stnid) {
+        if (stnid === d) {
+            return [d];
+        }
+
+        // get the children of the station
+        let kids = net.filter( c => c[0] === stnid);
+
+        if (kids.length > 0) { 
+            for (let i = 0; i < kids.length; i+=1) {
+                let kres = findDestination(kids[i][1]);
+                // if this child found the destination, return it
+                if (kres !== false) {
+                    // kres is then an array
+                    kres.push(stnid);
+                    return kres;
+                }
+            }
+        }
+        return false;
+    }
+
+    return findDestination(o);
+};
+
 TSE.recomputeAllXY = function()
 {
     // tree search - start at root and look dependents, etc, recursive until spur/leaf
     function updateXY(stnid) {
 
         // get the index of the edited station in the array
-        // Note that findIndex "returns the index of the first element in an array that satisfies the provided testing function" (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
-        let stnindex = TSE.projects[TSE.active].survey.findIndex( (o) => o.id == stnid)
+        let stnindex = TSE.getStationIndexFromId(stnid);
         // get the station for ease of reading
         let stn = TSE.getStationFromId(stnid);
 
+        // skip for BM0
         if (stnindex !== 0) {
             // calculate x,y based on dependent
             // get the object this station is dependent on
@@ -836,7 +957,7 @@ TSE.recomputeAllXY = function()
             stn.y = Math.cos(stn.azimuth / 180 * Math.PI) * stn.distance + dependent.y;
             
             // replace the station back in the main data array
-            TSE.projects[TSE.active].survey[stnindex] = stn;
+            TSE.setStationAtIndex(stn, stnindex);
         }
 
         // get all the stations that are dependent on this one and and make recursive call
@@ -846,8 +967,104 @@ TSE.recomputeAllXY = function()
         }
     }
 
-    // root/benchmark
+    // start from root/benchmark
     updateXY(0);
+
+    // if we have any closed traverses then also calculate the georeferenced XY, gx, gy
+    let geobm = TSE.getGeoreferencedBM();
+    if (geobm.length > 1) {
+        // there can be multiple georeferenced benchmarks
+        // select only the **first two** benchmarks and calculate the closing error
+        // the first survey point is always a benchmark, and used
+
+        // calculate the difference between where the traverse located the bm and where it should be
+        let error = {
+            "x":geobm[0].e + geobm[1].x - geobm[1].e,
+            "y": geobm[0].n + geobm[1].y - geobm[1].n
+        };
+
+        // calculate the path from BM0 to BM1 - get a sequential list of ids
+        let ctpath = TSE.shortestPath(TSE.projects[TSE.active].connections, geobm[0].id, geobm[1].id);
+
+        // update the 'traverse_path' value for each station to false
+        for (let j = 0; j < TSE.projects[TSE.active].survey.length; j+=1) {
+            TSE.projects[TSE.active].survey[j].traverse_path = false;
+        }
+
+        // get the total distance, in metres, of all the legs in the closed traverse set
+        let perimeter_traverse = 0;
+        for (let i = 0; i < ctpath.length; i+=1) {
+            let stn = TSE.getStationFromId(ctpath[i]);
+            // handle for bm0 that has no distance value
+            perimeter_traverse += typeof(stn.distance) === 'undefined' ? 0 : stn.distance;
+        }
+
+        // now go through closed traverse set and define the georeference values, gx, gy
+        // calculating the gx, gy values 
+        // start from BM0
+        let gx = 0;
+        let gy = 0;
+        let stn, stnindex;
+        for (let i = (ctpath.length - 1); i >= 0; i-=1) {
+            stnindex = TSE.getStationIndexFromId(ctpath[i]);
+            stn = TSE.getStationFromId(ctpath[i]);
+
+            // updated georeferenced coordinates
+            // use georeferenced coordinates of benchmark when available (for the first/last)
+            let rx, ry;
+            if (stn.id === 0) {
+                // don't do for BM0
+                rx = 0;
+                ry = 0;
+            } else {
+                rx = Math.sin(stn.azimuth / 180 * Math.PI) * stn.distance;
+                ry = Math.cos(stn.azimuth / 180 * Math.PI) * stn.distance;
+            }
+
+            // combine the change between stations with the closed traverse error proportion
+            gx = stn.e ? stn.e : gx + rx - error.x * stn.distance/perimeter_traverse;
+            gy = stn.n ? stn.n : gy + ry - error.y * stn.distance/perimeter_traverse;
+
+            // update local station object
+            stn.gx = gx;
+            stn.gy = gy;
+            stn.traverse_path = true;
+
+            // update global object
+            TSE.setStationAtIndex(stn, stnindex);
+        }
+
+        // tree searches dependents recursively until spur/leaf
+        // repeats the updateXY but a bit differently
+        function updateCorrectedXY(stnid) {
+
+            // retrieve info on stn
+            let uc_stnindex = TSE.getStationIndexFromId(stnid);
+            let uc_stn = TSE.getStationFromId(stnid);
+
+            // skip for BM0
+            if (stnid !== 0 && !uc_stn.traverse_path) {
+                // calculate x,y based on dependent
+                // get the object this station is dependent on
+                let dependent = TSE.getStationFromId(uc_stn.dependence);
+                uc_stn.gx = Math.sin(uc_stn.azimuth / 180 * Math.PI) * uc_stn.distance + dependent.gx;
+                uc_stn.gy = Math.cos(uc_stn.azimuth / 180 * Math.PI) * uc_stn.distance + dependent.gy;
+
+                // replace the station back in the main data array
+                TSE.setStationAtIndex(uc_stn, uc_stnindex);
+            }
+
+            // get all the stations that are dependent on this one and and make recursive call
+            let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
+            for (let i = 0; i < childcon.length; i+=1) {
+                updateCorrectedXY(childcon[i][1]);
+            }
+        }
+
+        // start from root/benchmark
+        updateCorrectedXY(0);
+
+    }
 };
 
 // display notifications
@@ -936,7 +1153,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
     };
     document.getElementById('submit_distance_error').onclick = function() {
         // some initialization
-        if (TSE.active === null) { TSE.active = 'main'; }
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
         let pep = parseFloat(document.getElementById('known_error_percentage').value, 10);
@@ -968,7 +1184,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
     };
     document.getElementById('submit_pace_trial').onclick = function() {
         // some initialization
-        if (TSE.active === null) { TSE.active = 'main'; }
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
         let pdinput = document.getElementById('pacing_distance');
@@ -998,7 +1213,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
     };
     document.getElementById('submit_azim_error').onclick = function() {
         // some initialization
-        if (TSE.active === null) { TSE.active = 'main'; }
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
         let azim = parseFloat(document.getElementById('azim_error_input').value);
@@ -1054,30 +1268,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
             document.getElementById('edit_station_type_benchmark').checked = true;
         }
     };
-    /*
-    document.getElementById('control_mergebm').onclick = function() {
-        document.getElementById('form_bm_merge').classList.remove('d-none');
-
-        // which station id is selected
-        let stnid = TSE.projects[TSE.active].selected;
-
-        // get the benchmark stations (that are not this one)
-        let bmlist = TSE.projects[TSE.active].survey
-            .map(s => s.type === "benchmark" ? s.id : false) // get boolean
-            .reduce( (out, val, index) => val === false ? out : out.concat(val), []);
-
-        // remove the selected bm from the list
-        bmlist = bmlist.reduce( (out, val, i) => val === stnid ? out : out.concat(val), []);
-
-        let bmlist_el = document.getElementById('bmlist');
-        let bmbuttons_html = '';
-        for (let i = 0; i < bmlist.length; i+=1) {
-            let istn = TSE.getStationFromId(bmlist[i]);
-            bmbuttons_html += '<button id="' + bmlist[i] + '" onclick="TSE.mergeBM(' + bmlist[i] + ',' + stnid + ')" class="btn btn-primary">' + istn.name + '</button>';
-        }
-        bmlist_el.innerHTML = bmbuttons_html;
-    };
-    */
     document.getElementById('submit_station_edit').onclick = function() {
         // retrieve data from form
         let azim = parseFloat(document.getElementById('edit_station_azim').value);
@@ -1123,13 +1313,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // recompute all X,Y as we've made changes
         TSE.recomputeAllXY();
-
-        // check if we have a closed traverse, between benchmarks either A-A or A-B 
-        if (TSE.checkForClosedTraverse()) {
-            console.log('Show *close traverse* button');
-        } else {
-            console.log('Hide *close traverse* button');
-        }
 
         // update SVG display
         TSE.updateSVG();
@@ -1236,5 +1419,10 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // update list of projects
         TSE.updateProjectButtons();
     };
-    
+    document.getElementById('closed_traverse_error_correction').onclick = function(e) {
+        if (TSE.isCtecEnabled()) {
+            TSE.recomputeAllXY();
+        }
+        TSE.updateSVG();
+    }
 }());
