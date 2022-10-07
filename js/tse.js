@@ -220,12 +220,16 @@ TSE.test = function(test_num)
 TSE.listProjects = function()
 {
     let pnames = [];
-    return (Object.keys(TSE.projects));
+    return Object.keys(TSE.projects);
 };
 
 TSE.loadProject = function(pn)
 {
+    // set active project
     TSE.active = pn;
+
+    // update displayed name of project
+    document.getElementById('project_name').innerHTML = '[' + pn + ']';
     // redraw canvas if necessary
     TSE.updateSVG();
 };
@@ -443,6 +447,157 @@ TSE.isCtecEnabled = function()
     return document.getElementById('closed_traverse_error_correction').checked;
 };
 
+// builds GeoJSON objects from data and returns it
+TSE.getGeoJSON = function()
+{
+    let geojson = JSON.stringify({ "type": "FeatureCollection", "features": [ ] });
+    let data = {
+        "stns": JSON.parse(geojson),
+        "geostns": JSON.parse(geojson),
+        "lines": JSON.parse(geojson),
+        "geolines": JSON.parse(geojson),
+        "walls": JSON.parse(geojson),
+        "geowalls": JSON.parse(geojson),
+        "uncertainty": JSON.parse(geojson),
+    };
+    
+    let svy = TSE.projects[TSE.active].survey;
+    let cnxs = TSE.projects[TSE.active].connections;
+    let walls = TSE.projects[TSE.active].walls;
+    let error = TSE.projects[TSE.active].error_poly;
+
+    // get bm0 location if defined to move local coordinates to georeferenced location
+    let e = isNaN(svy[0].e) ? 0 : svy[0].e;
+    let n = isNaN(svy[0].n) ? 0 : svy[0].n;
+    for (let i = 0; i < svy.length; i+=1) {
+        let stn = svy[i];
+
+        // reformat data into geojson feature
+        let feature = {
+            "type": "Feature",
+            "geometry": {
+               "type": "Point",
+               "coordinates": [e + stn.x, n + stn.y]
+            },
+            "properties": {
+               "id": stn.id,
+               "dep_id": stn.dependence,
+               "name": stn.name,
+               "type": stn.type,
+               "paces": stn.paces,
+               "distance": stn.distance,
+               "azimuth": stn.azim,
+               "on_ctp": stn.traverse_path
+            }
+        }
+        
+        // add to stations - push a deep copy
+        data.stns.features.push(JSON.parse(JSON.stringify(feature)));
+
+        // add corrected stations if there are at least two BM
+        if (TSE.getGeoreferencedBM().length > 1) {
+            // alter the object
+            feature.geometry.coordinates = [stn.gx, stn.gy];
+            delete(feature.geometry.distance);
+            data.geostns.features.push(JSON.parse(JSON.stringify(feature)));
+        }
+    }
+
+    // lines between stations
+    for (let i = 0; i < cnxs.length; i+=1) {
+        let ostn = TSE.getStationFromId(cnxs[i][0]);
+        let dstn = TSE.getStationFromId(cnxs[i][1]);
+
+        // reformat data into geojson feature
+        let feature = {
+            "type": "Feature",
+            "geometry": {
+               "type": "LineString",
+               "coordinates": [[e + ostn.x, n + ostn.y], [e + dstn.x, n + dstn.y]]
+            },
+            "properties": {
+               "oid": ostn.id,
+               "did": dstn.id,
+               "paces": dstn.paces,
+               "azimuth": dstn.azim,
+               "length": dstn.distance,
+               "on_ctp": dstn.traverse_path
+            }
+        }
+
+        // add to lines - push a deep copy
+        data.lines.features.push(JSON.parse(JSON.stringify(feature)));
+
+        // add corrected stations if there are at least two BM
+        if (TSE.getGeoreferencedBM().length > 1) {
+            // alter the object
+            feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
+            // delete distance as it doesn't apply to the corrected locations
+            delete(feature.geometry.distance);
+            data.geolines.features.push(JSON.parse(JSON.stringify(feature)));
+        }
+    }
+
+    // walls between stations
+    for (let i = 0; i < walls.length; i+=1) {
+        let ostn = TSE.getStationFromId(walls[i].op);
+        let dstn = TSE.getStationFromId(walls[i].dp);
+
+        // reformat data into geojson feature
+        let feature = {
+            "type": "Feature",
+            "geometry": {
+               "type": "LineString",
+               "coordinates": [[e + ostn.x, n + ostn.y], [e + dstn.x, n + dstn.y]]
+            },
+            "properties": {
+               "oid": ostn.id,
+               "did": dstn.id,
+            }
+        }
+        
+        // add to walls - push a deep copy
+        data.walls.features.push(JSON.parse(JSON.stringify(feature)));
+
+        // add corrected stations if there are at least two BM
+        if (TSE.getGeoreferencedBM().length > 1) {
+            // alter the object
+            feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
+            data.geowalls.features.push(JSON.parse(JSON.stringify(feature)));
+        }
+    }
+
+    // uncertainty/error polygons
+    let stn_error_ids = Object.keys(error);
+    for (let i = 0; i < stn_error_ids.length; i+=1) {
+        let stnid = stn_error_ids[i];
+        let err = error[stnid];
+
+        // reformat data into geojson feature
+        let poly = err.map( p => [p.x, p.y] );
+        // polygon in geojson needs to have same start/end coordinates
+        poly.push(poly[0]);
+
+        let feature = {
+            "type": "Feature",
+            "geometry": {
+               "type": "Polygon",
+               "coordinates": [poly], // note the extra nesting is needed
+            },
+            "properties": {
+               "id": stnid
+            }
+        }
+        
+        // add to uncertainty
+        data.uncertainty.features.push(feature);
+    }
+
+    console.log(data);
+    return data;
+
+};
+
 // draws the SVG elements from the data
 TSE.updateSVG = function()
 {
@@ -611,6 +766,9 @@ TSE.updateSVG = function()
             // transform points keeping external only using convex
             let convex_pnts = QuickHull(erpnts);
 
+            // save them for export
+            TSE.projects[TSE.active].error_poly[stn.id] = convex_pnts;
+
             // calculate error area for this station - remove interior points with turf.convex(points)
 
             // add error to map
@@ -631,6 +789,9 @@ TSE.updateSVG = function()
             calcStationError(childcon[i][1], erpnts);
         }
     }
+    // delete past error polygon data
+    TSE.projects[TSE.active].error_poly = {};
+    // now recreate the error polygon areas
     // call for the root, second parameter is the error area
     calcStationError(0, [{"x": 0, "y": 0}]);
     
@@ -1424,5 +1585,30 @@ TSE.toast = function(msg, head_text, type, text_colour)
             TSE.recomputeAllXY();
         }
         TSE.updateSVG();
+    }
+    document.getElementById('gen_data_zip').onclick = function(e) {
+
+        // retrieve multiple GeoJSON objects
+        let data = TSE.getGeoJSON();
+        console.log(data);
+
+        // check if data is valid - if so zip and save/download
+        if (data !== false) {
+            // zip data for download - using JSZip and FileSaver
+            // https://stuk.github.io/jszip/documentation/examples.html
+            let zip = new JSZip();
+            zip.file('measures/' + TSE.active + "_stations.geojson", JSON.stringify(data.stns));
+            zip.file('corrected/' + TSE.active + "_stations.geojson", JSON.stringify(data.geostns));
+            zip.file('measures/' + TSE.active + "_lines.geojson", JSON.stringify(data.lines));
+            zip.file('corrected/' + TSE.active + "_lines.geojson", JSON.stringify(data.geolines));
+            zip.file('measures/' + TSE.active + "_walls.geojson", JSON.stringify(data.walls));
+            zip.file('corrected/' + TSE.active + "_walls.geojson", JSON.stringify(data.geowalls));
+            zip.file('measures/' + TSE.active + "_uncertainty.geojson", JSON.stringify(data.uncertainty));
+            
+            zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                saveAs(content, TSE.active + "_data_export.zip");
+            });
+        }
     }
 }());
