@@ -230,6 +230,14 @@ TSE.loadProject = function(pn)
 
     // update displayed name of project
     document.getElementById('project_name').innerHTML = '[' + pn + ']';
+
+    // need to update error inputs and tables
+    if (TSE.projects[TSE.active].pace_trials) {
+
+    }
+    if (TSE.projects[TSE.active].pace_trials) {
+    }
+    // TO DO
 };
 
 // Goes through points/stations network to see if there's a closed traverse (or just two benchmarks really)
@@ -537,31 +545,33 @@ TSE.getGeoJSON = function()
     }
 
     // walls between stations
-    for (let i = 0; i < walls.length; i+=1) {
-        let ostn = TSE.getStationFromId(walls[i].op);
-        let dstn = TSE.getStationFromId(walls[i].dp);
+    if (walls) {
+        for (let i = 0; i < walls.length; i+=1) {
+            let ostn = TSE.getStationFromId(walls[i].op);
+            let dstn = TSE.getStationFromId(walls[i].dp);
 
-        // reformat data into geojson feature
-        let feature = {
-            "type": "Feature",
-            "geometry": {
-               "type": "LineString",
-               "coordinates": [[e + ostn.x, n + ostn.y], [e + dstn.x, n + dstn.y]]
-            },
-            "properties": {
-               "oid": ostn.id,
-               "did": dstn.id,
+            // reformat data into geojson feature
+            let feature = {
+                "type": "Feature",
+                "geometry": {
+                   "type": "LineString",
+                   "coordinates": [[e + ostn.x, n + ostn.y], [e + dstn.x, n + dstn.y]]
+                },
+                "properties": {
+                   "oid": ostn.id,
+                   "did": dstn.id,
+                }
             }
-        }
-        
-        // add to walls - push a deep copy
-        data.walls.features.push(JSON.parse(JSON.stringify(feature)));
+            
+            // add to walls - push a deep copy
+            data.walls.features.push(JSON.parse(JSON.stringify(feature)));
 
-        // add corrected stations if there are at least two BM
-        if (TSE.getGeoreferencedBM().length > 1) {
-            // alter the object
-            feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
-            data.geowalls.features.push(JSON.parse(JSON.stringify(feature)));
+            // add corrected stations if there are at least two BM
+            if (TSE.getGeoreferencedBM().length > 1) {
+                // alter the object
+                feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
+                data.geowalls.features.push(JSON.parse(JSON.stringify(feature)));
+            }
         }
     }
 
@@ -591,7 +601,6 @@ TSE.getGeoJSON = function()
         data.uncertainty.features.push(feature);
     }
 
-    console.log(data);
     return data;
 
 };
@@ -635,7 +644,8 @@ TSE.updateSVG = function()
             ".wall_line { stroke-width: 1; }" + 
             ".sb_line { stroke: black; stroke-width: 0.5; }" + 
             ".sb_text { font-size: 4px; }" + 
-            ".error_poly { opacity: 0.3; }"
+            ".error_poly { opacity: 0.3; }" +
+            ".selection { fill: #0B5ED7; }"
         );
 
     // add groups to contain and order layers of map elements/hierarchy
@@ -731,7 +741,7 @@ TSE.updateSVG = function()
                 .on("click", (evt) => stnClick(n) )
                 // note that y is inverted as SVG postive values go down
                 // correct stations that are in georeferenced coordanates based on BM0
-                .attr("transform", function(d) { return "translate(" + (n.gx - bm0.gx) + "," + (-n.gy - bm0.gy) + ")"; })
+                .attr("transform", function(d) { return "translate(" + (n.gx - bm0.gx) + "," + -(n.gy - bm0.gy) + ")"; })
                 .append("title") // add child title tag for tooltip
                 .html(n.name);
         }
@@ -822,9 +832,9 @@ TSE.updateSVG = function()
 
             layer_ctec_lines.append("line")
                 .attr("x1", orig.gx - bm0.gx)
-                .attr("y1", -orig.gy - bm0.gy)
+                .attr("y1", -(orig.gy - bm0.gy))
                 .attr("x2", dest.gx - bm0.gx)
-                .attr("y2", -dest.gy - bm0.gy)
+                .attr("y2", -(dest.gy - bm0.gy))
                 .attr("class", ctec_line_type);
         }
 
@@ -1581,13 +1591,17 @@ TSE.toast = function(msg, head_text, type, text_colour)
         document.getElementById('section_project_tab').click();
     };
     document.getElementById('create_new_project').onclick = function() {
-        let npn = document.getElementById('new_project_name').value;
+        let pnin = document.getElementById('new_project_name');
+        let npn = pnin.value;
+        pnin.value = '';
         // check if a project with this name already exists
         if (TSE.projects[npn]) {
         } else {
             TSE.active = npn;
             TSE.projects[TSE.active] = {};
         }
+
+        TSE.save();
 
         // update list of projects
         TSE.updateProjectButtons();
