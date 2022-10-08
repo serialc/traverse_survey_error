@@ -351,7 +351,7 @@ TSE.update_pace_trials_table = function()
     let tc = "<table class='table table-striped'>" +
         "<thead>" +
         "<tr><th>Trial#</th>" +
-        "<th>No. of paces</th>" +
+        "<th>Paces</th>" +
         "<th>Distance</th>" +
         "<th>Pace length</th>" +
         "<th>Variance</th>" +
@@ -537,7 +537,7 @@ TSE.getGeoJSON = function()
         // add corrected stations if there are at least two BM
         if (TSE.getGeoreferencedBM().length > 1) {
             // alter the object
-            feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
+            feature.geometry.coordinates = [[ostn.gx, ostn.gy], [dstn.gx, dstn.gy]]
             // delete distance as it doesn't apply to the corrected locations
             delete(feature.geometry.distance);
             data.geolines.features.push(JSON.parse(JSON.stringify(feature)));
@@ -569,7 +569,7 @@ TSE.getGeoJSON = function()
             // add corrected stations if there are at least two BM
             if (TSE.getGeoreferencedBM().length > 1) {
                 // alter the object
-                feature.geometry.coordinates = [[e + ostn.gx, n + ostn.gy], [e + dstn.gx, n + dstn.gy]]
+                feature.geometry.coordinates = [[ostn.gx, ostn.gy], [dstn.gx, dstn.gy]]
                 data.geowalls.features.push(JSON.parse(JSON.stringify(feature)));
             }
         }
@@ -582,7 +582,7 @@ TSE.getGeoJSON = function()
         let err = error[stnid];
 
         // reformat data into geojson feature
-        let poly = err.map( p => [p.x, p.y] );
+        let poly = err.map( p => [e + p.x, n + p.y] );
         // polygon in geojson needs to have same start/end coordinates
         poly.push(poly[0]);
 
@@ -917,9 +917,9 @@ TSE.updateSVG = function()
             if (ctec) {
                 layer_walls.append("line")
                     .attr("x1", wo.gx - bm0.gx)
-                    .attr("y1", -wo.gy - bm0.gy)
+                    .attr("y1", -(wo.gy - bm0.gy))
                     .attr("x2", wd.gx - bm0.gx)
-                    .attr("y2", -wd.gy - bm0.gy)
+                    .attr("y2", -(wd.gy - bm0.gy))
                     .attr("class", "wall_line pointer")
                     .on("click", function() {
                         TSE.promptWallDelete(walls[w]);
