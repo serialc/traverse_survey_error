@@ -230,8 +230,6 @@ TSE.loadProject = function(pn)
 
     // update displayed name of project
     document.getElementById('project_name').innerHTML = '[' + pn + ']';
-    // redraw canvas if necessary
-    TSE.updateSVG();
 };
 
 // Goes through points/stations network to see if there's a closed traverse (or just two benchmarks really)
@@ -625,6 +623,20 @@ TSE.updateSVG = function()
             (bounds.xmin - padding) + " " + (-bounds.ymax - padding) + " " +
             (bounds.xmax - bounds.xmin + (2 * padding)) + " " + (bounds.ymax - bounds.ymin + (2 * padding))
         ); // viewBox x, y, w, h
+
+    // add CSS styling
+    svg.append('style')
+        .text(
+            ".leg_line, .leg_line_ctp { stroke-dasharray: 2 1; }" +
+            ".leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly { stroke: black; stroke-width: 0.5; }" +
+            ".leg_line_ctp { stroke: blue; stroke-width: 0.8; }" +
+            ".marker_benchmark, .marker_point, .error_poly { fill: white; }" +
+            ".faded { opacity: 0.2; }" + 
+            ".wall_line { stroke-width: 1; }" + 
+            ".sb_line { stroke: black; stroke-width: 0.5; }" + 
+            ".sb_text { font-size: 4px; }" + 
+            ".error_poly { opacity: 0.3; }"
+        );
 
     // add groups to contain and order layers of map elements/hierarchy
     // uncorrected layers
@@ -1604,6 +1616,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
             zip.file('measures/' + TSE.active + "_walls.geojson", JSON.stringify(data.walls));
             zip.file('corrected/' + TSE.active + "_walls.geojson", JSON.stringify(data.geowalls));
             zip.file('measures/' + TSE.active + "_uncertainty.geojson", JSON.stringify(data.uncertainty));
+            zip.file(TSE.active + "_map.svg", document.getElementById('surveyfigure').outerHTML);
             
             zip.generateAsync({type:"blob"})
             .then(function(content) {

@@ -222,40 +222,10 @@
                     <p>The area below represents your field space. The triangular marker in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
                     <p><strong>Select a benchmark or station to see possible operations.</strong></p>
 
-                    <!-- SVG CSS -->
+                    <!-- external SVG CSS - shouldn't impact feature regular styling -->
                     <style>
                     .pointer {
                         cursor: pointer;
-                    }
-                    .leg_line, .leg_line_ctp {
-                        stroke-dasharray: 2 1;
-                    }
-                    .leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly {
-                        stroke: black;
-                        stroke-width: 0.5;
-                    }
-                    .leg_line_ctp {
-                        stroke: blue;
-                        stroke-width: 0.8;
-                    }
-                    .marker_benchmark, .marker_point, .error_poly {
-                        fill: white;
-                    }
-                    .faded {
-                        opacity: 0.2;
-                    }
-                    .wall_line {
-                        stroke-width: 1;
-                    }
-                    .sb_line {
-                        stroke: black;
-                        stroke-width: 0.5;
-                    }
-                    .sb_text {
-                        font-size: 4px;
-                    }
-                    .error_poly {
-                        opacity: 0.3;
                     }
                     .selection {
                         fill: #0B5ED7;
@@ -275,7 +245,6 @@
                         background-position: 10px 10px;
                         background-size: 25px;
                     }
-
                     </style>
 
                     <div id="results" class="mb-3">
@@ -398,9 +367,10 @@
                                 Files are separated by feature type (e.g., points, lines, and polygons) as well as duplicated for measured (data entered) and corrected when closed traverses are completed.
                                 Data is georeferenced if northing and eastings are provided.
                             </p>
+                            <p>Note that the SVG figure/map will also be exported as is currently displayed - you may wish to (de)activate CTEC.</p>
                             <p>You will still need to define your projection coordinate system in your GIS to complete the georeferencing.</p>
                             <p>
-                                <button id="gen_data_zip" class="btn btn-primary">Generate zip files for download</button>
+                                <button id="gen_data_zip" class="btn btn-primary">Download</button>
                             </p>
                         </div>
                         <div class="col-md-6">
