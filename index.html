@@ -77,12 +77,14 @@
                             <p><strong>The situation.</strong> You only have a compass (or no GPS reception) and would like to record the location of other features relative to a chosen point (e.g., a tree, rock cairn, or geodetic benchmark).</p>
                             <p>
                             A <strong>benchmark</strong> is a good point to start such an activity, but not necessary.<br>
-                            A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating points for an area).<br>
-                            The benefit of a geodetic benchmark is that your collected data using a local coordinate system can be tied and transferred directly to know geographic coordinate systems.
+                            A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating relative points for an area).<br>
+                            The benefit of using a geodetic benchmark is that the data collected in this exercise can be tied to a other geographic data.
                         </div>
                         <div class="col-md-6 mb-4">
-                            <img src="rsc/bm.jpg" class="sizelim" width="100%"><br>
-                                A benchmark in France (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons)
+                            <p>
+                                <img src="rsc/bm.jpg" class="sizelim" width="100%"><br>
+                                A benchmark in France (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg" target="_blank">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>, via Wikimedia Commons)
+                            </p>
                         </div>
 
                         <div class="col-lg-6">
@@ -91,13 +93,31 @@
                         <div class="col-lg-6">
                             <p><strong>Dealing with error.</strong> For this exercise we will be using a compass and pacing. A pace, in this activity, is using the following definition. When walking, a pace is one step or the distance between one foot and the other, at a consistent point (e.g., the tip or heel of the feet). See the adjacent diagram.</p>
                             <p>Other pacing definitions exist. Regardless of which 'pace' definition you use, it is important to specify to your colleagues which your are using.</p>
-                            <p>For this activity we will begin by measuring your pace length and error percentage. This requires doing a few trials.<br>
-                            Note that as pace lengths vary by person only the person that has calculated their pace length (and error) should be completing the paces in the main activity.</p>
+                            <p>For this activity we will begin by measuring your pace length and error percentage. This requires doing a few trials.</p>
+                            <p><em>Note that as pace lengths vary by person only the person that has calculated their pace length (and error) should be completing the paces in the main activity.</em></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Compasses directions are wrong</strong> in most places (and time), but to varying degrees. True north, the place on the globe we consider north and which geographic and projected coordinate systems consider north differ from the magnetic north. Not only this but it's constantly (slowly) changing and can be quite a large declination. For example, a large part of Brazil has a declination of -20&deg; or greater.</p>
+                            <p><strong>It is therefore recommended or even necessary to know the local magnetic declination when using a compass.</strong></p>
+                            <p>
+                                Some compasses allow you to compensate for magnetic declination. Alternatively you must compensate for it manually.
+                                So if I take a compass reading in Trier, Germany, of 140&deg; and the local magnetic declination is +2.7&deg; then I will record a reading of 137.3&deg;.
+                                Remember that the given magnetic declination is the error, and therefore you must compensate by inversing the magnitude/sign.
+                                In Cape Town, South Africa, a similar compass reading of 140&deg; with the given magnetic declination of -25.7&deg; yields an adjusted reading of 165.7&deg;.
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <p>
+                                <img src="rsc/magdecl.png" width="100%"><br>
+                                Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>). While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne.
+                            </p>
                         </div>
                     </div>
 
                     <p class="text-end">
-                        <button id="goto_section_after1" class="btn btn-primary">Next</button>
+                        <button id="goto_section_after1" class="btn btn-primary">Get started</button>
                     </p>
                 </div>
             </div>
@@ -107,7 +127,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <h2>Create a new project</h2>
-                            <p>Select a project below or create a new one. Projects allow you to save multiple traverses.</p>
+                            <p>Select a project below or create a new one.<br>Projects allow you to save multiple traverses.</p>
                             <label for="new_project_name" class="form-label">Project name</label>
                             <input type="text" id="new_project_name" class="form-control" placeholder="e.g., Cornett Building" aria-describedby="newProjectHelp">
                             <div id="newProjectHelp" class="form-text">
@@ -198,6 +218,18 @@
                             <label>Please estimate your azimuth accuracy in degrees:</label>
                             <input type="number" class="form-control" id="azim_error_input" placeholder="">
                             <div class="form-text">E.g., 2</div>
+                        </div>
+
+                        <h4>Magnetic declination error</h4>
+                        <div class="col-md-12 mb-3">
+                            <p>As outlined in the introduction, compasses have error specific to their location used.</p>
+                            <p>Specify below your local magnetic declination value. This will be applied to your azimuth measurements.</p>
+                            <label>Magnetic declination in degress:</label>
+                            <input type="number" class="form-control" id="magnetic_declination_input" placeholder="0" value="0">
+                            <div class="form-text">E.g., An entered value of -12 would result in a value of +12 to be applied to your compass azimuth calculations. <strong>This is optional as you can compensate for this in other ways.</strong></div>
+                        </div>
+
+                        <div class="col-12">
                             <div class="row mt-3">
                                 <div class="col-6 text-start">
                                     <button id="return_to_dist_error" class="btn btn-secondary">Back</button>
@@ -206,8 +238,8 @@
                                     <button id="submit_azim_error" class="btn btn-primary">Submit direction error</button>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
 
                     <p id="start_activity_button" class="text-end mt-3 d-none">
@@ -409,6 +441,12 @@
                 </div>
 
                 <div class="col-md-12">
+                    <h2>Data</h2>
+                    <p><strong>Where is the data stored?</strong><br>In your browser and it's only accessible by you. Learn more about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a>.
+                    <p><strong>How do I delete the project data?</strong><br>You can simply clear the site data, similarly to how it is done for cookies or the cache in your browser.</p>
+                </div>
+
+                <div class="col-md-12">
                     <h2>Additional concepts</h2>
                     <p>This activity depends on existing understanding of other concepts and skills, such as how to use a compass. Here further information is provided to suggest topics for further exploration.</p>
                     <ul>
@@ -422,7 +460,7 @@
                     <ul>
                         <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
                         <li>Enable showing of work to calculate point locations, error correction.</li>
-                        <li>Integrate level-traverse visualization - see <a href="https://www.boeingconsult.com/tafe/ss&so/survey1/level/notes-sur1.htm#sect1">example</a>.</li>
+                        <li>Integrate level-traverse visualization - see <a href="https://www.boeingconsult.com/tafe/ss&so/survey1/level/notes-sur1.htm#sect1" target="_blank">example</a>.</li>
                         <li>Add option to enter magnetic declination</li>
                         <li>Add exercise context of field notes - TSE shouldn't replace the taking of field notes and notebook data entry.</li>
                         <li>Harmonize terms - define them (e.g., leg, station, position)</li>
@@ -460,22 +498,22 @@
                     <div class="col-sm-6 col-md-4 mt-5">
                         <h3 class="mb-4">Created by</h3>
                         <p>Cyrille Médard de Chardon</p>
-                        <p>Want to <a href="https://github.com/serialc/traverse_survey_error">contribute</a>?</p>
+                        <p>Want to <a href="https://github.com/serialc/traverse_survey_error" target="_blank">contribute</a>?</p>
                   </div>
 
                   <div class="col-sm-6 col-md-4 mt-5">
                     <h3 class="mb-4">Used resources</h3>
-                    <a href="https://getbootstrap.com/">Bootstrap</a><br>
-                    <a href="https://d3js.org/">D3.js</a><br>
-                    <a href="https://github.com/claytongulick/quickhull">QuickHull</a><br>
-                    <a href="https://github.com/Stuk/jszip">JSZip</a> &amp; 
-                    <a href="https://github.com/eligrey/FileSaver.js">FileSaver.js</a>
+                    <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a><br>
+                    <a href="https://d3js.org/" target="_blank">D3.js</a><br>
+                    <a href="https://github.com/claytongulick/quickhull" target="_blank">QuickHull</a><br>
+                    <a href="https://github.com/Stuk/jszip" target="_blank">JSZip</a> &amp; 
+                    <a href="https://github.com/eligrey/FileSaver.js" target="_blank">FileSaver.js</a>
                   </div>
 
                   <div class="col-sm-6 col-md-4 mt-5">
                       <h3 class="mb-4">Co-funded by</h3>
-                      <a href="https://project.digilego.eu"><img src="rsc/logo_and_text_white.svg" width="60%"></a>
-                      <a href="https://liser.lu"><img src="rsc/liser.png" width="60%"></a>
+                      <a href="https://project.digilego.eu" target="_blank"><img src="rsc/logo_and_text_white.svg" width="60%"></a>
+                      <a href="https://liser.lu" target="_blank"><img src="rsc/liser.png" width="60%"></a>
                   </div>
 
                   <div class="col-12">

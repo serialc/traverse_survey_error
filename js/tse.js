@@ -55,6 +55,7 @@ TSE.test = function(test_num)
             
             // add direction error
             document.getElementById('azim_error_input').value = 2.5;
+            document.getElementById('magnetic_declination_input').value = 2.7;
             document.getElementById('submit_azim_error').click();
 
             // go back to project selection
@@ -233,11 +234,20 @@ TSE.loadProject = function(pn)
 
     // need to update error inputs and tables
     if (TSE.projects[TSE.active].pace_trials) {
-
+        TSE.update_pace_trials_table();
     }
-    if (TSE.projects[TSE.active].pace_trials) {
+    if (TSE.projects[TSE.active].pacing_error_percentage) {
+        document.getElementById('known_error_percentage').value = TSE.projects[TSE.active].pacing_error_percentage;
     }
-    // TO DO
+    if (TSE.projects[TSE.active].pace_length) {
+        document.getElementById('known_pace_length').value = TSE.projects[TSE.active].pace_length;
+    }
+    if (TSE.projects[TSE.active].azim_error) {
+        document.getElementById('azim_error_input').value = TSE.projects[TSE.active].azim_error;
+    }
+    if (TSE.projects[TSE.active].magnetic_declination) {
+        document.getElementById('magnetic_declination_input').value = TSE.projects[TSE.active].magnetic_declination;
+    }
 };
 
 // Goes through points/stations network to see if there's a closed traverse (or just two benchmarks really)
@@ -272,7 +282,7 @@ TSE.updateProjectButtons = function()
         let pn = pnames[i];
         let btn = document.createElement('button');
         btn.innerHTML = pn;
-        btn.classList.add('btn', 'btn-success', 'me-2');
+        btn.classList.add('btn', 'btn-success', 'mt-2', 'me-2');
 
         btn.addEventListener('click', (function() {
             // reset tab visibilities
@@ -399,6 +409,11 @@ TSE.update_pace_trials_table = function()
     // update the div and make sure it's visible
     table_div.innerHTML = tc;
     table_div.classList.remove('d-none');
+    
+    // if we have at least 6 trials, enable the progress button
+    if (TSE.projects[TSE.active].pace_trials.length >= 6) {
+        document.getElementById('finish_pace_trials').disabled = false;
+    }
 };
 
 // add a wall to the data model
@@ -493,6 +508,7 @@ TSE.getGeoJSON = function()
                "paces": stn.paces,
                "distance": stn.distance,
                "azimuth": stn.azim,
+               "adjazimuth": stn.adjazim,
                "on_ctp": stn.traverse_path
             }
         }
@@ -526,6 +542,7 @@ TSE.getGeoJSON = function()
                "did": dstn.id,
                "paces": dstn.paces,
                "azimuth": dstn.azim,
+               "adjazimuth": dstn.adjazim,
                "length": dstn.distance,
                "on_ctp": dstn.traverse_path
             }
@@ -767,21 +784,21 @@ TSE.updateSVG = function()
             for (let i = 0; i < error_points.length; i+=1) {
                 // change azim error
                 erpnts.push({
-                    "x": Math.sin((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
-                    "y": Math.cos((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
+                    "x": Math.sin((stn.adjazimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.adjazimuth + error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
                 });
                 erpnts.push({
-                    "x": Math.sin((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
-                    "y": Math.cos((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
+                    "x": Math.sin((stn.adjazimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.adjazimuth - error_azim) / 180 * Math.PI) * (stn.distance + error_pace) + error_points[i].y
                 });
                 // change pace error
                 erpnts.push({
-                    "x": Math.sin((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
-                    "y": Math.cos((stn.azimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
+                    "x": Math.sin((stn.adjazimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.adjazimuth + error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
                 });
                 erpnts.push({
-                    "x": Math.sin((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
-                    "y": Math.cos((stn.azimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
+                    "x": Math.sin((stn.adjazimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].x,
+                    "y": Math.cos((stn.adjazimuth - error_azim) / 180 * Math.PI) * (stn.distance - error_pace) + error_points[i].y
                 });
             }
 
@@ -1133,15 +1150,20 @@ TSE.recomputeAllXY = function()
 
         // skip for BM0
         if (stnindex !== 0) {
+            // recalculate adjusted azimuth for magnetic declination
+            stn.adjazimuth = stn.azimuth - TSE.projects[TSE.active].magnetic_declination;
+
             // calculate x,y based on dependent
             // get the object this station is dependent on
             let dependent = TSE.getStationFromId(stn.dependence);
-            stn.x = Math.sin(stn.azimuth / 180 * Math.PI) * stn.distance + dependent.x;
-            stn.y = Math.cos(stn.azimuth / 180 * Math.PI) * stn.distance + dependent.y;
+            console.log(dependent);
+            stn.x = Math.sin(stn.adjazimuth / 180 * Math.PI) * stn.distance + dependent.x;
+            stn.y = Math.cos(stn.adjazimuth / 180 * Math.PI) * stn.distance + dependent.y;
             
             // replace the station back in the main data array
             TSE.setStationAtIndex(stn, stnindex);
         }
+        console.log(stn);
 
         // get all the stations that are dependent on this one and and make recursive call
         let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
@@ -1200,8 +1222,8 @@ TSE.recomputeAllXY = function()
                 rx = 0;
                 ry = 0;
             } else {
-                rx = Math.sin(stn.azimuth / 180 * Math.PI) * stn.distance;
-                ry = Math.cos(stn.azimuth / 180 * Math.PI) * stn.distance;
+                rx = Math.sin(stn.adjazimuth / 180 * Math.PI) * stn.distance;
+                ry = Math.cos(stn.adjazimuth / 180 * Math.PI) * stn.distance;
             }
 
             // combine the change between stations with the closed traverse error proportion
@@ -1230,8 +1252,8 @@ TSE.recomputeAllXY = function()
                 // calculate x,y based on dependent
                 // get the object this station is dependent on
                 let dependent = TSE.getStationFromId(uc_stn.dependence);
-                uc_stn.gx = Math.sin(uc_stn.azimuth / 180 * Math.PI) * uc_stn.distance + dependent.gx;
-                uc_stn.gy = Math.cos(uc_stn.azimuth / 180 * Math.PI) * uc_stn.distance + dependent.gy;
+                uc_stn.gx = Math.sin(uc_stn.adjazimuth / 180 * Math.PI) * uc_stn.distance + dependent.gx;
+                uc_stn.gy = Math.cos(uc_stn.adjazimuth / 180 * Math.PI) * uc_stn.distance + dependent.gy;
 
                 // replace the station back in the main data array
                 TSE.setStationAtIndex(uc_stn, uc_stnindex);
@@ -1389,22 +1411,24 @@ TSE.toast = function(msg, head_text, type, text_colour)
         TSE.projects[TSE.active].pace_trials.push({"d": pdist, "p": paces});
         TSE.update_pace_trials_table();
 
-        // if we have at least 6 trials, enable the progress button
-        if (TSE.projects[TSE.active].pace_trials.length >= 6) {
-            document.getElementById('finish_pace_trials').disabled = false;
-        }
     };
     document.getElementById('submit_azim_error').onclick = function() {
         // some initialization
         if (!TSE.projects[TSE.active]) { TSE.projects[TSE.active] = {}; }
 
         let azim = parseFloat(document.getElementById('azim_error_input').value);
-        if(azim.length === 0 || isNaN(azim)) {
+        if (azim.length === 0 || isNaN(azim)) {
             TSE.warnToast("Azimuth error must have a valid value");
             return false;
         }
-
         TSE.projects[TSE.active].azim_error = azim;
+
+        let magdecl = parseFloat(document.getElementById('magnetic_declination_input').value);
+        if (magdecl === "" || isNaN(magdecl)) {
+            TSE.infoToast("Magnetic declination has been set to 0.");
+            magdecl = 0;
+        }
+        TSE.projects[TSE.active].magnetic_declination = magdecl;
 
         // try to setup the graph area if the required paramters have been provided
         if (TSE.tryInitialization()) {
@@ -1418,6 +1442,10 @@ TSE.toast = function(msg, head_text, type, text_colour)
         acttab.click();
         // also enable the export function
         document.getElementById('section4-tab').disabled = false;
+
+        // recompute all X,Y as error changes may have been made
+        TSE.recomputeAllXY();
+        TSE.updateSVG();
     };
     document.getElementById('control_add_leg').onclick = function() {
         TSE.resetControls();
@@ -1479,6 +1507,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // update the x/y coordinates and other attributes (except for the starting benchmark)
         if (stn.id !== 0) {
             stn.azimuth = azim;
+            stn.adjazimuth = azim - TSE.projects[TSE.active].magnetic_declination;
             stn.paces = paces;
 
             // calculate
@@ -1487,8 +1516,8 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
             // get the object this station is dependent on
             let dependent = TSE.getStationFromId(stn.dependence);
-            stn.x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
-            stn.y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+            //stn.x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
+            //stn.y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
         }
 
         // replace the object we want to update
@@ -1549,6 +1578,9 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // below only works as long as we don't add a third point type
         let ptype = elptype.checked ? "point" : "benchmark";
 
+        // record azim with the provided magnetic declination
+        let adjazim = azim - TSE.projects[TSE.active].magnetic_declination;
+
         // reset inputs
         elazim.value = "";
         elpaces.value = "";
@@ -1562,9 +1594,9 @@ TSE.toast = function(msg, head_text, type, text_colour)
         // convert paces to metres (or other unit)
         let dist = TSE.projects[TSE.active].pace_length * paces;
 
-        // calculate x,y
-        let x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
-        let y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
+        // calculate x,y // not necessary as we calculate this in recomputeAllXY()
+        //let x = Math.sin(azim / 180 * Math.PI) * dist + dependent.x;
+        //let y = Math.cos(azim / 180 * Math.PI) * dist + dependent.y;
 
         // add point to project survey list
         TSE.projects[TSE.active].survey.push({
@@ -1572,10 +1604,11 @@ TSE.toast = function(msg, head_text, type, text_colour)
             "name": desc,
             "id": stnid,
             "azimuth": azim,
+            "adjazimuth": adjazim,
             "distance": dist,
             "paces": paces,
-            "x": x,
-            "y": y,
+         //   "x": x,
+         //   "y": y,
             "dependence": dependent.id
         });
 
@@ -1584,6 +1617,7 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // gui update controls and SVG graphics
         TSE.hideControlButtons();
+        TSE.recomputeAllXY();
         TSE.updateSVG();
         TSE.resetControls();
     };
