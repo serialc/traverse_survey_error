@@ -60,7 +60,7 @@
                         <div class="col-md-6">
                             <p>This tool assists traverse survey exercise data collection, graphing, and error illustratation.</p>
                             <p>While the activity focuses on the use of compasses and pacing to measure angle and distance, other tools could be used.</p>
-                            <p><strong>The contribution of this tool aims to ease the graphing and illustration of error in traverse surveying.</strong> This exercise should not replace the process of learning how to manually perform graphing calculations - but perhaps to check them.</p>
+                            <p><strong>The contribution of this tool aims to ease the graphing and illustration of error in traverse surveying.</strong> This exercise should not replace the process of practicing trigonometric calculations and graphing data, but supplement it. See suggested uses for the tool in the Help tab.</p>
                             <p>Follow the instructions below for the activity.</p>
                         </div>
                         <div class="col-md-6 mb-4">
@@ -78,12 +78,12 @@
                             <p>
                             A <strong>benchmark</strong> is a good point to start such an activity, but not necessary.<br>
                             A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating relative points for an area).<br>
-                            The benefit of using a geodetic benchmark is that the data collected in this exercise can be tied to a other geographic data.
+                            The benefit of using a geodetic benchmark is that the data collected in this exercise becomes georeferenced and can then be exported into a GIS program and be tied to a other geographic data.
                         </div>
                         <div class="col-md-6 mb-4">
+                            <img src="rsc/bm.jpg" class="sizelim" width="100%">
                             <p>
-                                <img src="rsc/bm.jpg" class="sizelim" width="100%"><br>
-                                A benchmark in France (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg" target="_blank">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>, via Wikimedia Commons)
+                                A benchmark in France (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg" target="_blank">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>, via Wikimedia Commons).
                             </p>
                         </div>
 
@@ -100,17 +100,28 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Compasses directions are wrong</strong> in most places (and time), but to varying degrees. True north, the place on the globe we consider north and which geographic and projected coordinate systems consider north differ from the magnetic north. Not only this but it's constantly (slowly) changing and can be quite a large declination. For example, a large part of Brazil has a declination of -20&deg; or greater.</p>
-                            <p><strong>It is therefore recommended or even necessary to know the local magnetic declination when using a compass.</strong></p>
                             <p>
-                                Some compasses allow you to compensate for magnetic declination. Alternatively you must compensate for it manually.
-                                So if I take a compass reading in Trier, Germany, of 140&deg; and the local magnetic declination is +2.7&deg; then I will record a reading of 137.3&deg;.
+                                <strong>Compass directions are wrong</strong> in most places (and time), but to varying degrees.
+                                Compass bearings/directions follow magnetic fields across the surface of the earth that differ in heading to true north.
+                                True north is the northern point at which the the earth rotates around its axis.
+                                It is used by geographic and projected coordinate systems to orient points relative to one another.
+                                A conversion is almost always required between magnetic north and true north.
+                                Additionally, the magnetic field is constantly (slowly) changing and can have large declinations. For example, a large part of Brazil has a declination of -20&deg; or greater.</p>
+                            <p>
+                                <strong>It is therefore recommended or even necessary to know the local magnetic declination when using a compass.</strong>
+                                Magnetic declination is the angle difference between the direction of the earth's northern axis of rotation and the direction the local magnetic field is aligning a compass's needle.
+                            </p>
+                            <p>
+                                Some compasses allow you to compensate for magnetic declination.
+                                Alternatively you can compensate for it manually.
                                 Remember that the given magnetic declination is the error, and therefore you must compensate by inversing the magnitude/sign.
+                                So if I take a compass reading in Trier, Germany, of 140&deg; and the local magnetic declination is +2.7&deg; then the corrected reading is 137.3&deg;.
                                 In Cape Town, South Africa, a similar compass reading of 140&deg; with the given magnetic declination of -25.7&deg; yields an adjusted reading of 165.7&deg;.
+                            </p>
                         </div>
                         <div class="col-md-6 mb-4">
+                            <img src="rsc/magdecl.png" width="100%">
                             <p>
-                                <img src="rsc/magdecl.png" width="100%"><br>
                                 Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>). While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne.
                             </p>
                         </div>
@@ -212,21 +223,35 @@
 
                     <div id="calc_azim_error_input" class="d-none row">
                         <h4>Direction / Azimuth error</h4>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <p>The azimuth is the compass direction. Compass direction measurements also have error.</p>
                             <p>While distance error is percentage based, azimuth error is value based.</p>
                             <label>Please estimate your azimuth accuracy in degrees:</label>
                             <input type="number" class="form-control" id="azim_error_input" placeholder="">
                             <div class="form-text">E.g., 2</div>
                         </div>
+                        <div class="col-md-6">
+                            <img src="rsc/compass_reading_error.svg" width="100%">
+                            <p>
+                                The provided error value for compass readings will be allocated to each side of measurements to determine error.
+                            </p>
+                        </div>
 
                         <h4>Magnetic declination error</h4>
-                        <div class="col-md-12 mb-3">
-                            <p>As outlined in the introduction, compasses have error specific to their location used.</p>
+                        <div class="col-md-6">
+                            <p>As outlined in the introduction, compasses measurements have error specific to their location used.</p>
                             <p>Specify below your local magnetic declination value. This will be applied to your azimuth measurements.</p>
                             <label>Magnetic declination in degress:</label>
-                            <input type="number" class="form-control" id="magnetic_declination_input" placeholder="0" value="0">
-                            <div class="form-text">E.g., An entered value of -12 would result in a value of +12 to be applied to your compass azimuth calculations. <strong>This is optional as you can compensate for this in other ways.</strong></div>
+                            <input type="number" class="form-control" id="magnetic_declination_input" placeholder="" value="0">
+                            <div class="form-text">
+                                E.g., An entered value of -12 would result in a value of +12 to be applied to your compass azimuth calculations.<br>
+                                <strong>
+                                    This is optional as you can compensate for this in other ways.<br>
+                                    <em>
+                                        You may also change this later and your recorded data will adapt.
+                                    </em>
+                                </strong>
+                            </div>
                         </div>
 
                         <div class="col-12">
@@ -516,7 +541,7 @@
                       <a href="https://liser.lu" target="_blank"><img src="rsc/liser.png" width="60%"></a>
                   </div>
 
-                  <div class="col-12">
+                  <div class="col-12 mt-5 mb-5">
                       The creation of this resources has been (partially) funded by the ERASMUS+ grant program of the European Union under grant no. 2020 1 DE01 KA226 005814. Neither the European Commission nor the project's national funding agency DAAD are responsible for the content or liable for any losses or damage resulting of the use of this resource.
                   </div>
                 </div>

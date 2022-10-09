@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="surveyfigure"
+   width="26.730227"
+   viewBox="-10 -10 26.730227 16.122022"
+   version="1.1"
+   sodipodi:docname="compass_reading_error.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   height="16.122023"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs157" />
+  <sodipodi:namedview
+     id="namedview155"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="48.218203"
+     inkscape:cx="13.594451"
+     inkscape:cy="10.628766"
+     inkscape:window-width="2560"
+     inkscape:window-height="1376"
+     inkscape:window-x="1920"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="map_error"
+     inkscape:snap-bbox="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-smooth-nodes="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <style
+     id="style2">.leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly {  }
+.marker_benchmark, .marker_point, .error_poly {  }
+.faded { opacity: 0.2; }
+.wall_line { stroke-width: 1; }
+.sb_line { stroke: black; stroke-width: 0.5; }
+.sb_text { font-size: 4px; }
+.error_poly {  }
+.selection { fill: #0B5ED7; }
+.leg_line_ctp { stroke: blue; stroke-width: 0.8; }
+</style>
+  <g
+     id="map_error"
+     transform="translate(-2.5876422,12.686222)">
+    <rect
+       style="fill:#acd1af;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers;stop-color:#000000"
+       id="rect2240"
+       width="26.730227"
+       height="16.122023"
+       x="-7.4123578"
+       y="-22.686222" />
+    <path
+       id="path9834"
+       style="fill:#5abdff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:transform-center-x="-4.9950957"
+       inkscape:transform-center-y="-2.780656"
+       d="m -1.5768541,-10.589182 8.7323749,-5.393371 c 0.4342318,0.704367 0.7859525,1.465212 1.0414882,2.268486 z"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 10.275936,-18.116739 -1.5704985,-10.59006 12.66909,-11.262798"
+       id="path7780" />
+    <path
+       style="opacity:0.3;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 17.819197,-11.437004 -5.150107,0.174206 -2.393154,-6.853941 4.441102,-2.876006 z"
+       id="path6374"
+       sodipodi:nodetypes="ccccc" />
+    <line
+       x1="-1.5704985"
+       y1="-10.59006"
+       x2="13.849973"
+       y2="-15.511359"
+       class="leg_line"
+       id="line3465" />
+    <path
+       d="m -1.5705009,-14.976973 3.79918,6.5803694 h -7.59836 z"
+       id="station_0"
+       class="pointer marker_benchmark">
+      <title
+         id="title3468">Starting benchmark</title>
+    </path>
+    <path
+       d="m 15.634089,-15.511358 a 1.7841241,1.7841241 0 1 1 -3.56824,0 1.7841241,1.7841241 0 1 1 3.56824,0"
+       id="station_13"
+       class="pointer marker_point">
+      <title
+         id="title3507">for figure</title>
+    </path>
+  </g>
+  <g
+     id="map_ctec_walls"
+     transform="translate(-2.5876422,12.686222)" />
+  <style
+     id="style995">.leg_line, .leg_line_ctp { stroke-dasharray: 2 1; }.leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly { stroke: black; stroke-width: 0.5; }.leg_line_ctp { stroke: blue; stroke-width: 0.8; }.marker_benchmark, .marker_point, .error_poly { fill: white; }.faded { opacity: 0.2; }.wall_line { stroke-width: 1; }.sb_line { stroke: black; stroke-width: 0.5; }.sb_text { font-size: 4px; }.error_poly { opacity: 0.3; }.selection { fill: #0B5ED7; }</style>
+  <style
+     id="style3352">.leg_line, .leg_line_ctp { stroke-dasharray: 2 1; }.leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly { stroke: black; stroke-width: 0.5; }.leg_line_ctp { stroke: blue; stroke-width: 0.8; }.marker_benchmark, .marker_point, .error_poly { fill: white; }.faded { opacity: 0.2; }.wall_line { stroke-width: 1; }.sb_line { stroke: black; stroke-width: 0.5; }.sb_text { font-size: 4px; }.error_poly { opacity: 0.3; }.selection { fill: #0B5ED7; }</style>
+</svg>

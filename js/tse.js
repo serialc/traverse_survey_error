@@ -209,6 +209,7 @@ TSE.test = function(test_num)
     }
   ];
             TSE.projects.test.selected = 7;
+            TSE.recomputeAllXY();
             TSE.updateSVG();
             break;
 
@@ -236,17 +237,26 @@ TSE.loadProject = function(pn)
     if (TSE.projects[TSE.active].pace_trials) {
         TSE.update_pace_trials_table();
     }
+    TSE.update_pace_trials_table();
     if (TSE.projects[TSE.active].pacing_error_percentage) {
         document.getElementById('known_error_percentage').value = TSE.projects[TSE.active].pacing_error_percentage;
+    } else {
+        document.getElementById('known_error_percentage').value = '';
     }
     if (TSE.projects[TSE.active].pace_length) {
         document.getElementById('known_pace_length').value = TSE.projects[TSE.active].pace_length;
+    } else {
+        document.getElementById('known_pace_length').value = '';
     }
     if (TSE.projects[TSE.active].azim_error) {
         document.getElementById('azim_error_input').value = TSE.projects[TSE.active].azim_error;
+    } else {
+        document.getElementById('azim_error_input').value = '';
     }
     if (TSE.projects[TSE.active].magnetic_declination) {
         document.getElementById('magnetic_declination_input').value = TSE.projects[TSE.active].magnetic_declination;
+    } else {
+        document.getElementById('magnetic_declination_input').value = '';
     }
 };
 
@@ -352,6 +362,12 @@ TSE.update_pace_trials_table = function()
     // reduce((a,b)=>a+b) sums all values in array
     let pace_lengths_mean= 0;
 
+    // if there are no pace trials defined - do so
+    if (!prj.pace_trials) {
+        prj.pace_trials = [];
+    }
+
+    // calculate mean pace length
     if (prj.pace_trials.length > 0) {
         let trials_pace_lengths = prj.pace_trials.map((t)=>t.d/t.p);
         pace_lengths_mean = trials_pace_lengths.reduce((a,b)=>a+b)/prj.pace_trials.length;
@@ -802,13 +818,14 @@ TSE.updateSVG = function()
                 });
             }
 
-            // transform points keeping external only using convex
+            // transform points - reduce them to keeping the external points only using convex hull alg.
             let convex_pnts = QuickHull(erpnts);
 
-            // save them for export
-            TSE.projects[TSE.active].error_poly[stn.id] = convex_pnts;
+            // reduce significant digits to tenths
+            //convex_pnts = convex_pnts.map( function(a) { return {"x": Math.round(a.x*10)/10, "y": Math.round(a.y*10)/10}});
 
-            // calculate error area for this station - remove interior points with turf.convex(points)
+            // save them for export (this is an exception as data generation usually happens in recomputeAllXY - perhaps need to move this?)
+            TSE.projects[TSE.active].error_poly[stn.id] = convex_pnts;
 
             // add error to map
             layer_error.append("polygon")
@@ -986,23 +1003,6 @@ TSE.deleteWall = function(wall, update=true)
     }
 };
 
-TSE.mergeBM = function(bm1id, bm2id)
-{
-    let bm1 = TSE.getStationFromId(bm1id);
-    let bm2 = TSE.getStationFromId(bm2id);
-
-    // calculate the closing error
-    let nsd = bm1.y - bm2.y;
-    let ewd = bm1.x - bm2.x;
-
-    // get the nodes in sequence that form the closed traverse
-    // Use Dijkstra's algorithm to find the shortest path to bm
-
-
-    console.log(bm1, bm2);
-    console.log(nsd, ewd);
-};
-
 TSE.hideControlButtons = function()
 {
     document.getElementById('controls').classList.add('d-none');
@@ -1156,14 +1156,12 @@ TSE.recomputeAllXY = function()
             // calculate x,y based on dependent
             // get the object this station is dependent on
             let dependent = TSE.getStationFromId(stn.dependence);
-            console.log(dependent);
             stn.x = Math.sin(stn.adjazimuth / 180 * Math.PI) * stn.distance + dependent.x;
             stn.y = Math.cos(stn.adjazimuth / 180 * Math.PI) * stn.distance + dependent.y;
             
             // replace the station back in the main data array
             TSE.setStationAtIndex(stn, stnindex);
         }
-        console.log(stn);
 
         // get all the stations that are dependent on this one and and make recursive call
         let childcon = TSE.projects[TSE.active].connections.filter( c => c[0] === stnid);
@@ -1650,7 +1648,6 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // retrieve multiple GeoJSON objects
         let data = TSE.getGeoJSON();
-        console.log(data);
 
         // check if data is valid - if so zip and save/download
         if (data !== false) {
