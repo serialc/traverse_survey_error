@@ -1087,7 +1087,6 @@ TSE.setStationAtIndex = function(stn, index)
     TSE.projects[TSE.active].survey[index] = stn;
 };
 
-
 // makes a station selected in gui and data
 TSE.selectStation = function(stnid)
 {
@@ -1315,6 +1314,9 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
     // retrieve projects from browser data
     TSE.load();
+
+    // hide restricted tabs
+    TSE.resetTabsToStart();
 
     // update list of projects
     TSE.updateProjectButtons();

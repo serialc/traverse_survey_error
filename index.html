@@ -223,22 +223,22 @@
 
                     <div id="calc_azim_error_input" class="d-none row">
                         <h4>Direction / Azimuth error</h4>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-8 mb-3">
                             <p>The azimuth is the compass direction. Compass direction measurements also have error.</p>
                             <p>While distance error is percentage based, azimuth error is value based.</p>
                             <label>Please estimate your azimuth accuracy in degrees:</label>
                             <input type="number" class="form-control" id="azim_error_input" placeholder="">
                             <div class="form-text">E.g., 2</div>
                         </div>
-                        <div class="col-md-6">
-                            <img src="rsc/compass_reading_error.svg" width="100%">
+                        <div class="col-md-4">
+                            <img src="rsc/compass_reading_error.svg" width="250">
                             <p>
-                                The provided error value for compass readings will be allocated to each side of measurements to determine error.
+                                The provided error value for compass readings will be allocated to each side of measurements to estimate possible error.
                             </p>
                         </div>
 
                         <h4>Magnetic declination error</h4>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <p>As outlined in the introduction, compasses measurements have error specific to their location used.</p>
                             <p>Specify below your local magnetic declination value. This will be applied to your azimuth measurements.</p>
                             <label>Magnetic declination in degress:</label>
@@ -252,6 +252,12 @@
                                     </em>
                                 </strong>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="rsc/magnetic_declination.svg" width="200">
+                            <p>
+                                Compasses point to magnetic north, not true north. Your local difference is called the magnetic declination.
+                            </p>
                         </div>
 
                         <div class="col-12">
@@ -428,6 +434,8 @@
                             </p>
                         </div>
                         <div class="col-md-6">
+                            <img src="rsc/export_into_qgis.png" widht="100%">
+                            <p>Exported data viewed in QGIS with a base map provided by &copy; OpenStreetMap contributors. Red features are raw measurements. Green features are through closed traverse correction. Multiple exports are displayed to show magnetic declination compensation (in blue).</p>
                         </div>
                     </div>
                 </div>
@@ -484,12 +492,10 @@
                     <h2>Aspects to still develop:</h2>
                     <ul>
                         <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
-                        <li>Enable showing of work to calculate point locations, error correction.</li>
-                        <li>Integrate level-traverse visualization - see <a href="https://www.boeingconsult.com/tafe/ss&so/survey1/level/notes-sur1.htm#sect1" target="_blank">example</a>.</li>
-                        <li>Add option to enter magnetic declination</li>
-                        <li>Add exercise context of field notes - TSE shouldn't replace the taking of field notes and notebook data entry.</li>
                         <li>Harmonize terms - define them (e.g., leg, station, position)</li>
-                        <li>Add export of data (GeoJSON)</li>
+                        <li>Enable showing of work to calculate point locations, error correction.</li>
+                        <li>Measurements are currently using trigonometry (angle + distance), add a triangulation option (angle + angle).</li>
+                        <li>Add exercise context of field notes - TSE shouldn't replace the taking of field notes and notebook data entry.</li>
                     </ul>
                 </div>
 
