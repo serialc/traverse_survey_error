@@ -122,7 +122,7 @@
                         <div class="col-md-6 mb-4">
                             <img src="rsc/magdecl.png" width="100%">
                             <p>
-                                Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>). While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne.
+                            Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>). While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne. <strong>The figure is not indicating the direction of the magnetic field.</strong>
                             </p>
                         </div>
                     </div>
@@ -444,58 +444,47 @@
             <div id="section5" class="row tab-pane fade" role="tabpanel" aria-labelledby="section5" tabindex="0">
                 <div class="col-md-12">
                     <h2>How to use this resource</h2>
-                    <p>This application is meant for use in a field surveying course to supplement introductory concepts. Initial methods teaching of relative location measurement introduce the concepts using trigonometry paired with angle and distance measurements. This can be done with a compass and pacing or alternatives.</p>
+                    <p>This application is meant for use in a field surveying course to supplement introductory concepts. Initial methods teaching of relative location measurement introduce the trigonometry (angle and distance measurements). This can be done with a compass and pacing, or alternatives.</p>
                     <p>This resource is designed for the following uses. Following a first compass and pacing traverse survey exercise, consisting of manual data recording (pencil and paper), calculation, and graphing of relative locations:
                         <ol>
-                            <li>a second servery exercise is completed but using this application to illustrate error accumulation</li>
                             <li>for graphing collected measurements as a comparison to manual graphing</li>
+                            <li>a second survey exercise is completed but using this application to illustrate error accumulation</li>
                             <li>to compare closed and open traverse error</li>
+                            <li>integrating collected data into a GIS for further analysis</li>
                         </ol>
                     </p>
                     <p>More generally this resource offers a variety of uses:
                         <ul>
-                            <li>Explanation of pacing and azimuth error</li>
-                            <li>
-                            <li>Data entry</li>
-                            <li>Graphing of data</li>
-                            <li>Visualizing of error accumulation</li>
+                            <li>Explanation of pacing, azimuth, magenetic declination error</li>
+                            <li>Easy data entry and visualization in the field that can highlight recording erros while still in the field</li>
+                            <li>Easy graphing of data through export into a GIS</li>
+                            <li>A novel visualizing of error accumulation</li>
                         </ul>
                     </p>
                 </div>
-                <div class="col-md-12">
-                    <h2>Learning objectives</h2>
-                    <p>To provide a follow-up exercise to traditional traverse exercises that consist of field work, returning to the lab for trigonometric computation of point locations along the traverse and graphing of the points. This tool allows easier graphing of points, reducing error of that process when surveying error is already significant.</p>
-                    <p>Secondly the tool allows better visualization of measurements error and (eventually) allows the comparisons of open traverse errors and closed traverse errors.</p>
-
-                    <h2>Closing error and balancing the traverse</h2>
-                    <p>The error correction from a closed traverse is performed using Bowditch’s Rule.</p>
-                    <p>Correction is only applied to the station legs between the original benchmark and the next applied, at this time.</p>
-
-                </div>
 
                 <div class="col-md-12">
-                    <h2>Data</h2>
+                    <h2>Frequently asked questions</h2>
+
+                    <h3>Closed traverse</h3>
+                    <p>
+                        <strong>How is the closed traverse error correction performed?</strong><br>
+                        The error correction from a closed traverse is performed using Bowditch’s Rule.
+                    </p>
+                    <p>
+                        <strong>What happens if there are multiple georeference benchmarks?</strong><br>
+                        Error correction is only directly applied to the station legs between the original benchmark and the next found georeference benchmark. Other points are corrected based on the changes to their dependencies.
+                    </p>
+
+                    <h3>Data</h3>
                     <p><strong>Where is the data stored?</strong><br>In your browser and it's only accessible by you. Learn more about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a>.
                     <p><strong>How do I delete the project data?</strong><br>You can simply clear the site data, similarly to how it is done for cookies or the cache in your browser.</p>
                 </div>
 
                 <div class="col-md-12">
-                    <h2>Additional concepts</h2>
-                    <p>This activity depends on existing understanding of other concepts and skills, such as how to use a compass. Here further information is provided to suggest topics for further exploration.</p>
-                    <ul>
-                        <li>Discuss open and closed (loop and between BM) traverses</li>
-                        <li>What is North: Magnetic vs true</li>
-                    </ul>
-                </div>
-
-                <div class="col-md-12">
                     <h2>Aspects to still develop:</h2>
                     <ul>
-                        <li>Elaborate on purposes - e.g., measuring the area, locating sampling points, everything that we use GPS for, understanding how it used to be done.</li>
-                        <li>Harmonize terms - define them (e.g., leg, station, position)</li>
-                        <li>Enable showing of work to calculate point locations, error correction.</li>
                         <li>Measurements are currently using trigonometry (angle + distance), add a triangulation option (angle + angle).</li>
-                        <li>Add exercise context of field notes - TSE shouldn't replace the taking of field notes and notebook data entry.</li>
                     </ul>
                 </div>
 
