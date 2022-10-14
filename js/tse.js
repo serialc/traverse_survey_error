@@ -238,6 +238,7 @@ TSE.loadProject = function(pn)
         TSE.update_pace_trials_table();
     }
     TSE.update_pace_trials_table();
+    console.log(TSE.projects[TSE.active]);
     if (TSE.projects[TSE.active].pacing_error_percentage) {
         document.getElementById('known_error_percentage').value = TSE.projects[TSE.active].pacing_error_percentage;
     } else {
@@ -362,7 +363,7 @@ TSE.update_pace_trials_table = function()
     // reduce((a,b)=>a+b) sums all values in array
     let pace_lengths_mean= 0;
 
-    // if there are no pace trials defined - do so
+    // if there are no pace trials object defined - create it
     if (!prj.pace_trials) {
         prj.pace_trials = [];
     }
@@ -418,18 +419,26 @@ TSE.update_pace_trials_table = function()
             "Mean pace length: " + (Math.round(pace_lengths_mean * 100) / 100) + "</p>";
     }
 
-    // save the stderr and pace length to the project
-    TSE.projects[TSE.active].pacing_error_percentage = stderr;
-    TSE.projects[TSE.active].pace_length = pace_lengths_mean;
+    // only update the stderr and pace length if there is more than one pace trial completed
+    if (prj.pace_trials.length > 0) {
+        // save the stderr and pace length to the project
+        TSE.projects[TSE.active].pacing_error_percentage = stderr;
+        TSE.projects[TSE.active].pace_length = pace_lengths_mean;
+    }
 
     // update the div and make sure it's visible
     table_div.innerHTML = tc;
     table_div.classList.remove('d-none');
     
     // if we have at least 6 trials, enable the progress button
-    if (TSE.projects[TSE.active].pace_trials.length >= 6) {
+    let trial_min = 6;
+    if (TSE.projects[TSE.active].pace_trials.length >= trial_min) {
         document.getElementById('finish_pace_trials').disabled = false;
+    } else {
+        TSE.successToast("Only " + (trial_min - TSE.projects[TSE.active].pace_trials.length) + " trials remaining to be completed.", "Well done");
     }
+
+    TSE.save();
 };
 
 // add a wall to the data model
