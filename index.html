@@ -21,40 +21,64 @@
     </head>
     
     <body class="bg-light">
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
           <div class="container">
-            <span class="navbar-brand mb-0 h1">Traverse Surveying & Error</span>
+            <span class="navbar-brand mb-0 h1">
+                <span class="lang lang-en">Traverse Surveying & Error</span>
+                <span class="lang lang-de">Polygoniometrische Vermessung und Abweichungen</span>
+            </span>
+              <div class="navbar-nav">
+                <a href="#" onclick="TSE.changeLanguage('en')" class="nav-link">EN</a>
+                <a href="#" onclick="TSE.changeLanguage('de')" class="nav-link">DE</a>
+              </div>
           </div>
         </nav>
 
         <div class="container">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="section1-tab" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab" aria-controls="section1" aria-selected="true">Introduction</button>
+                    <button class="nav-link active" id="section1-tab" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab" aria-controls="section1" aria-selected="true">
+                        <span class="lang lang-en">Introduction</span>
+                        <span class="lang lang-de">Einleitung</span>
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section_project_tab" data-bs-toggle="tab" data-bs-target="#section_project" type="button" role="tab" aria-controls="section_project" aria-selected="false">Project <span id="project_name"></span></button>
+                    <button class="nav-link" id="section_project_tab" data-bs-toggle="tab" data-bs-target="#section_project" type="button" role="tab" aria-controls="section_project" aria-selected="false">
+                        <span class="lang lang-en">Project </span>
+                        <span class="lang lang-de">Projekt </span>
+                         <span id="project_name"></span></button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section2-tab" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab" aria-controls="section2" aria-selected="false" disabled>Error</button>
+                    <button class="nav-link" id="section2-tab" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab" aria-controls="section2" aria-selected="false" disabled>
+                        <span class="lang lang-en">Error</span>
+                        <span class="lang lang-de">Fehler</span>
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section3-tab" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab" aria-controls="section3" aria-selected="false" disabled>Map</button>
+                    <button class="nav-link" id="section3-tab" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab" aria-controls="section3" aria-selected="false" disabled>
+                        <span class="lang lang-en">Map</span>
+                        <span class="lang lang-de">Karte</span>
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section4-tab" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab" aria-controls="section4" aria-selected="false" disabled>Export</button>
+                    <button class="nav-link" id="section4-tab" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab" aria-controls="section4" aria-selected="false" disabled>
+                        <span class="lang lang-en">Export</span>
+                        <span class="lang lang-de">Export</span>
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="section5-tab" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab" aria-controls="section5" aria-selected="false">Help</button>
+                    <button class="nav-link" id="section5-tab" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab" aria-controls="section5" aria-selected="false">
+                        <span class="lang lang-en">Help</span>
+                        <span class="lang lang-de">Hilfe</span>
+                    </button>
                 </li>
-                <li class="nav-item" role="presentation">
             </ul>
         </div>
         
         <div class="container pb-5 tab-content">
 
             <div id="section1" class="row tab-pane fade show active" role="tabpanel" aria-labelledby="section1" tabindex="0">
-                <div class="col-12">
+                <div class="col-12 lang lang-en">
                     <h2>Compass and Pace Traverse Surveying</h2>
                     <div class="row">
                         <div class="col-md-6">
@@ -68,17 +92,33 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-12 mb-4">
-                    <h2>Instructions</h2>
-
+                <div class="col-12 lang lang-de">
+                    <h2>Vermessung mit Kompass und Traverse</h2>
                     <div class="row">
                         <div class="col-md-6">
+                            <p>Die Übung soll die Datenerfassung mittels Traverse (auch polygoniometrische Vermessung), die grafische Darstellung und die Veranschaulichung von Fehlern bei Vermessungsübungen vermitteln.</p>
+                            <p>Die Übung basiert auf der Verwendung eines Kompasses sowie Zählung der Schritte (bzw. Ermittlung der Schrittlänge) zur Messung von Winkeln und Entfernungen, es können aber auch andere Hilfsmittel verwendet werden.</p>
+                            <p><strong>Die Übung zielt darauf ab, die grafische Darstellung und Veranschaulichung von Fehlern bei der Traverse-Vermessung zu erleichtern.</strong> Sie ersetzt das Üben trigonometrischer Berechnungen und das Darstellen von Daten nicht, sondern ergänzt diese. Mögliche Verwendungszwecke für das Tool finden Sie unter „Hilfe“.</p>
+                            <p>Zur Umsetzung der Übung folgen Sie bitte den nachstehenden Anweisungen.</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                                <img src="rsc/ex1.svg" class="sizelim" width="100%"><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-4">
+                    <h2>
+                        <span class="lang lang-en">Instructions</span>
+                        <span class="lang lang-de">Anleitung</span>
+                    </h2>
+
+                    <div class="row lang lang-en">
+                        <div class="col-md-6">
                             <p><strong>The situation.</strong> You only have a compass (or no GPS reception) and would like to record the location of other features relative to a chosen point (e.g., a tree, rock cairn, or geodetic benchmark).</p>
-                            <p>
-                            A <strong>benchmark</strong> is a good point to start such an activity, but not necessary.<br>
+                            <p>A <strong>benchmark</strong> is a good point to start such an activity, but not necessary.<br>
                             A benchmark is a marker, often made of metal, with an accurately known location according to a specific geographic coordinate system (i.e., a system of locating relative points for an area).<br>
-                            The benefit of using a geodetic benchmark is that the data collected in this exercise becomes georeferenced and can then be exported into a GIS program and be tied to a other geographic data.
+                            The benefit of using a geodetic benchmark is that the data collected in this exercise becomes georeferenced and can then be exported into a GIS program and be tied to a other geographic data.</p>
                         </div>
                         <div class="col-md-6 mb-4">
                             <img src="rsc/bm.jpg" class="sizelim" width="100%">
@@ -91,14 +131,40 @@
                             <p><img src="rsc/paces.svg" width="100%"></p>
                         </div>
                         <div class="col-lg-6">
-                            <p><strong>Dealing with error.</strong> For this exercise we will be using a compass and pacing. A pace, in this activity, is using the following definition. When walking, a pace is one step or the distance between one foot and the other, at a consistent point (e.g., the tip or heel of the feet). See the adjacent diagram.</p>
+                            <p><strong>Dealing with error.</strong> For this exercise we will be using a compass and pacing. A pace, in this activity, is using the following definition.
+                            When walking, a pace is one step or the distance between one foot and the other, at a consistent point (e.g., the tip or heel of the feet). See the adjacent diagram.</p>
                             <p>Other pacing definitions exist. Regardless of which 'pace' definition you use, it is important to specify to your colleagues which your are using.</p>
                             <p>For this activity we will begin by measuring your pace length and error percentage. This requires doing a few trials.</p>
                             <p><em>Note that as pace lengths vary by person only the person that has calculated their pace length (and error) should be completing the paces in the main activity.</em></p>
                         </div>
                     </div>
+                    <div class="row lang lang-de">
+                        <div class="col-md-6">
+                            <p><strong>Ausgangssituation.</strong> Sie haben nur einen Kompass (bzw. keinen GPS-Empfang) und möchten die Lage anderer Objekte in Bezug auf einen konkreten Lagepunkt (z. B. einen Baum, einen Steinhaufen oder einen geodätischen Bezugspunkt) bestimmen.</p>
+                            <p>Ein <strong>vermessungspunkt</strong> ist ein guter Ausgangspunkt für eine solche Aktivität, aber nicht unbedingt erforderlich.<br>
+                            Ein Vermessungspunkt ist eine Markierung, oft aus Metall, dessen Lage nach einem bestimmten geografischen Koordinatensystem (d. h. einem System zur Lokalisierung von Punkten in einem Gebiet) genau bekannt ist.<br>
+                            Der Vorteil der Verwendung eines geodätischen Referenzpunktes besteht darin, dass die bei dieser Übung gesammelten Daten georeferenziert werden und dann in ein GIS-Programm exportiert und mit anderen geografischen Daten verknüpft werden können.</p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <img src="rsc/bm.jpg" class="sizelim" width="100%">
+                            <p>
+                                Ein Vermessungspunkt in Frankreich (<a href="https://commons.wikimedia.org/wiki/File:Point_Geographique_(geodetic_monument)_on_Corsica.jpg" target="_blank">Amada44</a>, <a href="https://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>, via Wikimedia Commons).
+                            </p>
+                        </div>
 
-                    <div class="row">
+                        <div class="col-lg-6">
+                            <p><img src="rsc/paces.svg" width="100%"></p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p><strong>Umgang mit Fehlern.</strong> In der Übung werden ein Kompass und Schritte (bzw. Schrittlängen) verwenden.
+                            Ein Schritt wird in dieser Übung wie folgt ermittelt. Ein Schritt ist der Abstand, welcher beim Gehen zwischen einem festgelegten Kontaktpunkt am Fuß (z. B. Fußspitze oder Ferse) zwischen dem linken und dem rechten Fußes entsteht (siehe nebenstehendes Diagramm).</p>
+                            <p>Es gibt auch andere Definitionen eines Schrittes. Unabhängig davon, für welche Definition man sich entscheidet, sollte diese immer klar kommuniziert werden.</p>
+                            <p>Bei dieser Übung werden wir zunächst deine Schrittlänge und deinen Fehlerprozentsatz messen. Dazu musst du einige Versuche durchführen.</p>
+                            <p><em>Da die Schrittlänge von Person zu Person unterschiedlich ist, sollte nur die Person, die ihre Schrittlänge (und ihren Fehler) berechnet hat, die Schritte in der Hauptaktivität absolvieren.</em></p>
+                        </div>
+                    </div>
+
+                    <div class="row lang lang-en">
                         <div class="col-md-6">
                             <p>
                                 <strong>Compass directions are wrong</strong> in most places (and time), but to varying degrees.
@@ -106,7 +172,8 @@
                                 True north is the northern point at which the the earth rotates around its axis.
                                 It is used by geographic and projected coordinate systems to orient points relative to one another.
                                 A conversion is almost always required between magnetic north and true north.
-                                Additionally, the magnetic field is constantly (slowly) changing and can have large declinations. For example, a large part of Brazil has a declination of -20&deg; or greater.</p>
+                                Additionally, the magnetic field is constantly (slowly) changing and can have large declinations. For example, a large part of Brazil has a declination of -20&deg; or greater.
+                            </p>
                             <p>
                                 <strong>It is therefore recommended or even necessary to know the local magnetic declination when using a compass.</strong>
                                 Magnetic declination is the angle difference between the direction of the earth's northern axis of rotation and the direction the local magnetic field is aligning a compass's needle.
@@ -122,34 +189,82 @@
                         <div class="col-md-6 mb-4">
                             <img src="rsc/magdecl.png" width="100%">
                             <p>
-                            Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>). While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne. <strong>The figure is not indicating the direction of the magnetic field.</strong>
+                                Magnetic declination in Australia in 2020 (Source: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI and CIRES</a>).
+                                While magnetic declination as of 2020 was about -2&deg; in Perth, it was about +12&deg; in Melbourne. <strong>The figure is not indicating the direction of the magnetic field.</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row lang lang-de">
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Kompassrichtungen sind an den meisten Orten (und Zeiten) falsch</strong>, jedoch in unterschiedlichem Maße.
+                                Kompasspeilungen folgen magnetischen Feldern auf der Erdoberfläche, die sich in ihrer Richtung vom geographischen Norden unterscheiden.
+                                Der geographische Norden ist der nördliche Punkt, an dem sich die Erde um ihre Achse dreht.
+                                Er wird von geografischen und projizierten Koordinatensystemen verwendet, um Punkte relativ zueinander auszurichten.
+                                Fast immer ist eine Umrechnung zwischen dem magnetischen Norden und dem geographischen Norden erforderlich.
+                                Hinzu kommt, dass sich das Magnetfeld ständig (langsam) verändert und große Deklinationen aufweisen kann.
+                                Zum Beispiel hat ein großer Teil Brasiliens eine Deklination von -20&deg; oder mehr.
+                            </p>
+                            <p>
+                                <strong>Es ist daher empfehlenswert oder sogar notwendig, die örtliche magnetische Deklination zu kennen, wenn man einen Kompass benutzt.</strong>
+                                Die magnetische Deklination ist der Winkelunterschied zwischen der Richtung der nördlichen Rotationsachse der Erde und der Richtung, in die das örtliche Magnetfeld die Nadel eines Kompasses ausrichtet.
+                            </p>
+                            <p>
+                                Einige Kompasse bieten die Möglichkeit, die magnetische Deklination zu kompensieren.
+                                Alternativ kann sie aber auch manuell korrigiert werden. Denken Sie daran, dass die gegebene magnetische Deklination den Fehler darstellt und Sie daher die Kompensation durch Umkehrung des Vorzeichens vornehmen müssen.
+                                Wenn Sie zum Beispiel in der Stadt Trier, Deutschland, einen Kompasswert von 140&deg; ablesen und die örtliche magnetische Deklination +2,7&deg; beträgt, ist der korrigierte Wert 137,3&deg;.
+                                In Kapstadt, Südafrika, ergibt eine ähnliche Kompassablesung von 140&deg; mit der angegebenen magnetischen Deklination von -25,7&deg; eine korrigierte Ablesung von 165,7&deg;.
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <img src="rsc/magdecl.png" width="100%">
+                            <p>
+                                Magnetische Deklination in Australien im Jahr 2020 (Quelle: <a href="https://www.ngdc.noaa.gov/geomag/WMM/data/WMM2020/WMM2020_D_BoZ_MILL.pdf" target="_blank">NOAA/NCEI und CIRES</a>).
+                                Während die magnetische Deklination im Jahr 2020 in Perth etwa -2&deg; betrug, lag sie in Melbourne bei etwa +12&deg;. <strong>Die Abbildung gibt nicht die Richtung des Magnetfelds an.</strong>
                             </p>
                         </div>
                     </div>
 
                     <p class="text-end">
-                        <button id="goto_section_after1" class="btn btn-primary">Get started</button>
+                        <button id="goto_section_after1" class="btn btn-primary">
+                            <span class="lang lang-en">Get started</span>
+                            <span class="lang lang-de">Übung starten</span>
+                        </button>
                     </p>
                 </div>
             </div>
+
+            <!-- continue here -->
 
             <div id="section_project" class="row tab-pane fade" role="tabpanel" aria-labelledby="section_project" tabindex="0">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-lg-6 col-12">
-                            <h2>Create a new project</h2>
-                            <p>Select a project below or create a new one.<br>Projects allow you to save multiple traverses.</p>
-                            <label for="new_project_name" class="form-label">Project name</label>
-                            <input type="text" id="new_project_name" class="form-control" placeholder="e.g., Cornett Building" aria-describedby="newProjectHelp">
+                            <h2>
+                                <span class="lang lang-en">Create a new project</span>
+                                <span class="lang lang-de">Ein neues Projekt erstellen</span>
+                            </h2>
+                            <p class="lang lang-en">Select a project below or create a new one.<br>Projects allow you to save multiple traverses.</p>
+                            <p class="lang lang-de">Wählen Sie ein bestehendes Projekt aus oder erstellen Sie ein neues Projekt.<br>In jedem Projekt können mehrere Traversen gespeichert werden.</p>
+                            <label for="new_project_name" class="form-label">
+                                <span class="lang lang-en">Project name</span>
+                                <span class="lang lang-de">Projektname</span>
+                            </label>
+                            <input type="text" id="new_project_name" class="form-control" placeholder="e.g., Cornett" aria-describedby="newProjectHelp">
                             <div id="newProjectHelp" class="form-text">
-                                Provide new project name (e.g., School, Northern forest, Site A)
+                                <span class="lang lang-en">Provide new project name (e.g., School, Northern forest, Site A)</span>
+                                <span class="lang lang-de">Geben Sie einen neuen Projektnamen ein (z. B. Schule, Stadtwald, Standort A)</span>
                             </div>
                             <div class="text-end mt-3">
-                                <button id="create_new_project" type="submit" class="btn btn-primary">Create project</button>
+                                <button id="create_new_project" type="submit" class="btn btn-primary">
+                                    <span class="lang lang-en">Create project</span>
+                                    <span class="lang lang-de">Projekt erstellen</span>
+                                </button>
                             </div>
                         </div>
                         <div class="col-lg-6 col-12">
-                            <h2>Select an existing project</h2>
+                            <h2 class="lang lang-en">Select an existing project</h2>
+                            <h2 class="lang lang-de">Wählen Sie ein vorhandenes Projekt aus</h2>
                             <div id="projects_list"></div>
                         </div>
                     </div>
@@ -158,121 +273,205 @@
 
             <div id="section2" class="row tab-pane fade" role="tabpanel" aria-labelledby="section2" tabindex="0">
                 <div class="col-12">
-                    <h2>Calculating your error</h2>
-                    <p>Preceeding traverse measurements relative to a bench mark it is necessary to <strong>calculate your error in distance and direction measurements</strong>.</p>
+                    <div class="lang lang-en">
+                        <h2>Calculating your error</h2>
+                        <p>Preceeding traverse measurements relative to a bench mark it is necessary to <strong>calculate your error in distance and direction measurements</strong>.</p>
+                    </div>
+                    <div class="lang lang-de">
+                        <h2>Berechnen der Abweichung</h2>
+                        <p>Bevor Sie mit der eigentlichen Traverse-Messung beginnen, sollte der <strong>Fehler bei der Messung von Entfernung und Richtung berechnet werden</strong></p>
+                    </div>
 
                     <div id="dist_error_select" class="row">
-                        <h4>Distance error</h4>
-                        <p>Depending on your means of measuring distance you will have a different error rate in your measurements. Using paces will have more error than a tape measure for example.</p>
+                        <div class="lang lang-en">
+                            <h4>Distance error</h4>
+                            <p>Depending on your means of measuring distance you will have a different error rate in your measurements. Using paces will have more error than a tape measure for example.</p>
+                        </div>
+                        <div class="lang lang-de">
+                            <h4>Entfernungsfehler</h4>
+                            <p>Je nach Art der Entfernungsmessung ergeben sich unterschiedliche Fehlerquoten bei den Messungen. Bei der Verwendung von Schritten als Maßeinheit ist die Fehlerquote höher als bei der Verwendung eines Maßbands, da die Schrittlänge immer etwas variiert.</p>
+                        </div>
 
 
                         <div class="col-12 mb-3">
-                            <p>Do you already know your pace distance and error percentage?</p>
-                            <button id="distance_error_yes" class="btn btn-outline-primary">Yes</button>
-                            <button id="distance_error_no" class="btn btn-outline-primary">No</button>
-                            <div class="form-text">If you're unsure, select 'No'.</div>
+                            <p class="lang lang-en">Do you already know your pace distance and error percentage?</p>
+                            <p class="lang lang-de">Kennen Sie bereits Ihre Schrittlänge und Fehlerquote?</p>
+                            <button id="distance_error_yes" class="btn btn-outline-primary">
+                                <span class="lang lang-en">Yes</span>
+                                <span class="lang lang-de">Ja</span>
+                            </button>
+                            <button id="distance_error_no" class="btn btn-outline-primary">
+                                <span class="lang lang-en">No</span>
+                                <span class="lang lang-de">Nein</span>
+                            </button>
+                            <div class="form-text">
+                                <span class="lang lang-en">If you're unsure, select 'No'.</span>
+                                <span class="lang lang-de">Wenn Sie sich nicht sicher sind, wählen Sie „Nein“.</span>
+                            </div>
                         </div>
 
                         <div id="known_pace_and_error_input" class="d-none col-12 mb-3">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label>Enter your mean pace length:</label>
+                                    <label>
+                                        <span class="lang lang-en">Enter your mean pace length:</span>
+                                        <span class="lang lang-de">Gebe deine durchschnittliche Schrittlänge ein:</span>
+                                    </label>
                                     <input type="number" class="form-control" id="known_pace_length" placeholder="e.g., 0.8" required>
-                                    <div class="form-text">Metres is recommended</div>
+                                    <div class="form-text">
+                                        <span class="lang lang-en">Metres is recommended</span>
+                                        <span class="lang lang-de">Wir empfehlen eine Eingabe in Metern (z. B. 0,8)</span>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label>Enter your known error percentage:</label>
+                                    <label>
+                                        <span class="lang lang-en">Enter your known error percentage:</span>
+                                        <span class="lang lang-de">Geben Sie Ihre Fehlerquote ein:</span>
+                                    </label>
                                     <input type="number" class="form-control" id="known_error_percentage" placeholder="e.g., 7" required>
-                                    <div class="form-text">The percentage error</div>
+                                    <div class="form-text">
+                                        <span class="lang lang-en">The percentage error</span>
+                                        <span class="lang lang-de">Fehlerquote in Prozent (z. B. 7)</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="text-end">
-                                <button id="submit_distance_error" class="btn btn-primary">Submit pace and error</button>
+                                <button id="submit_distance_error" class="btn btn-primary">
+                                    <span class="lang lang-en">Submit pace and error</span>
+                                    <span class="lang lang-de">Senden Sie Pace und Fehler</span>
+                                </button>
                             </div>
                         </div>
 
                         <div id="calc_dist_error_input" class="d-none row">
-                            <h4>Pace measurement exercise</h4>
-                            <p>To calculate your pace and distance measurement error you must complete pacing trials between points of <strong>known distance</strong>.</p>
-                            <p>Walk repeatedly between points of known distance, submitting the number of paces you took to complete the distance.</p>
-                            <p>
-                                <em>An example pacing trial of 32 paces for a distance of 25 metres.</em>
-                                <img src="rsc/pacetrial.svg" width="100%">
-                            </p>
+                            <div class="lang lang-en">
+                                <h4>Pace measurement exercise</h4>
+                                <p>To calculate your pace and distance measurement error you must complete pacing trials between points of <strong>known distance</strong>.</p>
+                                <p>Walk repeatedly between points of known distance, submitting the number of paces you took to complete the distance.</p>
+                                <p>
+                                    <em>An example pacing trial of 32 paces for a distance of 25 metres.</em>
+                                    <img src="rsc/pacetrial.svg" width="100%">
+                                </p>
+                            </div>
+                            <div class="lang lang-de">
+                                <h4>Übung zur Bestimmung der Schrittlänge</h4>
+                                <p>Um den Fehler bei der Messung von Entfernungen durch Schritte zu berechnen, müssen Sie entlang einer abgemessenen und <strong>bekannten Distanz</strong> Schrittmessversuche durchführen.</p>
+                                <p>Gehen Sie die Distanz wiederholt ab und notieren Sie die Anzahl der Schritte, die Sie für die Strecke benötigt haben.</p>
+                                <p>
+                                    <em>Ein Beispiel für einen Versuch mit 32 Schritten über eine Strecke von 25 Metern.</em>
+                                    <img src="rsc/pacetrial.svg" width="100%">
+                                </p>
+                            </div>
+
                             <div class="col-md-6">
-                                <label>The pacing distance</label>
+                                <label>
+                                    <span class="lang lang-en">The pacing distance</span>
+                                    <span class="lang lang-de">Die gelaufene Distanz</span>
+                                </label>
                                 <input type="number" class="form-control" id="pacing_distance" required>
-                                <div class="form-text">In metres - this need not be a round number</div>
+                                <div class="form-text">
+                                    <span class="lang lang-en">In metres – this need not be a round number</span>
+                                    <span class="lang lang-de">in Metern – dies muss keine Runde Zahl sein</span>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Number of paces</label>
+                                <label>
+                                    <span class="lang lang-en">Number of paces</span>
+                                    <span class="lang lang-de">Anzahl der Schritte</span>
+                                </label>
                                 <input type="number" class="form-control" id="pacing_trial_value" required>
-                                <div class="form-text">Number of paces in trial</div>
+                                <div class="form-text">
+                                    <span class="lang lang-en">Number of paces in trial</span>
+                                    <span class="lang lang-de">Anzahl der Schritte im Versuch</span>
+                                </div>
                                 <div class="text-end">
-                                    <button id="submit_pace_trial" class="btn btn-primary">Submit pace trial</button>
+                                    <button id="submit_pace_trial" class="btn btn-primary">
+                                        <span class="lang lang-en">Submit pace trial</span>
+                                        <span class="lang lang-de">Schrittangabe einreichen</span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="d-none col-sm-12 mt-4" id="pace_data_table"> </div>
 
                             <div class="text-end mt-3">
-                                <button id="finish_pace_trials" class="btn btn-success" disabled>Next</button>
+                                <button id="finish_pace_trials" class="btn btn-success" disabled>
+                                    <span class="lang lang-en">Next</span>
+                                    <span class="lang lang-de">Weiter</span>
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <div id="calc_azim_error_input" class="d-none row">
-                        <h4>Direction / Azimuth error</h4>
+                        <h4 class="lang lang-en">Direction / Azimuth error</h4>
+                        <h4 class="lang lang-de">Richtungs-/ Azimutfehler</h4>
+
                         <div class="col-md-8 mb-3">
-                            <p>The azimuth is the compass direction. Compass direction measurements also have error.</p>
-                            <p>While distance error is percentage based, azimuth error is value based.</p>
-                            <label>Please estimate your azimuth accuracy in degrees:</label>
+                            <p class="lang lang-en">Azimuth is compass direction. Compass direction readings or measurements also have error. When reading your compass consider how accurately your target and the value you report match. This is likely in the range of 2-5 degrees!</p>
+                            <p class="lang lang-en">While distance error is percentage based, azimuth error is value based.</p>
+
+                            <p class="lang lang-de">Der Azimut ist die Kompassrichtung. Kompassrichtungsmessungen sind ebenfalls fehlerhaft. Berücksichtigen Sie beim Lesen Ihres Kompasses, wie genau Ihr Ziel und der von Ihnen gemeldete Wert übereinstimmen. Dies liegt wahrscheinlich im Bereich von 2-5 Grad!</p>
+                            <p class="lang lang-de">Während der Entfernungsfehler prozentual ist, ist der Azimutfehler wertbasiert.</p>
+                            <label class="lang lang-en">Please estimate your azimuth accuracy in degrees:</label>
+                            <label class="lang lang-de">Schätzen Sie Ihre Azimutgenauigkeit in Grad:</label>
                             <input type="number" class="form-control" id="azim_error_input" placeholder="">
-                            <div class="form-text">E.g., 2</div>
+                            <div class="form-text lang lang-en">E.g., 2</div>
+                            <div class="form-text lang lang-de">z. B. 2</div>
                         </div>
                         <div class="col-md-4">
                             <img src="rsc/compass_reading_error.svg" width="250">
-                            <p>
-                                The provided error value for compass readings will be allocated to each side of measurements to estimate possible error.
-                            </p>
+                            <p class="lang lang-en">The provided error value for compass readings will be allocated to each side of measurements to estimate possible error.</p>
+                            <p class="lang lang-de">Der angegebene Fehlerwert für Kompassmessungen wird jeder Seite der Messungen zugeordnet, um den möglichen Fehler abzuschätzen.</p>
                         </div>
 
-                        <h4>Magnetic declination error</h4>
+                        <h4 class="lang lang-en">Magnetic declination error</h4>
+                        <h4 class="lang lang-de">Magnetischer Deklinationsfehler</h4>
                         <div class="col-md-8">
-                            <p>As outlined in the introduction, compasses measurements have error specific to their location used.</p>
-                            <p>Specify below your local magnetic declination value. This will be applied to your azimuth measurements.</p>
-                            <label>Magnetic declination in degress:</label>
+                            <p class="lang lang-en">As outlined in the introduction, compasses measurements have error specific to their location used.</p>
+                            <p class="lang lang-en">Specify below your local magnetic declination value. This will be applied to your azimuth measurements.</p>
+                            <p class="lang lang-de">Wie in der Einleitung beschrieben, weisen die Kompassmessungen einen Fehler auf, der vom verwendeten Standort abhängt.</p>
+                            <p class="lang lang-de">Geben Sie unten den lokalen Wert für die magnetische Deklination an. Dieser wird auf die Azimutmessungen angewendet.</p>
+
+                            <label class="lang lang-en">Magnetic declination in degress:</label>
+                            <label class="lang lang-de">Magnetische Deklination in Grad:</label>
                             <input type="number" class="form-control" id="magnetic_declination_input" placeholder="" value="0">
-                            <div class="form-text">
+                            <div class="form-text lang lang-en">
                                 E.g., An entered value of -12 would result in a value of +12 to be applied to your compass azimuth calculations.<br>
-                                <strong>
-                                    This is optional as you can compensate for this in other ways.<br>
-                                    <em>
-                                        You may also change this later and your recorded data will adapt.
-                                    </em>
-                                </strong>
+                                <strong>This is optional as you can compensate for this in other ways.</strong>
+                                <em>You may also change this later and your recorded data will adapt.</em>
+                            </div>
+                            <div class="form-text lang lang-de">
+                                Ein eingegebener Wert von -12 würde z.B. dazu führen, dass ein Wert von +12 auf die Kompass-Azimut-Berechnungen angewendet wird.<br>
+                                <strong>Die Angabe ist optional, da die Abweichung auch auf andere Weise kompensiert werden kann.</strong>
+                                <em>Dieser Wert kann später noch geändert werden, die aufgezeichneten Daten werden entsprechend angepasst.</em>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <img src="rsc/magnetic_declination.svg" width="200">
-                            <p>
-                                Compasses point to magnetic north, not true north. Your local difference is called the magnetic declination.
-                            </p>
+                            <p class="lang lang-en">Compasses point to magnetic north, not true north. Your local difference is called the magnetic declination.</p>
+                            <p class="lang lang-de">Kompasse richten sich nach dem magnetischen Norden aus, nicht nach dem geografischen Norden. Der örtliche Unterschied wird als magnetische Deklination bezeichnet.</p>
                         </div>
 
                         <div class="col-12">
                             <div class="row mt-3">
                                 <div class="col-6 text-start">
-                                    <button id="return_to_dist_error" class="btn btn-secondary">Back</button>
+                                    <button id="return_to_dist_error" class="btn btn-secondary">
+                                        <span class="lang lang-en">Back</span>
+                                        <span class="lang lang-de">Zurück</span>
+                                    </button>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <button id="submit_azim_error" class="btn btn-primary">Submit direction error</button>
+                                    <button id="submit_azim_error" class="btn btn-primary">
+                                        <span class="lang lang-en">Submit direction error</span>
+                                        <span class="lang lang-de">Eingaben einreichen</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
+                    <!-- AFAIK this is not used anymore -->
                     <p id="start_activity_button" class="text-end mt-3 d-none">
                         <button id="goto_section3" class="btn btn-success">Start activity</button>
                     </p>
@@ -281,9 +480,19 @@
 
             <div id="section3" class="row tab-pane fade" role="tabpanel" aria-labelledby="section3" tabindex="0">
                 <div class="col-md-12">
-                    <h2 id="begin_survey_traverse">Begin survey traverse</h2>
-                    <p>The area below represents your field space. The triangular marker in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
-                    <p><strong>Select a benchmark or station to see possible operations.</strong></p>
+                    <h2 id="begin_survey_traverse">
+                        <span class="lang lang-en">Begin survey traverse</span>
+                        <span class="lang lang-de">Mit der Vermessung beginnen</span>
+                    </h2>
+
+                    <div class="lang lang-en">
+                        <p>The area below represents your field space. The triangular marker in the centre is your starting benchmark - a known point that you will base your measurements upon.</p>
+                        <p><strong>Select a benchmark or station to see possible operations.</strong></p>
+                    </div>
+                    <div class="lang lang-de">
+                        <p>Der Bereich unten stellt Ihr Untersuchungsgelände dar. Das dreieckige Symbol in der Mitte ist der Startpunkt - ein bekannter Punkt, auf dem die Messungen gestützt werden.</p>
+                        <p><strong>Wählen Sie einen Lagepunkt oder einen Referenzpunkt im Gelände aus, um mögliche Operationen auf der Karte anzuzeigen.</strong></p>
+                    </div>
 
                     <!-- external SVG CSS - shouldn't impact feature regular styling -->
                     <style>
@@ -310,10 +519,22 @@
                     <div id="results" class="mb-3">
                         <div id="controls" class="rounded d-none">
                             <button id="control_close" class="btn btn-dark">X</button>
-                            <button id="control_add_leg" class="btn btn-primary">Add leg</button>
-                            <button id="control_edit" class="btn btn-secondary">Edit station</button>
-                            <button id="control_wall" class="btn btn-secondary">Add wall</button>
-                            <button id="control_delete" class="btn btn-danger mt-3">Delete station</button>
+                            <button id="control_add_leg" class="btn btn-primary">
+                                <span class="lang lang-en">Add leg</span>
+                                <span class="lang lang-de">Strecke hinzufügen</span>
+                            </button>
+                            <button id="control_edit" class="btn btn-secondary">
+                                <span class="lang lang-en">Edit station</span>
+                                <span class="lang lang-de">Lagepunkt bearbeiten</span>
+                            </button>
+                            <button id="control_wall" class="btn btn-secondary">
+                                <span class="lang lang-en">Add wall</span>
+                                <span class="lang lang-de">Begrenzung hinzufügen</span>
+                            </button>
+                            <button id="control_delete" class="btn btn-danger mt-3">
+                                <span class="lang lang-en">Delete station</span>
+                                <span class="lang lang-de">Lagepunkt löschen</span>
+                            </button>
                         </div>
                         <div id="error_controls" class="rounded d-none">
                             <div class="form-check form-switch" title="Enable closed traverse error correction">
@@ -327,63 +548,89 @@
                         <div id="form_add_leg" class="d-none mb-3">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label>Enter target azimuth:</label>
+                                    <label class="lang lang-en">Enter target azimuth:</label>
+                                    <label class="lang lang-de">Richtungswinkel des Ziels eingeben:</label>
                                     <input type="number" class="form-control" id="target_azim" placeholder="" required>
-                                    <div class="form-text">In degrees (0-360&deg;)</div>
+                                    <div class="form-text lang lang-en">In degrees (0-360&deg;)</div>
+                                    <div class="form-text lang lang-de">in Grad (0-360&deg;)</div>
                                 </div>
-
                                 <div class="col-md-6">
-                                    <label>Enter target distance:</label>
+                                    <label class="lang lang-en">Enter target distance:</label>
+                                    <label class="lang lang-de">Entfernung zum Ziel eingeben:</label>
                                     <input type="number" class="form-control" id="target_distance" placeholder="" required>
-                                    <div class="form-text">In number of paces</div>
+                                    <div class="form-text lang lang-en">In number of paces</div>
+                                    <div class="form-text lang lang-de">Zahl der Schritte</div>
                                 </div>
                                 <div class="col-md-6 mt-3">
-                                    <label>Target description or name:</label>
+                                    <label class="lang lang-en">Target description or name:</label>
+                                    <label class="lang lang-de">Name oder Beschreibung des Ziels:</label>
                                     <input type="text" class="form-control" id="target_description" placeholder="">
-                                    <div class="form-text">Some notes or a name for the feature (e.g., Tree A)</div>
+                                    <div class="form-text lang lang-en">Some notes or a name for the feature (e.g., Tree A)</div>
+                                    <div class="form-text lang lang-de">Einige Notizen oder ein Name für die Funktion (z.B. Baum A)</div>
                                 </div>
                                 <div class="col-md-6 mt-3">
-                                    <p class="me-3">Target is of type:</p>
+                                    <p class="me-3 lang lang-en">Target is of type:</p>
+                                    <p class="me-3 lang lang-de">Kategorie des Ziels:</p>
                                     <input type="radio" name="target_type" id="target_type_point" value="point" checked>
-                                    <label for="target_type_point" class="me-4">Station</label>
+                                    <label for="target_type_point" class="me-4">
+                                        <span class="lang lang-en">Station</span>
+                                        <span class="lang lang-de">Lagepunkt</span>
+                                    </label>
                                     <input type="radio" name="target_type" id="target_type_benchmark" value="benchmark">
-                                    <label for="target_type_benchmark">Benchmark</label>
+                                    <label for="target_type_benchmark">
+                                        <span class="lang lang-en">Benchmark</span>
+                                        <span class="lang lang-de">Referenzpunkt</span>
+                                    </label>
                                 </div>
                             </div>
 
                             <div class="text-end mt-3">
-                                <button id="submit_new_leg" class="btn btn-primary">Add leg</button>
+                                <button id="submit_new_leg" class="btn btn-primary">
+                                    <span class="lang lang-en">Add leg</span>
+                                    <span class="lang lang-de">Strecke hinzufügen</span>
+                                </button>
                             </div>
                         </div>
 
                         <div id="form_edit" class="d-none">
                             <div class="row">
                                 <div class="col-md-12 col-12">
-                                    <p>Edit measurments <strong>to the selected station</strong>.</p>
+                                    <p class="lang lang-en">Edit measurements <strong>to the selected station</strong>.</p>
+                                    <p class="lang lang-de">Bearbeiten Sie Messungen <strong>zur ausgewählten Station</strong>.</p>
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label>Azimuth:</label>
+                                    <label class="lang lang-en">Azimuth:</label>
+                                    <label class="lang lang-de">Azimut:</label>
                                     <input type="number" class="form-control" id="edit_station_azim" placeholder="Degrees" required>
                                     <div class="form-text"></div>
                                 </div>
 
                                 <div class="col-6">
-                                    <label>Pace count:</label>
+                                    <label class="lang lang-en">Pace count:</label>
+                                    <label class="lang lang-de">Schrittzahl:</label>
                                     <input type="number" class="form-control" id="edit_station_paces" placeholder="Number of paces" required>
                                     <div class="form-text"></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label>Edit description or name:</label>
+                                    <label class="lang lang-en">Edit description or name:</label>
+                                    <label class="lang lang-de">Beschreibung oder Namen bearbeiten:</label>
                                     <input type="text" class="form-control" id="edit_station_description" placeholder="">
                                     <div class="form-text"></div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <p class="me-3">Station type:</p>
+                                    <p class="me-3 lang lang-en">Station type:</p>
+                                    <p class="me-3 lang lang-de">Lagepunktstyp:</p>
                                     <input type="radio" name="edit_station_type" id="edit_station_type_point" value="point">
-                                    <label for="edit_station_type_point" class="me-4">Station</label>
+                                    <label for="edit_station_type_point" class="me-4">
+                                        <span class="lang lang-en">Station</span>
+                                        <span class="lang lang-de">Lagepunkt</span>
+                                    </label>
                                     <input type="radio" name="edit_station_type" id="edit_station_type_benchmark" value="benchmark">
-                                    <label for="edit_station_type_benchmark">Benchmark</label>
+                                    <label for="edit_station_type_benchmark">
+                                        <span class="lang lang-en">Benchmark</span>
+                                        <span class="lang lang-de">Referenzpunkt</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -391,12 +638,14 @@
                         <div id="form_edit_bm" class="d-none mt-3">
                             <div class="row">
                                 <div class="col-6 mb-3">
-                                    <label>Northing:</label>
+                                    <label class="lang lang-en">Northing:</label>
+                                    <label class="lang lang-de">nördliche Deklination:</label>
                                     <input type="number" class="form-control" id="edit_bm_northing" placeholder="" required>
                                     <div class="form-text"></div>
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label>Easting:</label>
+                                    <label class="lang lang-en">Easting:</label>
+                                    <label class="lang lang-de">östliche Deklination:</label>
                                     <input type="number" class="form-control" id="edit_bm_easting" placeholder="" required>
                                     <div class="form-text"></div>
                                 </div>
@@ -404,14 +653,19 @@
                         </div>
 
                         <div id="edit_form_submit_btn" class="d-none text-end mt-3">
-                            <button id="submit_station_edit" class="btn btn-primary">Edit leg</button>
+                            <button id="submit_station_edit" class="btn btn-primary">
+                                <span class="lang lang-en">Edit leg</span>
+                                <span class="lang lang-de">Strecke bearbeiten</span>
+                            </button>
                         </div>
 
                         <div id="form_wall_instructions" class="d-none">
-                            <p>Click on another point/station to create a wall to it.</p>
+                            <p class="lang lang-en">Click on another point/station to create a wall to it.</p>
+                            <p class="lang lang-de">Wählen Sie einen anderen Lagepunkt aus, um eine Begrenzung zu diesem Punkt hinzuzufügen.</p>
                         </div>
                         <div id="merge_bm_instructions" class="d-none">
-                            <p>Click the other benchmark that represents the same location. Error correction will be applied.</p>
+                            <p class="lang lang-en">Click the other benchmark that represents the same location. Error correction will be applied.</p>
+                            <p class="lang lang-de">.Klicken Sie auf den anderen Benchmark, der denselben Standort darstellt. Die Fehlerkorrektur wird angewendet.</p>
                         </div>
                     </div>
                 </div>
@@ -419,30 +673,38 @@
 
             <div id="section4" class="row tab-pane fade" role="tabpanel" aria-labelledby="section4" tabindex="0">
                 <div class="col-md-12">
-                    <h2>Export</h2>
+                    <h2 class="lang lang-en">Export</h2>
+                    <h2 class="lang lang-de">Export</h2>
                     <div class="row">
                         <div class="col-md-6">
-                            <p>
-                                All the data will be exported in GeoJSON format, directly visible in QGIS or compatible GIS.
-                                Files are separated by feature type (e.g., points, lines, and polygons) as well as duplicated for measured (data entered) and corrected when closed traverses are completed.
-                                Data is georeferenced if northing and eastings are provided.
-                            </p>
-                            <p>Note that the SVG figure/map will also be exported as is currently displayed - you may wish to (de)activate CTEC.</p>
-                            <p>You will still need to define your projection coordinate system in your GIS to complete the georeferencing.</p>
-                            <p>
-                                <button id="gen_data_zip" class="btn btn-primary">Download</button>
-                            </p>
+                            <div class="lang lang-en">
+                                <p>All the data will be exported in GeoJSON format, directly visible in QGIS or compatible GIS.
+                                    Files are separated by feature type (e.g., points, lines, and polygons) as well as duplicated for measured (data entered) and corrected when closed traverses are completed.
+                                    Data is georeferenced if northing and eastings are provided.</p>
+                                <p>Note that the SVG figure/map will also be exported as is currently displayed - you may wish to (de)activate CTEC.</p>
+                                <p>You will still need to define your projection coordinate system in your GIS to complete the georeferencing.</p>
+                            </div>
+                            <div class="lang lang-de">
+                                <p>Alle Daten werden im GeoJSON-Format exportiert und können direkt in QGIS oder einem kompatiblen GIS angezeigt werden. Die Dateien sind nach Merkmalstyp (z. B. Punkte, Linien und Polygone) getrennt und werden für gemessene (eingegebene) Daten dupliziert und korrigiert, wenn geschlossene Traversen (Polygonzüge) abgeschlossen sind. Die Daten sind georeferenziert, wenn nördliche und östliche Deklinationswerte angegeben wurden.</p>
+                                <p>Beachten Sie, dass die SVG- Karte auch so exportiert wird, wie sie derzeit angezeigt wird - CTEC kann (de)aktiviert werden.</p>
+                                <p>Das Projektionskoordinatensystem muss noch im GIS definiert werden, um die Georeferenzierung abzuschließen.</p>
+                            </div>
+                            <p><button id="gen_data_zip" class="btn btn-primary">
+                                <span class="lang lang-en">Download</span>
+                                <span class="lang lang-de">Herunterladen</span>
+                            </button></p>
                         </div>
                         <div class="col-md-6">
                             <img src="rsc/export_into_qgis.png" widht="100%">
-                            <p>Exported data viewed in QGIS with a base map provided by &copy; OpenStreetMap contributors. Red features are raw measurements. Green features are through closed traverse correction. Multiple exports are displayed to show magnetic declination compensation (in blue).</p>
+                            <p class="lang lang-en">Exported data viewed in QGIS with a base map provided by &copy; OpenStreetMap contributors. Red features are raw measurements. Green features are through closed traverse correction. Multiple exports are displayed to show magnetic declination compensation (in blue).</p>
+                            <p class="lang lang-de">Exportierte Daten in QGIS mit einer Basiskarte, die von &copy; OpenStreetMap-Mitwirkenden bereitgestellt wurde. Rote Lagepunkte sind Rohmessungen. Grüne Lagepunkte wurden durch geschlossene Polygonzüge korrigiert. Mehrere Exporte werden angezeigt, um den Ausgleich der magnetischen Deklination (in blau) zu zeigen.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="section5" class="row tab-pane fade" role="tabpanel" aria-labelledby="section5" tabindex="0">
-                <div class="col-md-12">
+                <div class="col-md-12 lang lang-en">
                     <h2>How to use this resource</h2>
                     <p>This application is meant for use in a field surveying course to supplement introductory concepts. Initial methods teaching of relative location measurement introduce the trigonometry (angle and distance measurements). This can be done with a compass and pacing, or alternatives.</p>
                     <p>This resource is designed for the following uses. Following a first compass and pacing traverse survey exercise, consisting of manual data recording (pencil and paper), calculation, and graphing of relative locations:
@@ -463,38 +725,89 @@
                     </p>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 lang lang-de">
+                    <h2>Verwendung bzw. Einsatz der Übung</h2>
+                    <p>Diese Anwendung ist für den Einsatz in einem Feldvermessungskurs zur Ergänzung einführender Konzepte gedacht. Bei der Vermittlung erster Methoden der relativen Ortsbestimmung wird die Trigonometrie (Winkel- und Entfernungsmessungen) eingeführt. Dies kann mit einem Kompass und einem Schrittzähler oder mit Alternativen geschehen.</p>
+                    <p>Die Übung ist für die folgenden Verwendungszwecke konzipiert. Im Anschluss an eine erste Vermessungsübung mit Kompass und Traverse (Entfernung per Schrittzählung), bestehend aus manueller Datenaufzeichnung (Bleistift und Papier), Berechnung und grafischer Darstellung der relativen Standorte:
+                        <ol>
+                            <li>zur grafischen Darstellung der erfassten Messungen als Vergleich zur manuellen Darstellung</li>
+                            <li>eine zweite Vermessungsübung wird durchgeführt, aber mit der Intention die Fehlerakkumulation zu veranschaulichen</li>
+                            <li>zum Vergleich von Fehlern bei geschlossenen und offenen Traversen</li>
+                            <li>Integration der erfassten Daten in ein GIS zur weiteren Analyse</li>
+                        </ol>
+                    </p>
+                    <p>Allgemeiner bietet diese Übung eine Vielzahl von Einsatzmöglichkeiten:
+                        <ul>
+                            <li>Erklärung von Schrittweite, Azimut, magnetischem Deklinationsfehler</li>
+                            <li>Einfache Dateneingabe und Visualisierung im Feld, die Aufzeichnungsfehler noch im Feld hervorheben kann</li>
+                            <li>Einfache grafische Darstellung der Daten durch Export in ein GIS</li>
+                            <li>Eine neuartige Visualisierung der Fehlerakkumulation</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <div class="col-md-12 lang lang-en">
                     <h2>Frequently asked questions</h2>
 
                     <h3>Closed traverse</h3>
-                    <p>
-                        <strong>How is the closed traverse error correction performed?</strong><br>
-                        The error correction from a closed traverse is performed using Bowditch’s Rule.
-                    </p>
-                    <p>
-                        <strong>What happens if there are multiple georeference benchmarks?</strong><br>
-                        Error correction is only directly applied to the station legs between the original benchmark and the next found georeference benchmark. Other points are corrected based on the changes to their dependencies.
-                    </p>
+                    <p><strong>How is the closed traverse error correction performed?</strong><br>
+                        The error correction from a closed traverse is performed using Bowditch’s Rule.</p>
+                    <p><strong>What happens if there are multiple georeference benchmarks?</strong><br>
+                        Error correction is only directly applied to the station legs between the original benchmark and the next found georeference benchmark. Other points are corrected based on the changes to their dependencies.</p>
 
                     <h3>Data</h3>
-                    <p><strong>Where is the data stored?</strong><br>In your browser and it's only accessible by you. Learn more about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a>.
+                    <p><strong>Where is the data stored?</strong><br>
+                    In your browser and it's only accessible by you.
+                    Learn more about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a>.
                     <p><strong>How do I delete the project data?</strong><br>You can simply clear the site data, similarly to how it is done for cookies or the cache in your browser.</p>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 lang lang-de">
+                    <h2>Häufig gestellte Fragen</h2>
+
+                    <h3>Geschlossene Traversen</h3>
+                    <p><strong>Wie wird die Fehlerkorrektur bei einem geschlossenen Polygonzug durchgeführt?</strong><br>
+                        Die Fehlerkorrektur eines geschlossenen Polygonzugs wird mit Hilfe der Bowditchschen Regel durchgeführt.</p>
+                    <p><strong>Was passiert, wenn es mehrere Georeferenzpunkte gibt?</strong><br>
+                        Die Fehlerkorrektur wird nur direkt auf die Stationsabschnitte zwischen dem ursprünglichen Bezugspunkt und dem nächsten gefundenen Georeferenzbezugspunkt angewendet. Andere Punkte werden auf der Grundlage der Änderungen an den von ihnen abhängigen Punkten korrigiert.</p>
+
+                    <h3>Daten</h3>
+                    <p><strong>Wo werden die Daten gespeichert?</strong><br>
+                    In Ihrem Browser und sie sind nur für Sie zugänglich.
+                    Erfahren Sie mehr über <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a>.
+                    <p><strong>Wie kann ich die Projektdaten löschen?</strong><br>
+                    Sie können die Daten der Website einfach löschen, ähnlich wie bei Cookies oder dem Cache in Ihrem Browser.</p>
+                </div>
+
+                <div class="col-md-12 lang lang-en">
                     <h2>Aspects to still develop:</h2>
                     <ul>
                         <li>Measurements are currently using trigonometry (angle + distance), add a triangulation option (angle + angle).</li>
                     </ul>
                 </div>
+                <div class="col-md-12 lang lang-de">
+                    <h2>Aspekte, die noch zu entwickeln sind:</h2>
+                    <ul>
+                        <li>Die Messungen verwenden derzeit Trigonometrie (Winkel + Entfernung), fügen Sie eine Triangulationsoption (Winkel + Winkel) hinzu.</li>
+                    </ul>
+                </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 lang lang-en">
                     <h2>Testing & demonstration data</h2>
                     <p>Some automated inputs for testing or demonstration:</p>
                     <p><em>These will delete any existing project named 'test'.</em></p>
                     <ol>
                         <li><a href="#/" onclick="TSE.test(1)">Generate pace trials</a></li>
                         <li><a href="#/" onclick="TSE.test(2)">Add example stations</a></li>
+                    </ol>
+                </div>
+                <div class="col-md-12 lang lang-de">
+                    <h2>Daten für Tests und Demonstrationen</h2>
+                    <p>Einige automatisierte Eingaben zu Test- und Demonstrationszwecken:</p>
+                    <p><em>Diese löschen jedes bestehende Projekt mit dem Namen "Test".</em></p>
+                    <ol>
+                        <li><a href="#/" onclick="TSE.test(1)">Geschwindigkeitsversuche generieren</a></li>
+                        <li><a href="#/" onclick="TSE.test(2)">Beispielstationen hinzufügen</a></li>
                     </ol>
                 </div>
             </div>
@@ -536,8 +849,11 @@
                       <a href="https://liser.lu" target="_blank"><img src="rsc/liser.png" width="60%"></a>
                   </div>
 
-                  <div class="col-12 mt-5 mb-5">
+                  <div class="col-12 mt-5 mb-5 lang lang-en">
                       The creation of this resources has been (partially) funded by the ERASMUS+ grant program of the European Union under grant no. 2020 1 DE01 KA226 005814. Neither the European Commission nor the project's national funding agency DAAD are responsible for the content or liable for any losses or damage resulting of the use of this resource.
+                  </div>
+                  <div class="col-12 mt-5 mb-5 lang lang-de">
+                      Die Erstellung dieser Ressource wurde durch das ERASMUS+ Förderprogramm der Europäischen Union unter der Fördernummer 2020 1 DE01 KA226 005814 kofinanziert. Weder die Europäische Kommission noch der nationale Förderer des Projekts, der DAAD, sind für den Inhalt verantwortlich oder haften für Verluste oder Schäden, die aus der Nutzung dieser Ressource entstehen.
                   </div>
                 </div>
             </div>

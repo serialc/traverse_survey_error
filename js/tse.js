@@ -375,14 +375,23 @@ TSE.update_pace_trials_table = function()
     }
 
     let variance_sum = 0;
-    let tc = "<table class='table table-striped'>" +
-        "<thead>" +
+    let tc = "<table class='table table-striped'>";
+
+    tc += "<thead class='lang lang-en'>" +
         "<tr><th>Trial#</th>" +
         "<th>Paces</th>" +
         "<th>Distance</th>" +
         "<th>Pace length</th>" +
         "<th>Variance</th>" +
         "<th>Delete</th><tr>" +
+        "</thead>";
+    tc += "<thead class='lang lang-de'>" +
+        "<tr><th>Versuch#</th>" +
+        "<th>Schritte</th>" +
+        "<th>Distanz</th>" +
+        "<th>Schrittlänge</th>" +
+        "<th>Abweichung</th>" +
+        "<th>Löschen</th><tr>" +
         "</thead>";
 
     tc += "<tbody>";
@@ -397,13 +406,13 @@ TSE.update_pace_trials_table = function()
             "<td>" + pdist + "</td>" +
             "<td>" + (Math.round(pacelen * 100) / 100) + "</td>" +
             "<td>" + (Math.round(Math.pow(pacelen - pace_lengths_mean, 2) * 10000) / 10000) + "</td>" +
-            "<td><a href='#/' onclick='TSE.delete_pace_trial(" + trial_num + ")'>del</a></td>" +
+            "<td><a href='#/' onclick='TSE.delete_pace_trial(" + trial_num + ")'><span class='lang lang-en'>del</span><span class='lang lang-de'>lösch</span></a></td>" +
             "</tr>";
         variance_sum += Math.pow(pacelen - pace_lengths_mean, 2);
     }
 
     tc += "<tr><td></td><td></td><td></td>" +
-        "<td>mean=" + (Math.round(pace_lengths_mean * 1000) / 1000) + "</td><td>&Sigma;=" + (Math.round(variance_sum * 10000)/10000) + "</td>" +
+        "<td><span class='lang lang-en'>mean</span><span class='lang lang-de'>Durchschnitt</span>=" + (Math.round(pace_lengths_mean * 1000) / 1000) + "</td><td>&Sigma;=" + (Math.round(variance_sum * 10000)/10000) + "</td>" +
         "<td></td></tr>" +
         "</tbody></table>";
 
@@ -414,9 +423,9 @@ TSE.update_pace_trials_table = function()
     // only show summary if there are mutliple trials
     if (prj.pace_trials.length > 1) {
         tc += "<p class='m-4'>" +
-            "<strong>Standard deviation: " + (Math.round(stddev * 10000) / 10000) + "<br>" +
-            "Standard error: " + (Math.round(stderr * 10000) / 10000) + "%<br>" +
-            "Mean pace length: " + (Math.round(pace_lengths_mean * 100) / 100) + "</p>";
+            "<strong><span class='lang lang-en'>Standard deviation</span><span class='lang lang-de'>Standardabweichung</span>: " + (Math.round(stddev * 10000) / 10000) + "<br>" +
+            "<span class='lang lang-en'>Standard error</span><span class='lang lang-de'>Standardfehler</span>: " + (Math.round(stderr * 10000) / 10000) + "%<br>" +
+            "<span class='lang lang-en'>Mean pace length</span><span class='lang lang-de'>durchschnittliche Schrittlänge</span>: " + (Math.round(pace_lengths_mean * 100) / 100) + "</p>";
     }
 
     // only update the stderr and pace length if there is more than one pace trial completed
@@ -435,17 +444,29 @@ TSE.update_pace_trials_table = function()
     if (TSE.projects[TSE.active].pace_trials.length >= trial_min) {
         document.getElementById('finish_pace_trials').disabled = false;
     } else {
-        TSE.successToast("Only " + (trial_min - TSE.projects[TSE.active].pace_trials.length) + " trials remaining to be completed.", "Well done");
+        if (TSE.language === 'en') {
+            TSE.successToast("Only " + (trial_min - TSE.projects[TSE.active].pace_trials.length) + " trials remaining to be completed.", "Well done");
+        }
+        if (TSE.language === 'de') {
+            TSE.successToast("Nur noch " + (trial_min - TSE.projects[TSE.active].pace_trials.length) + " Versuche müssen abgeschlossen werden.", "Gut erledigt");
+        }
     }
 
     TSE.save();
+
+    TSE.changeLanguage(TSE.language);
 };
 
 // add a wall to the data model
 TSE.addWall = function(op, dp)
 {
     if (op === dp) {
-        TSE.warnToast("Select two different stations to create a wall");
+        if (TSE.language === 'en') {
+            TSE.warnToast("Select two different stations to create a wall");
+        }
+        if (TSE.language === 'de') {
+            TSE.warnToast("Wählen Sie zwei verschiedene Stationen aus, um eine Wand zu erstellen");
+        }
         return false;
     }
 
@@ -991,7 +1012,12 @@ TSE.promptWallDelete = function(wall)
         TSE.projects[TSE.active].wall_clicked === wall) {
         TSE.deleteWall(wall);
     } else {
-        TSE.infoToast("Double-click a wall to delete it");
+        if (TSE.language === 'en') {
+            TSE.infoToast("Double-click a wall to delete it");
+        }
+        if (TSE.language === 'de') {
+            TSE.infoToast("Doppelklicken Sie auf eine Wand, um sie zu löschen");
+        }
         TSE.projects[TSE.active].wall_click_time = new Date();
         TSE.projects[TSE.active].wall_clicked = wall;
     }
@@ -1318,8 +1344,29 @@ TSE.toast = function(msg, head_text, type, text_colour)
     t.show();
 };
 
+TSE.changeLanguage = function(lang_code)
+{
+    // update global data for language
+    TSE.language = lang_code;
+    
+    // get all class instances for lang and hide
+    let lang_els = document.getElementsByClassName('lang');
+    for (let i = 0; i < lang_els.length; i+=1) {
+        lang_els[i].classList.add('d-none');
+    }
+
+    // get all class instances for lang_code and show
+    let lang_sels = document.getElementsByClassName('lang-' + lang_code);
+    for (let i = 0; i < lang_sels.length; i+=1) {
+        lang_sels[i].classList.remove('d-none');
+    }
+};
+
 // initialization
-(function(){
+(function(){ 
+
+    // set the language
+    TSE.changeLanguage('en');
 
     // retrieve projects from browser data
     TSE.load();
@@ -1375,7 +1422,12 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         // check the values
         if (pep.length === 0 || isNaN(pep) || pl.length === 0 || isNaN(pl)) {
-            TSE.warnToast("Pace length and error percentage must have valid values");
+            if (TSE.language === 'en') {
+                TSE.warnToast("Pace length and error percentage must have valid values");
+            }
+            if (TSE.language === 'de') {
+                TSE.warnToast("Schrittlänge und Fehlerprozentsatz müssen gültige Werte aufweisen");
+            }
             return false;
         }
 
@@ -1427,14 +1479,24 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         let azim = parseFloat(document.getElementById('azim_error_input').value);
         if (azim.length === 0 || isNaN(azim)) {
-            TSE.warnToast("Azimuth error must have a valid value");
+            if (TSE.language === 'en') {
+                TSE.warnToast("Azimuth error must have a valid value");
+            }
+            if (TSE.language === 'de') {
+                TSE.warnToast("Der Azimutfehler muss einen gültigen Wert haben");
+            }
             return false;
         }
         TSE.projects[TSE.active].azim_error = azim;
 
         let magdecl = parseFloat(document.getElementById('magnetic_declination_input').value);
         if (magdecl === "" || isNaN(magdecl)) {
-            TSE.infoToast("Magnetic declination has been set to 0.");
+            if (TSE.language === 'en') {
+                TSE.infoToast("Magnetic declination has been set to 0");
+            }
+            if (TSE.language === 'de') {
+                TSE.infoToast("Die magnetische Deklination wurde auf 0 gesetzt");
+            }
             magdecl = 0;
         }
         TSE.projects[TSE.active].magnetic_declination = magdecl;
@@ -1550,7 +1612,12 @@ TSE.toast = function(msg, head_text, type, text_colour)
 
         let target = TSE.projects[TSE.active].selected;
         if (target === 0) {
-            TSE.warnToast("Starting benchmark cannot be deleted");
+            if (TSE.language === 'en') {
+                TSE.warnToast("Starting benchmark cannot be deleted");
+            }
+            if (TSE.language === 'de') {
+                TSE.warnToast("Start-Benchmark kann nicht gelöscht werden");
+            }
             return;
         }
 
@@ -1576,7 +1643,12 @@ TSE.toast = function(msg, head_text, type, text_colour)
         
         // check if inputs are valid
         if (elazim.value == "" || elpaces.value == "") {
-            TSE.warnToast("You must specify both an <strong>azimuth</strong> and pace <strong>distance</strong> at a minimum.");
+            if (TSE.language === 'en') {
+                TSE.warnToast("You must specify both an <strong>azimuth</strong> and pace <strong>distance</strong> at a minimum");
+            }
+            if (TSE.language === 'de') {
+                TSE.warnToast("Sie müssen mindestens sowohl einen <strong>Azimut</strong> als auch einen Pace-<strong>Abstand</strong> angeben");
+            }
             return false;
         }
 
@@ -1636,9 +1708,14 @@ TSE.toast = function(msg, head_text, type, text_colour)
     document.getElementById('create_new_project').onclick = function() {
         let pnin = document.getElementById('new_project_name');
         let npn = pnin.value;
+
+        // check there's a project name passed
+        if (npn === '') { return; }
+
         pnin.value = '';
         // check if a project with this name already exists
         if (TSE.projects[npn]) {
+            return;
         } else {
             TSE.active = npn;
             TSE.projects[TSE.active] = {};
