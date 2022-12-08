@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    id="surveyfigure"
-   width="109.17981"
-   viewBox="-41.254643 -97.768953 109.17981 120.69765"
+   width="358.24307"
+   viewBox="-41.254643 -97.768953 358.24307 396.03565"
    version="1.1"
    sodipodi:docname="ex1.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   height="120.69765"
+   height="396.03564"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -16,19 +16,25 @@
     <inkscape:path-effect
        effect="fill_between_many"
        method="originald"
-       linkedpaths="#layer1,0,1|"
+       linkedpaths="#layer1,0,1"
        id="path-effect18266"
        join="true"
        close="true"
-       autoreverse="true" />
+       autoreverse="true"
+       is_visible="true"
+       lpeversion="0"
+       applied="false" />
     <inkscape:path-effect
        effect="fill_between_many"
        method="originald"
-       linkedpaths="#layer1,0,1|"
+       linkedpaths="#layer1,0,1"
        id="path-effect18270"
        join="true"
        close="true"
-       autoreverse="true" />
+       autoreverse="true"
+       is_visible="true"
+       lpeversion="0"
+       applied="false" />
   </defs>
   <sodipodi:namedview
      id="namedview142"
@@ -39,13 +45,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="8"
-     inkscape:cx="56.3125"
-     inkscape:cy="64.8125"
-     inkscape:window-width="2560"
-     inkscape:window-height="1376"
-     inkscape:window-x="1920"
-     inkscape:window-y="27"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="191.97949"
+     inkscape:cy="154.50283"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="surveyfigure"
      fit-margin-top="0"
@@ -53,18 +59,18 @@
      fit-margin-right="0"
      fit-margin-bottom="0" />
   <rect
-     style="fill:#acd1af;fill-opacity:1;stroke:none;stroke-width:3.77953;stroke-linecap:round;stroke-miterlimit:7;stroke-opacity:1;paint-order:stroke fill markers;stop-color:#000000"
+     style="fill:#acd1af;fill-opacity:1;stroke:none;stroke-width:12.4015;stroke-linecap:round;stroke-miterlimit:7;stroke-opacity:1;paint-order:stroke fill markers;stop-color:#000000"
      id="rect14014"
-     width="109.17981"
-     height="120.69765"
+     width="358.24307"
+     height="396.03564"
      x="-41.254642"
      y="-97.768951" />
   <g
      id="map_error"
      style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422"
-     transform="translate(8.5122104,3.072684)">
+     transform="matrix(3.2812208,0,0,3.2812208,122.04139,233.11473)">
     <polygon
-       points="48.665646,-5.54475 57.322603,-6.5310856 56.535252,-11.502227 47.997202,-9.765141 "
+       points="57.322603,-6.5310856 56.535252,-11.502227 47.997202,-9.765141 48.665646,-5.54475 "
        class="error_poly"
        id="polygon4"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -72,7 +78,7 @@
          id="title2">oak tree</title>
     </polygon>
     <polygon
-       points="44.300702,-42.208905 44.969146,-37.988514 47.810873,-38.187227 56.46783,-39.173562 56.315777,-44.980216 55.528426,-49.951357 52.181194,-49.717296 43.643144,-47.98021 "
+       points="55.528426,-49.951357 52.181194,-49.717296 43.643144,-47.98021 44.300702,-42.208905 44.969146,-37.988514 47.810873,-38.187227 56.46783,-39.173562 56.315777,-44.980216 "
        class="error_poly"
        id="polygon8"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -80,7 +86,7 @@
          id="title6">lamp post</title>
     </polygon>
     <polygon
-       points="20.870209,-78.021548 24.391494,-80.976257 24.239441,-86.78291 23.45209,-91.754051 17.746146,-99.190183 14.398914,-98.956122 5.8608644,-97.219036 1.7131909,-93.738725 2.370748,-87.96742 3.0391923,-83.747029 9.3715253,-76.8365 12.213252,-77.035213 "
+       points="14.398914,-98.956122 5.8608644,-97.219036 1.7131909,-93.738725 2.370748,-87.96742 3.0391923,-83.747029 9.3715253,-76.8365 12.213252,-77.035213 20.870209,-78.021548 24.391494,-80.976257 24.239441,-86.78291 23.45209,-91.754051 17.746146,-99.190183 "
        class="error_poly"
        id="polygon12"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -88,7 +94,7 @@
          id="title10">no parking sign</title>
     </polygon>
     <polygon
-       points="-47.561583,-49.652995 -46.893138,-45.432604 -43.363809,-41.226512 -37.031476,-34.315983 -34.189749,-34.514696 -25.532792,-35.501032 -22.011507,-38.455741 -15.003647,-44.877262 -15.155699,-50.683915 -15.943051,-55.655056 -21.648995,-63.091187 -24.645319,-66.662068 -27.992551,-66.428007 -36.530601,-64.690921 -44.071466,-58.904611 -48.21914,-55.4243 "
+       points="-25.532792,-35.501032 -22.011507,-38.455741 -15.003647,-44.877262 -15.155699,-50.683915 -15.943051,-55.655056 -21.648995,-63.091187 -24.645319,-66.662068 -27.992551,-66.428007 -36.530601,-64.690921 -44.071466,-58.904611 -48.21914,-55.4243 -47.561583,-49.652995 -46.893138,-45.432604 -43.363809,-41.226512 -37.031476,-34.315983 -34.189749,-34.514696 "
        class="error_poly"
        id="polygon16"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -96,7 +102,7 @@
          id="title14">apple tree</title>
     </polygon>
     <polygon
-       points="-18.638576,-21.495752 -22.471368,-20.10073 -30.012233,-14.314421 -34.159907,-10.834109 -33.50235,-5.0628045 -32.833905,-0.84241346 -30.332959,7.0895755 -26.803629,11.295667 -20.471296,18.206196 -17.629569,18.007483 -8.9726123,17.021147 -4.4580192,15.37797 -0.93673445,12.423261 6.0711258,6.0017402 5.9190733,0.19508709 5.1317218,-4.7760542 1.9489738,-12.459888 -3.7569706,-19.896019 -6.7532949,-23.466899 -10.100526,-23.232838 "
+       points="-32.833905,-0.84241346 -30.332959,7.0895755 -26.803629,11.295667 -20.471296,18.206196 -17.629569,18.007483 -8.9726123,17.021147 -4.4580192,15.37797 -0.93673445,12.423261 6.0711258,6.0017402 5.9190733,0.19508709 5.1317218,-4.7760542 1.9489738,-12.459888 -3.7569706,-19.896019 -6.7532949,-23.466899 -10.100526,-23.232838 -18.638576,-21.495752 -22.471368,-20.10073 -30.012233,-14.314421 -34.159907,-10.834109 -33.50235,-5.0628045 "
        class="error_poly"
        id="polygon20"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -104,7 +110,7 @@
          id="title18">return to starting BM</title>
     </polygon>
     <polygon
-       points="-9.989778,-81.599289 -13.998018,-79.045759 -21.538884,-73.259449 -25.686557,-69.779138 -25.029,-64.007833 -24.360556,-59.787442 -23.195193,-57.768973 -19.665863,-53.562882 -13.33353,-46.652353 -10.491803,-46.851066 -1.8348461,-47.837402 2.3806964,-50.031874 5.9019812,-52.986583 12.909841,-59.408104 12.757789,-65.214757 11.970437,-70.185898 10.597772,-72.563425 4.8918275,-79.999556 1.8955032,-83.570437 -1.451728,-83.336375 "
+       points="-24.360556,-59.787442 -23.195193,-57.768973 -19.665863,-53.562882 -13.33353,-46.652353 -10.491803,-46.851066 -1.8348461,-47.837402 2.3806964,-50.031874 5.9019812,-52.986583 12.909841,-59.408104 12.757789,-65.214757 11.970437,-70.185898 10.597772,-72.563425 4.8918275,-79.999556 1.8955032,-83.570437 -1.451728,-83.336375 -9.989778,-81.599289 -13.998018,-79.045759 -21.538884,-73.259449 -25.686557,-69.779138 -25.029,-64.007833 "
        class="error_poly"
        id="polygon24"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -112,7 +118,7 @@
          id="title22">North side - western corner</title>
     </polygon>
     <polygon
-       points="4.9861636,-68.101366 5.4514105,-64.567465 6.1198548,-60.347074 12.452188,-53.436545 15.293914,-53.635258 23.950872,-54.621594 25.978589,-54.979135 29.499874,-57.933844 29.347821,-63.740497 28.56047,-68.711638 27.788994,-72.191543 22.083049,-79.627674 18.735818,-79.393613 17.01433,-79.090068 8.4762799,-77.352982 4.3286065,-73.872671 "
+       points="23.950872,-54.621594 25.978589,-54.979135 29.499874,-57.933844 29.347821,-63.740497 28.56047,-68.711638 27.788994,-72.191543 22.083049,-79.627674 18.735818,-79.393613 17.01433,-79.090068 8.4762799,-77.352982 4.3286065,-73.872671 4.9861636,-68.101366 5.4514105,-64.567465 6.1198548,-60.347074 12.452188,-53.436545 15.293914,-53.635258 "
        class="error_poly"
        id="polygon28"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -120,7 +126,7 @@
          id="title26">North side - eastern corner</title>
     </polygon>
     <polygon
-       points="45.409154,-32.128409 47.079254,-33.19238 46.927201,-38.999033 46.13985,-43.970174 45.654282,-44.811203 42.30705,-44.577142 33.769,-42.840056 32.012524,-41.925692 32.670081,-36.154387 33.338526,-31.933996 33.91047,-30.94336 36.752196,-31.142073 "
+       points="42.30705,-44.577142 33.769,-42.840056 32.012524,-41.925692 32.670081,-36.154387 33.338526,-31.933996 33.91047,-30.94336 36.752196,-31.142073 45.409154,-32.128409 47.079254,-33.19238 46.927201,-38.999033 46.13985,-43.970174 45.654282,-44.811203 "
        class="error_poly"
        id="polygon32"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -128,7 +134,7 @@
          id="title30">SE top corner building</title>
     </polygon>
     <polygon
-       points="22.330921,-31.605592 27.486335,-32.74852 27.334282,-38.555173 26.546931,-43.526314 26.097235,-46.076667 22.750004,-45.842606 17.514595,-45.153351 8.9765449,-43.416265 9.634102,-37.64496 10.302546,-33.424569 10.832237,-30.420543 13.673964,-30.619256 "
+       points="22.750004,-45.842606 17.514595,-45.153351 8.9765449,-43.416265 9.634102,-37.64496 10.302546,-33.424569 10.832237,-30.420543 13.673964,-30.619256 22.330921,-31.605592 27.486335,-32.74852 27.334282,-38.555173 26.546931,-43.526314 26.097235,-46.076667 "
        class="error_poly"
        id="polygon36"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -136,7 +142,7 @@
          id="title34">East inner corner building</title>
     </polygon>
     <polygon
-       points="32.096877,-13.447647 34.599121,-12.254138 43.256078,-13.240474 43.894367,-14.440921 43.107016,-19.412062 40.718315,-20.819115 32.180265,-19.082029 31.428433,-17.668038 "
+       points="40.718315,-20.819115 32.180265,-19.082029 31.428433,-17.668038 32.096877,-13.447647 34.599121,-12.254138 43.256078,-13.240474 43.894367,-14.440921 43.107016,-19.412062 "
        class="error_poly"
        id="polygon40"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -144,7 +150,7 @@
          id="title38">SE corner building</title>
     </polygon>
     <polygon
-       points="-3.638177,-15.154098 -2.303566,-15.41352 -2.7133391,-18.155376 -4.2853592,-17.849806 "
+       points="-2.303566,-15.41352 -2.7133391,-18.155376 -4.2853592,-17.849806 -3.638177,-15.154098 "
        class="error_poly"
        id="polygon44"
        style="fill:#ffffff;fill-opacity:0.303103;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.300422">
@@ -155,7 +161,7 @@
   <g
      id="map_scalebar"
      style="fill:#ababab;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     transform="translate(-1.0982022,9.4272238)">
+     transform="matrix(3.2812208,0,0,3.2812208,90.507506,253.96537)">
     <text
        x="57.850361"
        y="7.8168983"
@@ -206,7 +212,7 @@
   <g
      id="map_walls"
      style="fill:#ababab;fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     transform="translate(8.5122104,3.072684)">
+     transform="matrix(3.2812208,0,0,3.2812208,122.04139,233.11473)">
     <path
        id="line68"
        class="wall_line pointer"
@@ -217,7 +223,7 @@
   <g
      id="map_lines"
      style="fill:#ababab;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1.5, 0.5;stroke-dashoffset:0;stroke-opacity:1"
-     transform="translate(8.5122104,3.072684)">
+     transform="matrix(3.2812208,0,0,3.2812208,122.04139,233.11473)">
     <line
        x1="0"
        y1="0"
@@ -310,7 +316,7 @@
   <g
      id="map_stations"
      style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     transform="translate(8.5122104,3.072684)">
+     transform="matrix(3.2812208,0,0,3.2812208,122.04139,233.11473)">
     <path
        d="M 0,-4.3869134 3.7991784,2.1934567 H -3.7991784 Z"
        id="station_0"
@@ -420,19 +426,21 @@
     </path>
   </g>
   <path
-     inkscape:original-d="M 0,0"
+     inkscape:original-d="M 94.11095,223.03257"
      inkscape:path-effect="#path-effect18266"
-     d="M 0,0"
-     id="path18268" />
+     d="M 94.11095,223.03257"
+     id="path18268"
+     style="stroke-width:3.28122" />
   <path
-     inkscape:original-d="M 0,0"
+     inkscape:original-d="M 94.11095,223.03257"
      inkscape:path-effect="#path-effect18270"
-     d="M 0,0"
-     id="path18272" />
+     d="M 94.11095,223.03257"
+     id="path18272"
+     style="stroke-width:3.28122" />
   <g
      inkscape:label="Layer 1"
      id="layer1"
-     transform="matrix(0.64410732,0,0,0.64410732,-55.186069,-103.22387)">
+     transform="matrix(2.1134584,0,0,2.1134584,-86.966731,-115.66774)">
     <path
        style="color:#000000;fill:#000000;stroke-miterlimit:7;-inkscape-stroke:none"
        d="m 26.21875,12.345703 v 26.121094 h 0.5 2.603516 V 26.9375 h 3.126953 z m 1,4.888672 3.716797,8.703125 H 28.322266 V 37.466797 H 27.21875 Z"
