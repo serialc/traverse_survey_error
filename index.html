@@ -680,9 +680,9 @@
                             <div class="lang lang-en">
                                 <p>All the data will be exported in GeoJSON format, directly visible in QGIS or compatible GIS.
                                     Files are separated by feature type (e.g., points, lines, and polygons) as well as duplicated for measured (data entered) and corrected when closed traverses are completed.
-                                    Data is georeferenced if northing and eastings are provided.</p>
-                                <p>Note that the SVG figure/map will also be exported as is currently displayed - you may wish to (de)activate CTEC.</p>
-                                <p>You will still need to define your projection coordinate system in your GIS to complete the georeferencing.</p>
+                                    Data is georeferenced if northing and eastings are provided for benchmarks.</p>
+                                <p>Note that the map will also be exported <em>as is currently displayed</em>. You may wish to (de)activate CTEC.</p>
+                                <p>You will still need to <strong><em>DEFINE</em> your projection coordinate system in your GIS</strong> to complete the georeferencing.</p>
                             </div>
                             <div class="lang lang-de">
                                 <p>Alle Daten werden im GeoJSON-Format exportiert und können direkt in QGIS oder einem kompatiblen GIS angezeigt werden. Die Dateien sind nach Merkmalstyp (z. B. Punkte, Linien und Polygone) getrennt und werden für gemessene (eingegebene) Daten dupliziert und korrigiert, wenn geschlossene Traversen (Polygonzüge) abgeschlossen sind. Die Daten sind georeferenziert, wenn nördliche und östliche Deklinationswerte angegeben wurden.</p>
@@ -750,6 +750,16 @@
                     <h2>Frequently asked questions</h2>
 
                     <h3>Closed traverse</h3>
+                    <p><strong>What is CTEC?</strong><br>
+                        It's an acronym for Closed Traverse Error Correction. A process of reducing error between points of known location (See benchmark explanation in introduction).
+                        The figures below illustrate a traverse without CTEC (left) and with it enabled (right).
+                    </p>
+
+                    <div class="row mb-5">
+                        <div class="col-6"><img src="rsc/noctec_map.svg" width="100%"></div>
+                        <div class="col-6"><img src="rsc/ctec_map.svg" width="100%"></div>
+                    </div>
+
                     <p><strong>How is the closed traverse error correction performed?</strong><br>
                         The error correction from a closed traverse is performed using Bowditch’s Rule.</p>
                     <p><strong>What happens if there are multiple georeference benchmarks?</strong><br>

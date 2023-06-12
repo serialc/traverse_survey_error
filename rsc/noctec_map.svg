@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="surveyfigure"
+   width="90"
+   viewBox="-34.548377 -81.280522 90.000003 89.999997"
+   version="1.1"
+   sodipodi:docname="noctec_map.svg"
+   height="90"
+   inkscape:version="1.2.2 (1:1.2.2+202212051551+b0a8486541)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs65" />
+  <sodipodi:namedview
+     id="namedview63"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="5.170873"
+     inkscape:cx="48.057649"
+     inkscape:cy="37.517843"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="surveyfigure" />
+  <style
+     id="style2">.leg_line, .leg_line_ctp { stroke-dasharray: 2 1; }.leg_line, .leg_line_ctp, .wall_line, .marker_benchmark, .marker_point, .faded, .error_poly { stroke: black; stroke-width: 0.5; }.leg_line_ctp { stroke: blue; stroke-width: 0.8; }.marker_benchmark, .marker_point, .error_poly { fill: white; }.faded { opacity: 0.2; }.wall_line { stroke-width: 1; }.sb_line { stroke: black; stroke-width: 0.5; }.sb_text { font-size: 4px; }.error_poly { opacity: 0.3; }.selection { fill: #0B5ED7; }</style>
+  <g
+     id="g537"
+     transform="translate(0.62939688,0.83533908)">
+    <g
+       id="map_error"
+       transform="translate(2.5480183,-0.0078408)">
+      <polygon
+         points="36.8,-63.73947 43.2,-74.824595 35.142046,-78.930328 29.935817,-67.236946 "
+         class="error_poly"
+         id="polygon6">
+        <title
+           id="title4">t</title>
+      </polygon>
+      <polygon
+         points="-13.673713,-59.58533 -21.731667,-63.691062 -31.622747,-61.040755 -36.828976,-49.347373 -34.593262,-42.466553 -27.729079,-38.969077 -18.169216,-42.638765 -11.769216,-53.72389 "
+         class="error_poly"
+         id="polygon10">
+        <title
+           id="title8">t</title>
+      </polygon>
+      <polygon
+         points="16.398314,-13.026553 25.266414,-7.906553 32.130597,-4.409077 41.69046,-8.0787648 48.09046,-19.16389 51.375047,-25.610253 49.470549,-31.471693 41.412595,-35.577425 32.05789,-39.742409 22.166809,-37.092102 19.368829,-31.600755 14.1626,-19.907373 "
+         class="error_poly"
+         id="polygon14">
+        <title
+           id="title12">t</title>
+      </polygon>
+    </g>
+    <g
+       id="map_scalebar"
+       transform="translate(2.5480183,-4.0078408)">
+      <line
+         x1="43.319241"
+         y1="4"
+         x2="43.319241"
+         y2="5"
+         class="sb_line"
+         id="line17" />
+      <text
+         x="41.319241"
+         y="9"
+         class="sb_text"
+         id="text19">30</text>
+      <line
+         x1="33.319241"
+         y1="4"
+         x2="33.319241"
+         y2="5"
+         class="sb_line"
+         id="line21" />
+      <text
+         x="31.319241"
+         y="9"
+         class="sb_text"
+         id="text23">20</text>
+      <line
+         x1="23.319241"
+         y1="4"
+         x2="23.319241"
+         y2="5"
+         class="sb_line"
+         id="line25" />
+      <text
+         x="21.319241"
+         y="9"
+         class="sb_text"
+         id="text27">10</text>
+      <line
+         x1="13.31924"
+         y1="4"
+         x2="13.31924"
+         y2="5"
+         class="sb_line"
+         id="line29" />
+      <text
+         x="12.31924"
+         y="9"
+         class="sb_text"
+         id="text31">0</text>
+      <text
+         x="23.319241"
+         y="3"
+         class="sb_text"
+         id="text33">metres</text>
+      <line
+         x1="43.319241"
+         y1="4"
+         x2="13.31924"
+         y2="4"
+         class="sb_line"
+         id="line35" />
+    </g>
+    <g
+       id="map_walls"
+       transform="translate(2.5480183,-0.0078408)" />
+    <g
+       id="map_lines"
+       transform="translate(2.5480183,-0.0078408)">
+      <line
+         x1="0"
+         y1="0"
+         x2="36.319241"
+         y2="-71.280525"
+         class="leg_line"
+         id="line39" />
+      <line
+         x1="36.319241"
+         y1="-71.280525"
+         x2="-24.548378"
+         y2="-51.503433"
+         class="leg_line"
+         id="line41" />
+      <line
+         x1="-24.548378"
+         y1="-51.503433"
+         x2="32.47604"
+         y2="-22.448042"
+         class="leg_line"
+         id="line43" />
+    </g>
+    <g
+       id="map_stations"
+       transform="translate(2.5480183,-0.0078408)">
+      <path
+         d="M 0,-4.3869134 3.7991784,2.1934567 H -3.7991784 Z"
+         id="station_0"
+         class="pointer marker_benchmark">
+        <title
+           id="title46">Starting benchmark</title>
+      </path>
+      <path
+         d="M 1.7841241,0 A 1.7841241,1.7841241 0 1 1 -1.7841241,0 1.7841241,1.7841241 0 1 1 1.7841241,0"
+         id="station_1"
+         class="pointer marker_point"
+         transform="translate(36.31924,-71.280522)">
+        <title
+           id="title49">t</title>
+      </path>
+      <path
+         d="M 1.7841241,0 A 1.7841241,1.7841241 0 1 1 -1.7841241,0 1.7841241,1.7841241 0 1 1 1.7841241,0"
+         id="station_2"
+         class="pointer marker_point"
+         transform="translate(-24.548377,-51.503434)">
+        <title
+           id="title52">t</title>
+      </path>
+      <path
+         d="M 0,-4.3869134 3.7991784,2.1934567 H -3.7991784 Z"
+         id="station_3"
+         class="pointer marker_benchmark"
+         transform="translate(32.47604,-22.448042)">
+        <title
+           id="title55">t</title>
+      </path>
+    </g>
+    <g
+       id="map_ctec_walls"
+       transform="translate(2.5480183,-0.0078408)" />
+    <g
+       id="map_ctec_lines"
+       transform="translate(2.5480183,-0.0078408)" />
+    <g
+       id="map_ctec_stations"
+       transform="translate(2.5480183,-0.0078408)" />
+  </g>
+</svg>
