@@ -517,7 +517,10 @@ TSE.isCtecEnabled = function()
 // builds GeoJSON objects from data and returns it
 TSE.getGeoJSON = function()
 {
+    // create an empty geojson 'shell' 
     let geojson = JSON.stringify({ "type": "FeatureCollection", "features": [ ] });
+
+    // copy the geojson template into each of the data sets
     let data = {
         "stns": JSON.parse(geojson),
         "geostns": JSON.parse(geojson),
