@@ -711,7 +711,7 @@ TSE.updateSVG = function()
             ".sb_line { stroke: black; stroke-width: 0.5; }" + 
             ".sb_text { font-size: 4px; }" + 
             ".error_poly { opacity: 0.3; }" +
-            ".selection { fill: #0B5ED7; }"
+            ".selection { fill: #0B5ED7; stroke: red; }"
         );
 
     // add groups to contain and order layers of map elements/hierarchy
@@ -898,6 +898,8 @@ TSE.updateSVG = function()
             let ctec_line_type = TSE.getStationFromId(cnx[1]).traverse_path ? 'leg_line_ctp' : 'leg_line';
 
             layer_ctec_lines.append("line")
+                // i + 1 to match station index
+                .attr("id", "leg_line_" + (i + 1))
                 .attr("x1", orig.gx - bm0.gx)
                 .attr("y1", -(orig.gy - bm0.gy))
                 .attr("x2", dest.gx - bm0.gx)
@@ -907,6 +909,8 @@ TSE.updateSVG = function()
 
         // note the inverted y axis
         layer_lines.append("line")
+            // i + 1 to match station index
+            .attr("id", "leg_line_" + (i + 1) + (ctec ? '_faded' : ''))
             .attr("x1", orig.x)
             .attr("y1", -orig.y)
             .attr("x2", dest.x)
@@ -1131,16 +1135,21 @@ TSE.selectStation = function(stnid)
     // deselect previous (if any)
     // checking with isNaN otherwise id of 0 will be false
     if (!isNaN(TSE.projects[TSE.active].selected)) {
+
         let selected = document.getElementById('station_' + TSE.projects[TSE.active].selected);
+        let sline =    document.getElementById('leg_line_' + TSE.projects[TSE.active].selected);
+
         // if selected exists (we may have deleted it) - then deselect it
         if (selected) {
             selected.classList.remove("selection");
+            sline.classList.remove("selection");
         }
     }
 
     // select new
     if (!isNaN(stnid)) {
         document.getElementById('station_' + stnid).classList.add("selection")
+        document.getElementById('leg_line_' + stnid).classList.add("selection")
     }
 
     TSE.projects[TSE.active].selected = stnid;
