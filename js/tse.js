@@ -1649,6 +1649,13 @@ TSE.changeLanguage = function(lang_code)
 
         // delete stations and dependencies
         TSE.deleteStation(TSE.projects[TSE.active].selected);
+
+        // turn off CTEC, if on
+        if (TSE.isCtecEnabled()) {
+            document.getElementById('closed_traverse_error_correction').checked = false;
+            // will hide the CTEC button
+            TSE.recomputeAllXY();
+        }
         
         // update display
         TSE.updateSVG();
