@@ -2,7 +2,10 @@
 
 var TSE = {
     "projects": {},
-    "active": null
+    "active": null,
+    "settings": {
+        "trial_min": 6
+    }
 };
 
 TSE.save = function()
@@ -440,8 +443,10 @@ TSE.update_pace_trials_table = function()
     table_div.classList.remove('d-none');
     
     // if we have at least 6 trials, enable the progress button
-    let trial_min = 6;
+    let trial_min = TSE.settings.trial_min;
+
     if (TSE.projects[TSE.active].pace_trials.length >= trial_min) {
+        TSE.hideToast();
         document.getElementById('finish_pace_trials').disabled = false;
     } else {
         if (TSE.language === 'en') {
@@ -1142,14 +1147,16 @@ TSE.selectStation = function(stnid)
         // if selected exists (we may have deleted it) - then deselect it
         if (selected) {
             selected.classList.remove("selection");
-            sline.classList.remove("selection");
+            if (sline) { sline.classList.remove("selection"); }
         }
     }
 
     // select new
     if (!isNaN(stnid)) {
         document.getElementById('station_' + stnid).classList.add("selection")
-        document.getElementById('leg_line_' + stnid).classList.add("selection")
+        // same for line, but it may not yet exist
+        let legline = document.getElementById('leg_line_' + stnid);
+        if (legline) { legline.classList.add("selection"); }
     }
 
     TSE.projects[TSE.active].selected = stnid;
@@ -1330,6 +1337,13 @@ TSE.infoToast = function(msg, head_text = "Information")
 TSE.warnToast = function(msg, head_text = "Warning")
 {
     TSE.toast(msg, head_text, "bg-warning", "text-dark");
+};
+
+TSE.hideToast = function()
+{
+    let toast = document.getElementById('liveToast');
+    const t = new bootstrap.Toast(toast);
+    t.hide();
 };
 
 TSE.toast = function(msg, head_text, type, text_colour)
