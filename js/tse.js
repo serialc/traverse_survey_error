@@ -241,7 +241,6 @@ TSE.loadProject = function(pn)
         TSE.update_pace_trials_table();
     }
     TSE.update_pace_trials_table();
-    console.log(TSE.projects[TSE.active]);
     if (TSE.projects[TSE.active].pacing_error_percentage) {
         document.getElementById('known_error_percentage').value = TSE.projects[TSE.active].pacing_error_percentage;
     } else {
@@ -676,6 +675,32 @@ TSE.getGeoJSON = function()
 
 };
 
+TSE.stnClick = function(n)
+{
+    // check if this click is completing some other operation besides selection
+    if (TSE.projects[TSE.active].mode) {
+        switch(TSE.projects[TSE.active].mode) {
+            case "wall":
+                // create the wall in the data
+                TSE.addWall(TSE.projects[TSE.active].selected, n.id);
+
+                // remove the mode and hide the controls, remove selection
+                TSE.hideControlButtons();
+                TSE.resetControls();
+                TSE.selectStation(undefined);
+                return;
+                //break;
+            default:
+        }
+    }
+
+    // save index of selected node/point/bm
+    TSE.selectStation(n.id);
+
+    // show controls
+    document.getElementById('controls').classList.remove('d-none');
+};
+
 // draws the SVG elements from the data
 TSE.updateSVG = function()
 {
@@ -749,30 +774,6 @@ TSE.updateSVG = function()
         .type(d3.symbolCircle)
         .size(10);
 
-    function stnClick(n) {
-        // check if this click is completing some other operation besides selection
-        if (TSE.projects[TSE.active].mode) {
-            switch(TSE.projects[TSE.active].mode) {
-                case "wall":
-                    // create the wall in the data
-                    TSE.addWall(TSE.projects[TSE.active].selected, n.id);
-
-                    // remove the mode and hide the controls, remove selection
-                    TSE.hideControlButtons();
-                    TSE.resetControls();
-                    TSE.selectStation(undefined);
-                    return;
-                    //break;
-                default:
-            }
-        }
-
-        // save index of selected node/point/bm
-        TSE.selectStation(n.id);
-
-        // show controls
-        document.getElementById('controls').classList.remove('d-none');
-    }
 
     // iterate through stations and populate svg
     for (let i = 0; i < prj.survey.length; i+=1) {
@@ -796,7 +797,7 @@ TSE.updateSVG = function()
             // class is dependent on ctec state
             .attr("class", ctec ? "faded" : "pointer marker_" + n.type)
             // don't provide click interaction if ctec enabled
-            .on("click", ctec ? false : (evt) => stnClick(n) )
+            .on("click", ctec ? false : (evt) => TSE.stnClick(n) )
             // note that y is inverted as SVG postive values go down
             .attr("transform", function(d) { return "translate(" + n.x + "," + (-n.y) + ")"; })
             .append("title") // add child title tag for tooltip
@@ -809,7 +810,7 @@ TSE.updateSVG = function()
                 .attr("id", "station_" + n.id)
                 // class is dependent on ctec state
                 .attr("class", "pointer marker_" + n.type)
-                .on("click", (evt) => stnClick(n) )
+                .on("click", (evt) => TSE.stnClick(n) )
                 // note that y is inverted as SVG postive values go down
                 // correct stations that are in georeferenced coordanates based on BM0
                 .attr("transform", function(d) { return "translate(" + (n.gx - bm0.gx) + "," + -(n.gy - bm0.gy) + ")"; })
@@ -903,8 +904,8 @@ TSE.updateSVG = function()
             let ctec_line_type = TSE.getStationFromId(cnx[1]).traverse_path ? 'leg_line_ctp' : 'leg_line';
 
             layer_ctec_lines.append("line")
-                // i + 1 to match station index
-                .attr("id", "leg_line_" + (i + 1))
+                // give the line the id of the destination (cnx[1])
+                .attr("id", "leg_line_" + cnx[1])
                 .attr("x1", orig.gx - bm0.gx)
                 .attr("y1", -(orig.gy - bm0.gy))
                 .attr("x2", dest.gx - bm0.gx)
@@ -915,7 +916,7 @@ TSE.updateSVG = function()
         // note the inverted y axis
         layer_lines.append("line")
             // i + 1 to match station index
-            .attr("id", "leg_line_" + (i + 1) + (ctec ? '_faded' : ''))
+            .attr("id", "leg_line_" + cnx[1] + (ctec ? '_faded' : ''))
             .attr("x1", orig.x)
             .attr("y1", -orig.y)
             .attr("x2", dest.x)
